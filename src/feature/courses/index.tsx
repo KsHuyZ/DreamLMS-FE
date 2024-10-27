@@ -33,7 +33,7 @@ const mockCourse = {
   image: {
     id: '',
     name: '',
-    url: '',
+    url: '/images/spider.jpg',
     format: '',
     size: 10,
     publicId: '',
