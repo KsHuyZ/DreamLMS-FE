@@ -57,7 +57,7 @@ const CourseView = ({ course }: ICourseViewProps) => {
                 </div>
               </div>
             </div>
-            <ModalPreview img={course.image} name={course.name} />
+            <ModalPreview img={course.image.url} name={course.name} />
           </div>
         </div>
         <div className='grid grid-cols-3 gap-2 items-start'>

@@ -148,7 +148,6 @@ export const MultiSelect = React.forwardRef<
       React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
-
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>
     ) => {
@@ -290,7 +289,7 @@ export const MultiSelect = React.forwardRef<
           align='start'
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
-          <Command>
+          <Command shouldFilter={false}>
             <CommandInput
               placeholder='Search...'
               onKeyDown={handleInputKeyDown}
@@ -324,13 +323,14 @@ export const MultiSelect = React.forwardRef<
                 {isLoading ? (
                   Array.from({ length: 5 }).map((_, index) => (
                     <CommandItem key={index}>
-                      <Skeleton className='w-full h-2' />
+                      <Skeleton className='w-full h-4' />
                     </CommandItem>
                   ))
                 ) : (
                   <></>
                 )}
                 {options.map((option) => {
+                  console.log({ selectedValues, option: option.value });
                   const isSelected = selectedValues.includes(option.value);
                   return (
                     <CommandItem

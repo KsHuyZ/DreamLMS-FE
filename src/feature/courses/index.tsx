@@ -21,16 +21,23 @@ import {
 
 import CoursesFilter from '@/feature/courses/components/courses-filter';
 
-import { ELevel, ERoles, EStatus } from '@/types';
+import { ECourseStatus, ELevel, ERoles } from '@/types';
 
 const mockCourse = {
   id: 'string',
   name: 'Tailwind from zero to hero',
   price: 20000,
-  image: '/images/spider.jpg',
   videoPreview: 'https://example.com/path/to/file.mp4',
   description: 'this is description',
   shortDescription: 'this is short description',
+  image: {
+    id: '',
+    name: '',
+    url: '',
+    format: '',
+    size: 10,
+    publicId: '',
+  },
   duration: 2000,
   createdBy: {
     id: 'strng',
@@ -38,14 +45,17 @@ const mockCourse = {
     email: 'hahahahahaha@gmail.com',
     lastName: 'Woolfie',
     role: ERoles.TEACHER,
-    avatar: '/images/avatar.jpg',
+    photo: '/images/avatar.jpg',
   },
+  tags: [],
+  categories: [],
+  lessons: 1,
   level: ELevel.BEGINNER,
-  status: EStatus.ACTIVE,
   isDeleted: true,
   willLearn: ['Become master css', 'Become master React', "I don't know"],
   createdAt: '2024-08-31T08:06:49.029Z',
   updatedAt: '2024-08-31T08:06:49.029Z',
+  status: ECourseStatus.Draft,
 };
 
 const CoursesPage = () => {

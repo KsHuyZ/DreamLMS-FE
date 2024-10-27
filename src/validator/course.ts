@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { ELevel } from '@/types';
+import { ELevel, TImage } from '@/types';
 
 const ACCEPTED_VIDEO_TYPES = [
   'video/mp4',
@@ -17,7 +17,7 @@ export interface CreateCourseForm {
   tags: string[];
   categories: string[];
   price: number;
-  image: File;
+  image: File | TImage;
   level: ELevel;
 }
 
@@ -47,4 +47,8 @@ export const createVideoSchema = z.object({
     return ACCEPTED_VIDEO_TYPES.includes(file?.type);
   }, 'Only .mp4, .webm formats are supported.'),
   isPreview: z.boolean().default(false),
+});
+
+export const deleteCourseSchema = z.object({
+  name: z.string(),
 });

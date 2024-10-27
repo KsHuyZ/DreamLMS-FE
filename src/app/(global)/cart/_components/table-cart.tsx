@@ -54,7 +54,7 @@ const TableCart = ({ data, isLoading }: TableCartProps) => {
               <div className='flex items-center justify-between cursor-pointer duration-200 p-2 rounded-sm'>
                 <div className='flex items-center space-x-2'>
                   <Image
-                    src={course.courseResponse.image}
+                    src={course.courseResponse.image.url}
                     width={100}
                     height={100}
                     alt='COurse img'

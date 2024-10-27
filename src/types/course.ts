@@ -1,6 +1,6 @@
 import { CreateCourseForm } from '@/validator';
 
-import { ELevel, ICategory, ITag, TQuiz, TUser } from '@/types';
+import { ELevel, ICategory, ITag, TImage, TQuiz, TUser } from '@/types';
 
 export type CourseCredentials = {
   id?: string;
@@ -8,7 +8,7 @@ export type CourseCredentials = {
 
 export type TCourse = {
   id: string;
-  image: string;
+  image: TImage;
   name: string;
   videoPreview?: string;
   description: string;

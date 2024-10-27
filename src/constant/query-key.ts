@@ -3,5 +3,6 @@ export enum QueryKey {
   Tag = 'tag',
   Category = 'category',
   Lessons = 'lessons',
-  TeacherCourse = 'teacher-course'
+  TeacherCourse = 'teacher-course',
+  CourseInfo = 'course-info',
 }

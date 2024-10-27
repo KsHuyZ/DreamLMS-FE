@@ -67,7 +67,7 @@ const Cart = () => {
                   >
                     <div className='flex items-center space-x-2'>
                       <Image
-                        src={item.courseResponse.image}
+                        src={item.courseResponse.image.url}
                         width={100}
                         height={100}
                         alt='COurse img'

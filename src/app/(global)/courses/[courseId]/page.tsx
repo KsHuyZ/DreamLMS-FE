@@ -61,7 +61,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                   <span className='text-white'>3000 students</span>
                 </div>
                 <div>
-                  <p className='text-white'>{course.descriptionShort}</p>
+                  <p className='text-white'>{course.shortDescription}</p>
                 </div>
                 <div className='flex items-center space-x-2'>
                   {course.tags.map((tag) => (
@@ -76,7 +76,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                 </div>
               </div>
             </div>
-            <ModalPreview img={course.image} name={course.name} />
+            <ModalPreview img={course.image.url} name={course.name} />
           </div>
         </div>
         <div className='grid grid-cols-3 gap-2 items-start'>
@@ -158,8 +158,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                         H
                       </div>
                       <span>
-                        {course.userResponse.firstName}{' '}
-                        {course.userResponse.lastName}
+                        {course.createdBy.firstName} {course.createdBy.lastName}
                       </span>
                     </Link>
                   </div>

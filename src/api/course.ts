@@ -8,6 +8,7 @@ import {
   LessonCredentials,
   PaginationResponse,
   TCourse,
+  TImage,
   TVideoCredentials,
 } from '@/types';
 
@@ -27,7 +28,7 @@ export const createCourses = (course: CourseCredentials): Promise<TCourse> => {
   data.append('categories', JSON.stringify(categories));
   data.append('description', description);
   data.append('tags', JSON.stringify(tags));
-  data.append('image', image);
+  data.append('image', image as File);
   data.append('level', level);
   data.append('price', price ? price.toString() : '0');
   data.append('shortDescription', shortDescription);
@@ -47,20 +48,26 @@ export const updateCourses = (course: CourseCredentials): Promise<TCourse> => {
     level,
     price,
     shortDescription,
+    id,
   } = course;
   const data = new FormData();
+  const file = (image as TImage).url ? JSON.stringify(image) : (image as File);
   data.append('name', name);
   data.append('categories', JSON.stringify(categories));
   data.append('description', description);
   data.append('tags', JSON.stringify(tags));
-  data.append('image', image);
+  data.append('image', file);
   data.append('level', level);
   data.append('price', price ? price.toString() : '0');
   data.append('shortDescription', shortDescription);
 
-  return api.put('/course/update', data, {
+  return api.patch(`/courses/${id}`, data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+};
+
+export const removeCourse = async (id: string): Promise<void> => {
+  await api.delete(`/courses/${id}`);
 };
 
 export const getCourses = (
@@ -108,8 +115,8 @@ export const getAllCourseCategories = (): Promise<ICategory[]> =>
 
 export const getLessonByCourseId = (id: string): Promise<Lesson[]> =>
   api.get(`/lesson/get-lessons?id=${id}`);
-export const getCourseById = (id: string): Promise<TCourse> =>
-  api.get(`/course/get-by-id?id=${id}`);
+export const getCourseById = (id?: string): Promise<TCourse> =>
+  api.get(`/courses/${id}`);
 
 export const deleteLessonById = (id: string) =>
   api.delete('/lesson/delete', {

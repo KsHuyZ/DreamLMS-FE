@@ -10,6 +10,10 @@ import truncate from 'truncate';
 
 import { cn } from '@/lib/utils';
 
+import { formatBytes } from '@/utils';
+
+import { TImage } from '@/types';
+
 export type DropzoneState = _DropzoneState;
 
 export interface DropzoneProps extends Omit<_DropzoneProps, 'children'> {
@@ -20,6 +24,7 @@ export interface DropzoneProps extends Omit<_DropzoneProps, 'children'> {
   showErrorMessage?: boolean;
   onFileChange?: (files: File[]) => void;
   isSingleFile?: boolean;
+  value?: TImage | File;
 }
 
 const Upload = ({ className }: { className?: string }) => (
@@ -108,6 +113,7 @@ const Dropzone = ({
   showErrorMessage = true,
   onFileChange,
   isSingleFile = false,
+  value,
   ...props
 }: DropzoneProps) => {
   // Constants:
@@ -120,7 +126,7 @@ const Dropzone = ({
           const fileChange = isSingleFile
             ? acceptedFiles
             : [..._filesUploaded, ...acceptedFiles];
-          onFileChange && onFileChange(fileChange);
+          onFileChange && onFileChange(fileChange as File[]);
           return fileChange;
         });
         if (fileRejections.length > 0) {
@@ -137,7 +143,9 @@ const Dropzone = ({
   });
 
   // State:
-  const [filesUploaded, setFilesUploaded] = useState<File[]>([]);
+  const [filesUploaded, setFilesUploaded] = useState<(File | TImage)[]>(
+    value ? [value] : []
+  );
   const [errorMessage, setErrorMessage] = useState<string>();
 
   // Functions:
@@ -146,7 +154,7 @@ const Dropzone = ({
       const restFiles = [
         ..._uploadedFiles.slice(0, index),
         ..._uploadedFiles.slice(index + 1),
-      ];
+      ] as File[];
       onFileChange && onFileChange(isSingleFile ? [] : restFiles);
 
       return restFiles;
@@ -167,15 +175,15 @@ const Dropzone = ({
         {children ? (
           children(dropzone)
         ) : dropzone.isDragAccept ? (
-          <div className='text-sm font-medium'>Drop your files here!</div>
+          <div className='text-sm font-medium'>Drop your images here!</div>
         ) : (
           <div className='flex items-center flex-col gap-1.5'>
             <div className='flex items-center flex-row gap-0.5 text-sm font-medium'>
-              <Upload className='mr-2 h-4 w-4' /> Upload files
+              <Upload className='mr-2 h-4 w-4' /> Upload images
             </div>
             {props.maxSize && (
               <div className='text-xs text-gray-400 font-medium'>
-                Max. file size: {(props.maxSize / (1024 * 1024)).toFixed(2)} MB
+                Max. image size: {(props.maxSize / (1024 * 1024)).toFixed(2)} MB
               </div>
             )}
           </div>
@@ -197,21 +205,26 @@ const Dropzone = ({
                 className='flex justify-between items-center flex-row w-full h-16 mt-2 px-4 border-solid border-2 border-gray-200 rounded-lg shadow-sm'
               >
                 <div className='flex items-center flex-row gap-4 h-full'>
-                  {fileUploaded.type === 'application/pdf' ? (
+                  {(fileUploaded as File).type === 'application/pdf' ? (
                     <PDF className='text-rose-700 w-6 h-6' />
                   ) : (
                     <Image className='text-rose-700 w-6 h-6' />
                   )}
                   <div className='flex flex-col gap-0'>
                     <div className='text-[0.85rem] font-medium leading-snug'>
-                      {truncate(
-                        fileUploaded.name.split('.').slice(0, -1).join('.'),
-                        30
-                      )}
+                      {(fileUploaded as TImage).url
+                        ? fileUploaded.name
+                        : truncate(
+                            fileUploaded.name.split('.').slice(0, -1).join('.'),
+                            30
+                          )}
                     </div>
                     <div className='text-[0.7rem] text-gray-500 leading-tight'>
-                      .{fileUploaded.name.split('.').pop()} •{' '}
-                      {(fileUploaded.size / (1024 * 1024)).toFixed(2)} MB
+                      .
+                      {(fileUploaded as TImage).url
+                        ? (fileUploaded as TImage).format
+                        : fileUploaded.name.split('.').pop()}{' '}
+                      • {formatBytes(fileUploaded.size ?? 0)}
                     </div>
                   </div>
                 </div>

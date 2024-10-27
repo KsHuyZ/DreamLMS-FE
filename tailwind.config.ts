@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       container: {
-        center: true, // Để container luôn được canh giữa
-        padding: '1rem', // Padding mặc định
+        center: true,
+        padding: '1rem',
         screens: {
           sm: '540px',
           md: '720px',

@@ -31,7 +31,7 @@ const CourseCard = ({ course, loading, isTeacherView }: CourseCardProps) => {
           <Skeleton className='w-full h-50' />
         ) : (
           <Image
-            src={course?.image ?? ''}
+            src={course?.image.url ?? ''}
             className='object-cover w-full h-50 rounded-md duration-150'
             alt={course?.name ?? ''}
             width={150}

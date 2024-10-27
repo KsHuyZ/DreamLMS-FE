@@ -1,9 +1,8 @@
-import type {
+import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
-import axios from 'axios';
 
 import { getCookies, setCookies } from '@/lib/action';
 
@@ -43,7 +42,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.status === 401 || error.status === 403) {
+    if (error.status === 401) {
       const token = (await getCookies('token')) as Token | undefined;
       const refreshToken = token?.refreshToken;
       if (refreshToken) {

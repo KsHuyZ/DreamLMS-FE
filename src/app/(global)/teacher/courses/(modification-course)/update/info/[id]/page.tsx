@@ -1,7 +1,3 @@
-// import CreateForm from '@/app/(global)/teacher/courses/(modification-course)/_components/create-form';
+import CourseInfoTab from '@/feature/teacher/features/courses/features/components/course-info-tab';
 
-const EditInfo = () => {
-  return <div>{/* <CreateForm /> */}</div>;
-};
-
-export default EditInfo;
+export default CourseInfoTab;

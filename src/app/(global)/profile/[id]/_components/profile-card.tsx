@@ -30,7 +30,7 @@ const ProfileCard = ({ user }: IProfileCardProps) => {
           <div className='absolute bottom-5 left-5'>
             <div className='flex items-center space-x-4'>
               <Image
-                src={!user?.avatar ? '/images/avatar.jpg' : user.avatar}
+                src={user?.photo ?? '/images/avatar.jpg'}
                 width={120}
                 height={120}
                 alt='avatar'

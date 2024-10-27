@@ -1,3 +1,3 @@
-import CreateCourseInfoTab from '@/feature/teacher/features/courses/features/create';
+import CourseInfoTab from '@/feature/teacher/features/courses/features/components/course-info-tab';
 
-export default CreateCourseInfoTab;
+export default CourseInfoTab;

@@ -62,7 +62,7 @@ const MyCourse = () => {
                   <div className='flex items-center justify-between cursor-pointer duration-200 p-2 rounded-sm'>
                     <div className='flex items-center space-x-4'>
                       <Image
-                        src={course.image}
+                        src={course.image.url}
                         width={120}
                         height={120}
                         alt='Course img'

@@ -2,7 +2,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import {
   createLesson,
+  getCategoriesByName,
   getLessonByCourseId,
+  getTagsByName,
   getTeacherCourses,
   updateLesson,
 } from '@/api';
@@ -28,4 +30,18 @@ export const useTeacherCourse = (name?: string, status?: string) =>
   useQuery({
     queryKey: [QueryKey.TeacherCourse],
     queryFn: () => getTeacherCourses({ name, status }),
+  });
+
+export const useTags = (title: string) =>
+  useQuery({
+    queryKey: [QueryKey.Tag, title],
+    queryFn: () => getTagsByName(title),
+    enabled: !!title,
+  });
+
+export const useCategory = (title: string) =>
+  useQuery({
+    queryKey: [QueryKey.Category, title],
+    queryFn: () => getCategoriesByName(title),
+    enabled: !!title,
   });

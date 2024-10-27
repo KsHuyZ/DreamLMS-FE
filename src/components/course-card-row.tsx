@@ -23,7 +23,7 @@ const CourseCardRow = ({ course }: CourseCardProps) => {
         >
           <div className='flex items-center space-x-4'>
             <Image
-              src={course?.image ?? ''}
+              src={course?.image.url ?? ''}
               alt='image'
               width={250}
               height={200}
@@ -63,12 +63,12 @@ const CourseCardRow = ({ course }: CourseCardProps) => {
         <div className='space-y-4 w-full'>
           <h4 className='font-semibold'>What you will learn</h4>
           <div className='space-y-2'>
-            {course?.willLearn.map((learn) => (
+            {/* {course?.willLearn.map((learn) => (
               <div className='flex space-x-4' key={learn}>
                 <Check className='w-5 h-5 text-primary-600' />
                 <p className='text-sm'>{learn}</p>
               </div>
-            ))}
+            ))} */}
           </div>
           <Button className='w-full'>Add to cart</Button>
         </div>
