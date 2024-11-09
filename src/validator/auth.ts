@@ -26,3 +26,12 @@ export const signInSchema = z.object({
   password: z.string({ required_error: 'Password is required!' }).trim(),
   rememberMe: z.boolean().default(false),
 });
+
+export const forgetPasswordSchema = z.object({
+  email: z
+    .string({
+      required_error: 'Email is required!',
+    })
+    .email('This is not valid email')
+    .trim(),
+});

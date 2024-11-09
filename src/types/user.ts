@@ -14,7 +14,9 @@ export type TSignInCredentials = {
   password: string;
   rememberMe: boolean;
 };
-
+export type TForgetPasswordCredentials = {
+  email: string;
+};
 export type TSignUpCredentials = {
   email: string;
   password: string;
