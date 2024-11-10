@@ -190,7 +190,7 @@ const Quiz = ({
                       cy='18'
                       r='16'
                       fill='none'
-                      className='stroke-current text-gray-200 dark:text-neutral-700'
+                      className='stroke-current text-gray-200 '
                       stroke-width='2'
                     ></circle>
                     <g className='origin-center -rotate-90 transform'>
@@ -214,7 +214,7 @@ const Quiz = ({
                     </g>
                   </svg>
                   <div className='absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2'>
-                    <span className='text-center text-2xl font-bold text-gray-800 dark:text-white'>
+                    <span className='text-center text-2xl font-bold text-gray-800 '>
                       {questionResultList.length} / {questions?.length}
                     </span>
                   </div>

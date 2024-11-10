@@ -86,7 +86,7 @@ const SettingTheme = () => {
                     'cursor-pointer p-2 px-1 border rounded-sm flex justify-center items-center group hover: hover:scale-110 duration-300',
                     `hover:border-[${color.primary}]`,
                     themeColor === color.label
-                      ? `border-[${color.primary}] bg-slate-100 dark:`
+                      ? `border-[${color.primary}] bg-slate-100 `
                       : ''
                   )}
                 >

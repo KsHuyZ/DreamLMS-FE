@@ -37,7 +37,7 @@ function CustomEditor({ label, value, onChange, error }: CKEditorProps) {
   return (
     <div>
       {label ? (
-        <label className='block text-sm mb-2 font-medium text-gray-900 dark:text-white'>
+        <label className='block text-sm mb-2 font-medium text-gray-900 '>
           {label}
         </label>
       ) : null}

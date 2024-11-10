@@ -32,7 +32,7 @@ const LearningPage = ({ params: { courseId } }: LearningPageProps) => {
           </Button>
           <Link
             href='#'
-            className='flex items-center text-2xl font-semibold text-gray-900 dark:text-white'
+            className='flex items-center text-2xl font-semibold text-gray-900 '
           >
             <NextImage
               className='w-8 h-8 mr-2'

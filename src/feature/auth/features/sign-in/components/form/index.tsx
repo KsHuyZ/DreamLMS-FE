@@ -145,6 +145,15 @@ const SignInForm = () => {
             </FormItem>
           )}
         />
+        <p className='text-sm font-light text-gray-500 '>
+          Forgot password ?{' '}
+          <Link
+            href='/forgot-password'
+            className='font-medium text-primary-600 hover:underline '
+          >
+            Reset here
+          </Link>
+        </p>
         <Button
           type='submit'
           className='w-full text-center'
@@ -174,11 +183,11 @@ const SignInForm = () => {
             <span>Sign in with google</span>
           </div>
         </Button>
-        <p className='text-sm font-light text-gray-500 dark:text-gray-400'>
+        <p className='text-sm font-light text-gray-500 '>
           Don’t have an account yet?{' '}
           <Link
             href='/sign-up'
-            className='font-medium text-primary-600 hover:underline dark:text-primary-500'
+            className='font-medium text-primary-600 hover:underline '
           >
             Sign up
           </Link>

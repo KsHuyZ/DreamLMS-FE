@@ -9,7 +9,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className='flex flex-col w-full lg:w-1/2 justify-center px-6 py-8 md:h-screen lg:py-0'>
           <Link
             href='#'
-            className='flex justify-center lg:justify-start items-center text-2xl font-bold text-gray-900 dark:text-white'
+            className='flex justify-center lg:justify-start items-center text-2xl font-bold text-gray-900 '
           >
             <Image
               src='/images/logo.svg'
@@ -20,9 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             />
           </Link>
           <div className='flex justify-center items-center'>
-            <div className='w-full dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700'>
-              {children}
-            </div>
+            <div className='w-full md:mt-0 sm:max-w-md xl:p-0 '>{children}</div>
           </div>
         </div>
         <div className="w-1/2 h-screen hidden lg:block bg-[url('/images/login-bg.png')] rounded-lg overflow-hidden">
