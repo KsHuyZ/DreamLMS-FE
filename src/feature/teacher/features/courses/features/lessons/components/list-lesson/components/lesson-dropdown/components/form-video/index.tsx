@@ -1,17 +1,15 @@
 'use client';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, Plus } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import React, {
   Dispatch,
+  memo,
   SetStateAction,
   useCallback,
   useEffect,
   useState,
 } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import Input from '@/components/inputs/Input';
 import { Button } from '@/components/ui/button';
@@ -32,51 +30,57 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import MinimalTiptapEditor from '@/components/ui/minimal-tiptap';
+import { Progress } from '@/components/ui/progress';
 
-import VideoUploader from '@/app/(global)/teacher/courses/__components/form-video/components/video-uploader';
 import { useCreateVideo } from '@/app/(global)/teacher/courses/_hooks';
+import VideoUploader from '@/feature/teacher/features/courses/features/lessons/components/list-lesson/components/lesson-dropdown/components/form-video/components/video-uploader';
 import { createVideoSchema } from '@/validator';
 
-import { TUnit } from '@/types';
-
-const CustomEditor = dynamic(
-  () => {
-    return import('@/components/inputs/CustomEditor');
-  },
-  { ssr: false }
-);
+import { TUnit, TVideoCredentials } from '@/types';
 
 interface IFormProps {
   lessonId?: string;
   unit?: TUnit;
   setUnit: Dispatch<SetStateAction<TUnit | undefined>>;
+  refetch: () => void;
 }
 
-const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
-  const form = useForm<z.infer<typeof createVideoSchema>>({
+const defaultValues = {
+  title: '',
+  description: '',
+  video: undefined,
+  isFree: false,
+};
+
+const FormVideo = ({ lessonId, unit, setUnit, refetch }: IFormProps) => {
+  const form = useForm<TVideoCredentials>({
+    defaultValues,
     resolver: zodResolver(createVideoSchema),
   });
   const [open, setOpen] = useState(false);
-  const { mutateAsync: createVideo, isPending } = useCreateVideo();
+  const {
+    mutateAsync: createVideo,
+    isPending,
+    progress,
+    setProgress,
+  } = useCreateVideo();
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     const values = form.getValues();
-    if (lessonId && values.file) {
-      await createVideo({ ...values, idLesson: lessonId });
+    if (lessonId && values.video) {
+      await createVideo({ ...values, lessonId });
       setOpen(false);
       setUnit(undefined);
+      refetch();
     }
-  };
-
-  const onEditorChange = (_: unknown, editor: ClassicEditor) => {
-    form.setValue('description', editor.getData());
-  };
+  }, [createVideo, form, lessonId, setUnit, refetch]);
 
   useEffect(() => {
     if (unit) {
       setOpen(true);
       form.reset(unit);
-      form.setValue('file', unit.video?.url);
+      form.setValue('video', unit.video);
     }
   }, [setOpen, form, unit]);
 
@@ -86,12 +90,7 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
         return;
       }
       if (!value) {
-        form.reset({
-          title: '',
-          description: '',
-          file: undefined,
-          isPreview: false,
-        });
+        form.reset(defaultValues);
         setUnit(undefined);
       }
       setOpen(value);
@@ -107,34 +106,41 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent className='min-w-[1000px]'>
           <DialogHeader>
-            <DialogTitle>{unit ? 'Edit' : 'Create'} Lesson</DialogTitle>
+            <DialogTitle>{unit ? 'Edit' : 'Create'} Video</DialogTitle>
           </DialogHeader>
           <div className='overflow-y-scroll no-scrollbar'>
             <div className='w-full'>
               <Form {...form}>
-                <form>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div className='grid grid-cols-2 gap-4'>
-                    <FormField
-                      control={form.control}
-                      name='file'
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Video</FormLabel>
-                          <FormControl>
-                            <VideoUploader
-                              onChange={(e) =>
-                                form.setValue(
-                                  'file',
-                                  e.target.files ? e.target.files[0] : null
-                                )
-                              }
-                              value={field.value}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className='space-y-4'>
+                      <FormField
+                        control={form.control}
+                        name='video'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Video</FormLabel>
+                            <FormControl>
+                              <VideoUploader
+                                onChange={(e) => {
+                                  form.setValue(
+                                    'video',
+                                    e.target.files
+                                      ? e.target.files[0]
+                                      : undefined
+                                  );
+                                  setProgress(0);
+                                }}
+                                value={field.value as unknown as string}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Progress value={progress} className='w-full h-1' />
+                    </div>
+
                     <div className='flex flex-col space-y-2'>
                       <FormField
                         control={form.control}
@@ -143,7 +149,11 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
                           <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
-                              <Input placeholder='Eg: Introdution' {...field} />
+                              <Input
+                                placeholder='Eg: Introdution'
+                                {...field}
+                                className='rounded-md'
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -156,9 +166,16 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
                           <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                              <CustomEditor
-                                value={field.value}
-                                onChange={onEditorChange}
+                              <MinimalTiptapEditor
+                                {...field}
+                                immediatelyRender={false}
+                                className='w-full'
+                                editorContentClassName='p-5'
+                                output='html'
+                                placeholder='Type your description here...'
+                                autofocus={true}
+                                editable={true}
+                                editorClassName='focus:outline-none'
                               />
                             </FormControl>
                             <FormMessage />
@@ -167,7 +184,7 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
                       />
                       <FormField
                         control={form.control}
-                        name='isPreview'
+                        name='isFree'
                         render={({ field }) => (
                           <FormItem>
                             <div className='flex items-center space-x-2'>
@@ -177,7 +194,7 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
                                   onCheckedChange={field.onChange}
                                 />
                               </FormControl>
-                              <FormLabel>Enable Course Preview</FormLabel>
+                              <FormLabel>Enable Video Preview</FormLabel>
                             </div>
                             <FormDescription className='flex items-center space-x-2'>
                               <AlertCircle className='w-5 h-5' />{' '}
@@ -197,7 +214,12 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button type='submit' isLoading={isPending} onClick={onSubmit}>
+            <Button
+              type='submit'
+              isLoading={isPending}
+              onClick={onSubmit}
+              className='rounded-md'
+            >
               Submit
             </Button>
           </DialogFooter>
@@ -207,4 +229,4 @@ const FormVideo = ({ lessonId, unit, setUnit }: IFormProps) => {
   );
 };
 
-export default FormVideo;
+export default memo(FormVideo);

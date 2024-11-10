@@ -1,30 +1,37 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
+import { useToast } from '@/components/ui/use-toast';
+
 import {
   createLesson,
   getCategoriesByName,
-  getLessonByCourseId,
+  getLessonsByCourseId,
   getTagsByName,
   getTeacherCourses,
   updateLesson,
 } from '@/api';
 import { QueryKey } from '@/constant';
+import { validateError } from '@/utils';
 
 import { LessonCredentials } from '@/types';
 
 export const useLessons = (id?: string) =>
   useQuery({
-    queryKey: [QueryKey.Lessons],
-    queryFn: () => getLessonByCourseId(id ?? ''),
+    queryKey: [QueryKey.Lessons, id],
+    queryFn: () => getLessonsByCourseId(id ?? ''),
     enabled: !!id,
   });
 
-export const useModificationLesson = (id?: string) =>
-  useMutation({
-    mutationKey: ['modificationLesson'],
+export const useModificationLesson = (id?: string) => {
+  const { toast } = useToast();
+  return useMutation({
     mutationFn: (data: LessonCredentials) =>
       id ? updateLesson(data) : createLesson(data),
+    onError(error) {
+      toast({ variant: 'destructive', title: validateError(error) });
+    },
   });
+};
 
 export const useTeacherCourse = (name?: string, status?: string) =>
   useQuery({

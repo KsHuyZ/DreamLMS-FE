@@ -90,7 +90,7 @@ const FormQuiz = ({ lessonId }: FormQuizProps) => {
     const timeRemain = Number(currentTime) - Number(startOfToday);
     const time = timeRemain / 60000;
     if (lessonId) {
-      await createQuiz({ ...quizValues, time, questions, idLesson: lessonId });
+      await createQuiz({ ...quizValues, time, questions, lessonId });
     }
   };
 

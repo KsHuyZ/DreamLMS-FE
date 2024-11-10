@@ -65,8 +65,8 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
     TQuestionResults[]
   >([]);
   const { data: questions, isLoading: questionLoading } = useQuestion(
-    selectUnit?.quizResponse?.id,
-    selectUnit?.type
+    selectUnit?.id,
+    selectUnit?.unit
   );
   const pathName = usePathname();
   const { replace, push } = useRouter();
@@ -168,24 +168,24 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
     [createQueryString, setCurrentIndex]
   );
 
-  useEffect(() => {
-    if (data && !isLoading) {
-      const unitId = searchParams.get('unitId');
-      if (unitId) {
-        data.forEach((lesson) =>
-          lesson.units.forEach((unit) => {
-            if (unit.id === unitId) {
-              setSelectUnit(unit);
-              setCurrentLesson((prev) => [...prev, lesson.id]);
-            }
-          })
-        );
-      } else {
-        setCurrentLesson([data[0].id]);
-        setSelectUnit(data[0].units[0]);
-      }
-    }
-  }, [data, isLoading, searchParams]);
+  // useEffect(() => {
+  //   if (data && !isLoading) {
+  //     const unitId = searchParams.get('unitId');
+  //     if (unitId) {
+  //       data.forEach((lesson) =>
+  //         lesson.units.forEach((unit) => {
+  //           if (unit.id === unitId) {
+  //             setSelectUnit(unit);
+  //             setCurrentLesson((prev) => [...prev, lesson.id]);
+  //           }
+  //         })
+  //       );
+  //     } else {
+  //       setCurrentLesson([data[0].id]);
+  //       setSelectUnit(data[0].units[0]);
+  //     }
+  //   }
+  // }, [data, isLoading, searchParams]);
 
   useEffect(() => {
     if (showAnimation) {
@@ -198,16 +198,16 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
       push(`/certificate/${userId}/${id}`);
       return;
     }
-    if (data) {
-      data.forEach((lesson) =>
-        lesson.units.forEach((unit, index) => {
-          if (unit.id === selectUnit?.id && lesson.units.length - 1 < index) {
-            setSelectUnit(lesson.units[index]);
-          }
-        })
-      );
-      setSelectUnit(data[0].units[0]);
-    }
+    // if (data) {
+    //   data.forEach((lesson) =>
+    //     lesson.units.forEach((unit, index) => {
+    //       if (unit.id === selectUnit?.id && lesson.units.length - 1 < index) {
+    //         setSelectUnit(lesson.units[index]);
+    //       }
+    //     })
+    //   );
+    //   setSelectUnit(data[0].units[0]);
+    // }
     setFinalResult(undefined);
   };
 
@@ -277,7 +277,7 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
               <div className='grid grid-cols-4 gap-2 items-stretch overflow-scroll no-scrollbar mt-5'>
                 <div className='col-span-3'>
                   {data && selectUnit ? (
-                    selectUnit.type === EUnitType.VIDEO ? (
+                    selectUnit.unit === EUnitType.VIDEO ? (
                       <Video selectUnit={selectUnit} />
                     ) : (
                       <Quiz
@@ -299,7 +299,7 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
                   )}
                 </div>
                 {selectUnit ? (
-                  selectUnit.type === EUnitType.QUIZ ? (
+                  selectUnit.unit === EUnitType.QUIZ ? (
                     <Card className='border rounded-md'>
                       <CardHeader>
                         <CardTitle>Quiz list</CardTitle>
@@ -348,7 +348,7 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
 
         <div className='mx-4 flex flex-col space-y-2'>
           <Label className='font-bold text-xl'>Description</Label>
-          <div
+          {/* <div
             dangerouslySetInnerHTML={{
               __html: selectUnit
                 ? selectUnit.video
@@ -356,7 +356,7 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
                   : selectUnit?.quizResponse?.description ?? ''
                 : '',
             }}
-          />
+          /> */}
         </div>
       </div>
     </>

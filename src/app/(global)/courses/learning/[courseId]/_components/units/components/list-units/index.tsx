@@ -1,11 +1,5 @@
 import { ethers } from 'ethers';
-import {
-  BookOpen,
-  ChevronDown,
-  Clock,
-  PlayCircle,
-  StickyNote,
-} from 'lucide-react';
+import { BookOpen, ChevronDown, Clock } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, {
   Dispatch,
@@ -33,7 +27,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { useCourseProgress } from '@/app/(global)/courses/learning/[courseId]/_components/units/components/list-units/hooks';
 
-import { EUnitType, Lesson, TUnit } from '@/types';
+import { Lesson, TUnit } from '@/types';
 
 interface IListUnitsProps {
   isLoading: boolean;
@@ -63,28 +57,27 @@ const ListUnits = ({
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams);
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return replace(`${pathName}?${params.toString()}`);
+      // if (value) {
+      //   searchParams.set(name, value);
+      // } else {
+      //   searchParams.delete(name);
+      // }
+      // return replace(`${pathName}?${searchParams.toString()}`);
     },
     [searchParams, pathName, replace]
   );
 
   const onSelectUnit = (unit: TUnit) => {
-    if (unit.type === EUnitType.QUIZ) {
-      if (unit.quizResponse?.finalExam) {
-        setOpenAlert(true);
-        setCurrentUnit(unit.id);
-        return;
-      }
-      setOpen(true);
-      setCurrentUnit(unit.id);
-      return;
-    }
+    // if (unit.unit === EUnitType.QUIZ) {
+    //   if (unit.unit?.finalExam) {
+    //     setOpenAlert(true);
+    //     setCurrentUnit(unit.id);
+    //     return;
+    //   }
+    //   setOpen(true);
+    //   setCurrentUnit(unit.id);
+    //   return;
+    // }
     createQueryString('unitId', unit.id);
   };
 
@@ -220,7 +213,7 @@ const ListUnits = ({
                         'font-bold duration-700'
                       )}
                     >
-                      {lesson.title}
+                      {lesson.name}
                     </span>
                     <div className='flex space-x-2 items-center'>
                       <Clock size={15} />
@@ -256,15 +249,15 @@ const ListUnits = ({
                         )}
                       >
                         <BookOpen size={15} />
-                        <span>
+                        {/* <span>
                           {lesson.units?.length} lesson
                           {Number(lesson.units?.length) > 0 ? 's' : ''}
-                        </span>
+                        </span> */}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div
+                {/* <div
                   className={cn(
                     'no-scrollbar duration-700',
                     currentLesson.includes(lesson.id)
@@ -304,7 +297,7 @@ const ListUnits = ({
                       </div>
                     </div>
                   ))}
-                </div>
+                </div> */}
               </div>
             ))}
       </CardContent>

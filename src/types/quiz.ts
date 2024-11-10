@@ -34,11 +34,11 @@ export type TQuizSubmitResults = {
 export type TQuizCredentials = {
   title: string;
   description: string;
-  idLesson: string;
-  isFinalExam: boolean;
+  lessonId: string;
+  order?: number;
   finalExam?: boolean;
-  questions: TQuestion[];
-  time: number;
+  questions?: TQuestion[];
+  time?: number;
 };
 export type TQuiz = {
   id: string;

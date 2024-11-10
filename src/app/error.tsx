@@ -26,7 +26,7 @@ export default function Error({
           <h1 className='mt-8 text-4xl md:text-6xl'>
             Oops, something went wrong!
           </h1>
-          <div onClick={reset} className='mt-4'>
+          <div onClick={reset} className='mt-4 cursor-pointer'>
             Try again
           </div>
         </div>

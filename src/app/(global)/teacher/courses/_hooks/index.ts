@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import { useToast } from '@/components/ui/use-toast';
 
 import { createQuiz } from '@/api';
 import { createVideo, deleteLessonById } from '@/api';
+import { QueryKey } from '@/constant';
 import { validateError } from '@/utils';
 
 import { TQuizCredentials } from '@/types';
@@ -26,17 +28,23 @@ export const useDeleteLesson = () => {
 
 export const useCreateVideo = () => {
   const queryClient = useQueryClient();
+  const [progress, setProgress] = useState(0);
   const { toast } = useToast();
-  return useMutation({
-    mutationFn: (video: TVideoCredentials) => createVideo(video),
-    onSuccess() {
-      toast({ title: 'Create video success!', variant: 'success' });
-      queryClient.invalidateQueries({ queryKey: ['lessons'] });
-    },
-    onError(error) {
-      toast({ title: validateError(error), variant: 'destructive' });
-    },
-  });
+
+  return {
+    progress,
+    setProgress,
+    ...useMutation({
+      mutationFn: (video: TVideoCredentials) => createVideo(video, setProgress),
+      onSuccess() {
+        toast({ title: 'Create video success!', variant: 'success' });
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Lessons] });
+      },
+      onError(error) {
+        toast({ title: validateError(error), variant: 'destructive' });
+      },
+    }),
+  };
 };
 
 export const useCreateQuiz = () => {

@@ -27,6 +27,20 @@ const CourseList = ({ id }: CourseListProps) => {
 
   const lessons = useMemo(() => data?.map((lesson) => lesson.id), [data]) ?? [];
 
+  // const units = useMemo(() => {
+  //   const videos = lesson.videos.map((video) => ({
+  //     ...video,
+  //     unit: EUnitType.VIDEO,
+  //   }));
+  //   const quizzes = lesson.quizzes.map((quiz) => ({
+  //     ...quiz,
+  //     unit: EUnitType.QUIZ,
+  //   }));
+  //   return [...videos, ...quizzes].sort(
+  //     (a, b) => Number(a.order) - Number(b.order)
+  //   );
+  // }, [lesson.videos, lesson.quizzes]);
+
   const handleExpandAll = () => {
     if (currentLesson.length !== data?.length) {
       setCurrentLesson(lessons);
@@ -86,7 +100,7 @@ const CourseList = ({ id }: CourseListProps) => {
                   currentLesson.includes(lesson.id) ? 'border-primary-300' : ''
                 )}
               >
-                <div
+                {/* <div
                   className={cn(
                     'flex items-center gap-x-2 text-slate-700 p-2 px-4 text-sm cursor-pointer'
                   )}
@@ -108,7 +122,7 @@ const CourseList = ({ id }: CourseListProps) => {
                         'font-bold duration-700'
                       )}
                     >
-                      {lesson.title}
+                      {lesson.name}
                     </span>
                     <div className='flex space-x-2 items-center'>
                       <Clock size={15} />
@@ -151,8 +165,8 @@ const CourseList = ({ id }: CourseListProps) => {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div
+                </div> */}
+                {/* <div
                   className={cn(
                     'no-scrollbar duration-700',
                     currentLesson.includes(lesson.id)
@@ -191,7 +205,7 @@ const CourseList = ({ id }: CourseListProps) => {
                       </div>
                     </div>
                   ))}
-                </div>
+                </div> */}
               </div>
             ))}
       </div>

@@ -43,10 +43,10 @@ export const courseInfoSchema = z.object({
 export const createVideoSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
-  file: z.any().refine((file) => {
+  video: z.any().refine((file) => {
     return ACCEPTED_VIDEO_TYPES.includes(file?.type);
   }, 'Only .mp4, .webm formats are supported.'),
-  isPreview: z.boolean().default(false),
+  isFree: z.boolean().default(false),
 });
 
 export const deleteCourseSchema = z.object({

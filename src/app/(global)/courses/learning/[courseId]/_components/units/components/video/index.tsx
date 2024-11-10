@@ -19,7 +19,7 @@ const Video = ({ selectUnit }: IVideoProps) => {
           <Spinner />
         </div>
       }
-      url={selectUnit.video?.url}
+      url={selectUnit.video as unknown as string}
       playing
       pip
       autoPlay
@@ -31,7 +31,11 @@ const Video = ({ selectUnit }: IVideoProps) => {
         backgroundColor: '#0000',
       }}
     >
-      <source autoFocus src={selectUnit.video?.url} type='video/mp4' />
+      <source
+        autoFocus
+        src={selectUnit.video as unknown as string}
+        type='video/mp4'
+      />
     </ReactPlayer>
   );
 };

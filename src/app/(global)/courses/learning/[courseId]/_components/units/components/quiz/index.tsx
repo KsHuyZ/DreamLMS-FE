@@ -8,8 +8,6 @@ import React, {
   useState,
 } from 'react';
 
-import { useWindowDimensions } from '@/hooks';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -61,13 +59,12 @@ const Quiz = ({
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams);
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return replace(`${pathName}?${params.toString()}`);
+      // if (value) {
+      //   searchParams.set(name, value);
+      // } else {
+      //   searchParams.delete(name);
+      // }
+      // return replace(`${pathName}?${searchParams.toString()}`);
     },
     [pathName, replace, searchParams]
   );
@@ -110,11 +107,7 @@ const Quiz = ({
                   {isLoading ? (
                     <Skeleton className='w-48 h-4' />
                   ) : (
-                    <CountdownTime
-                      totalSeconds={
-                        Number(selectUnit?.quizResponse?.time) * 60 ?? 3600
-                      }
-                    />
+                    <CountdownTime totalSeconds={0} />
                   )}
                 </div>
               </div>
@@ -124,7 +117,7 @@ const Quiz = ({
                 <Button
                   onClick={() =>
                     mutateAsync({
-                      quizId: selectUnit?.quizResponse?.id ?? '',
+                      quizId: selectUnit?.id ?? '',
                       questionResultRequestList: questionResultList,
                     })
                   }
@@ -209,12 +202,12 @@ const Quiz = ({
                         className='stroke-current text-primary-600 duration-300'
                         stroke-width='2'
                         stroke-dasharray='100'
-                        stroke-dashoffset={
-                          100 -
-                          (questionResultList.length /
-                            Number(questions?.length) ?? 1) *
-                            100
-                        }
+                        // stroke-dashoffset={
+                        //   100 -
+                        //   (questionResultList.length /
+                        //     Number(questions?.length) ?? 1) *
+                        //     100
+                        // }
                         stroke='currentColor'
                         stroke-linecap='round'
                       ></circle>

@@ -1,4 +1,4 @@
-import { intervalToDuration } from 'date-fns';
+import { addSeconds, format, intervalToDuration } from 'date-fns';
 
 /**
  * regular expression to check for valid hour format (01-23)
@@ -221,4 +221,9 @@ export function formatTimeToDuration(time: number) {
     timeString += `${time * 1000} secs`;
   }
   return timeString;
+}
+
+export function convertSeconds(seconds: number) {
+  const date = addSeconds(new Date(0), seconds);
+  return format(date, 'mm:ss');
 }

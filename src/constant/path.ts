@@ -13,4 +13,6 @@ export const TeacherPath = {
   UpdateAdditionCourse: (id?: string) =>
     `/teacher/courses/update/addition/${id}`,
   SettingCourse: (id?: string) => `/teacher/courses/update/settings/${id}`,
+  CreateVideo: (courseId: string) =>
+    `/teacher/courses/update/lesson/${courseId}/video`,
 };

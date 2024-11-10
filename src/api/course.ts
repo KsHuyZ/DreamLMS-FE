@@ -5,7 +5,6 @@ import {
   ECourseStatus,
   ICategory,
   Lesson,
-  LessonCredentials,
   PaginationResponse,
   TCourse,
   TImage,
@@ -101,20 +100,9 @@ export const getTeacherCourses = ({
 export const getCoursesLesson = (id: string): Promise<Lesson[]> =>
   api.get(`/lesson/get-lessons?id=${id}`);
 
-export const createLesson = (lesson: LessonCredentials): Promise<Lesson> =>
-  api.post('/lesson/create', lesson);
-
-export const updateLesson = (lesson: LessonCredentials): Promise<Lesson> =>
-  api.put(`/lesson/update/${lesson.id}`, {
-    title: lesson.title,
-    content: lesson.content,
-  });
-
 export const getAllCourseCategories = (): Promise<ICategory[]> =>
   api.get('/course/categories/get-all');
 
-export const getLessonByCourseId = (id: string): Promise<Lesson[]> =>
-  api.get(`/lesson/get-lessons?id=${id}`);
 export const getCourseById = (id?: string): Promise<TCourse> =>
   api.get(`/courses/${id}`);
 
@@ -122,18 +110,6 @@ export const deleteLessonById = (id: string) =>
   api.delete('/lesson/delete', {
     data: id,
   });
-
-export const createVideo = (video: TVideoCredentials) => {
-  const data = new FormData();
-  data.append('title', video.title);
-  data.append('file', video.file as Blob);
-  data.append('idLesson', video.idLesson);
-  data.append('description', video.description);
-
-  return api.post('/video/create', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-};
 
 export const getMyCourse = (): Promise<TCourse[]> =>
   api.get('/course/get-by-user');
