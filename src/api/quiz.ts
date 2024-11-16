@@ -1,20 +1,19 @@
-import axios from '@/lib/api';
+import api from '@/lib/api';
 
 import { TQuestionResponse, TQuestionResults, TQuizCredentials } from '@/types';
 
 export const createQuiz = (quiz: TQuizCredentials) =>
-  axios.post('/quiz/create-group', quiz);
+  api.post('/quizzes', quiz);
 
 export const getQuizByUnitId = (id?: string) =>
-  axios.get(`/quiz/getListQuizByIdUnit?id=${id}`);
+  api.get(`/quiz/getListQuizByIdUnit?id=${id}`);
 
 export const getQuestionByQuizId = (
   id?: string
-): Promise<TQuestionResponse[]> =>
-  axios.get(`/question/get-by-quiz-id?id=${id}`);
+): Promise<TQuestionResponse[]> => api.get(`/question/get-by-quiz-id?id=${id}`);
 
 export const submitQuiz = (values: {
   quizId: string;
   questionResultRequestList: TQuestionResults[];
 }): Promise<{ score: string; isFinal: boolean; isPass: boolean }> =>
-  axios.post('/quiz-results/submit', values);
+  api.post('/quiz-results/submit', values);

@@ -33,7 +33,7 @@ import Video from '@/app/(global)/courses/learning/[courseId]/_components/units/
 
 import {
   EUnitType,
-  TChoice,
+  TAnswer,
   TQuestionResponse,
   TQuestionResults,
   TUnit,
@@ -81,7 +81,7 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
   const [loading, setLoading] = useState(false);
 
   const onAddQuestionList = useCallback(
-    (question: TQuestionResponse, choice: TChoice) => {
+    (question: TQuestionResponse, choice: TAnswer) => {
       setQuestionResultList((prev) => {
         const tempQuestionList = [...prev];
         const isQuestionExist = prev.find((q) => q.questionId === question.id);

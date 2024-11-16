@@ -1,19 +1,21 @@
 import { z } from 'zod';
 
+import { EQuizType } from '@/types';
+
 export const answerSchema = z.object({
-  content: z.string({ required_error: 'Title question is required' }),
-  correct: z.boolean(),
+  title: z.string({ required_error: 'Title question is required' }),
+  isCorrect: z.boolean(),
 });
 
 export const questionSchema = z.object({
-  content: z.string({ required_error: 'Title question is required' }),
+  title: z.string({ required_error: 'Title question is required' }),
   description: z.string(),
-  level: z.number(),
-  choices: z.array(answerSchema),
-});
-
-export const formSchema = z.object({
-  questions: z.array(questionSchema),
+  type: z.enum([
+    EQuizType.SingleChoice,
+    EQuizType.MultipleChoice,
+    EQuizType.Essay,
+  ]),
+  answers: z.array(answerSchema),
 });
 
 export const quizGroupSchema = z.object({
@@ -27,6 +29,6 @@ export const quizGroupSchema = z.object({
       required_error: 'Description is required!',
     })
     .trim(),
-  isFinalExam: z.boolean(),
   time: z.date(),
+  questions: z.array(questionSchema),
 });

@@ -1,11 +1,5 @@
 import { Draggable } from '@hello-pangea/dnd';
-import {
-  ChevronDown,
-  Download,
-  EllipsisVertical,
-  Grip,
-  Pencil,
-} from 'lucide-react';
+import { ChevronDown, EllipsisVertical, Grip, Pencil } from 'lucide-react';
 import {
   Dispatch,
   memo,
@@ -17,7 +11,6 @@ import {
 
 import { cn } from '@/lib/utils';
 
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,8 +23,8 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/components/ui/use-toast';
 
-import FormQuiz from '@/app/(global)/teacher/courses/__components/form-quiz';
 import DeleteLesson from '@/feature/teacher/features/courses/features/lessons/components/list-lesson/components/delete-lesson';
+import FormQuiz from '@/feature/teacher/features/courses/features/lessons/components/list-lesson/components/lesson-dropdown/components/form-quiz';
 import FormVideo from '@/feature/teacher/features/courses/features/lessons/components/list-lesson/components/lesson-dropdown/components/form-video';
 import Unit from '@/feature/teacher/features/courses/features/lessons/components/list-lesson/components/lesson-dropdown/components/unit';
 import { useModificationLesson } from '@/feature/teacher/features/courses/hooks';
@@ -138,7 +131,7 @@ const LessonDropdown = ({
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
-                      className='flex items-center space-x-4  text-muted-foreground'
+                      className='flex items-center space-x-4 text-muted-foreground'
                       onClick={() => onSelectLesson(lesson)}
                     >
                       <Pencil className='w-4 h-4 cursor-pointer hover:opacity-75 transition' />
@@ -181,12 +174,7 @@ const LessonDropdown = ({
                         setUnit={setSelectEdit}
                         refetch={refetch}
                       />
-                      <FormQuiz lessonId={currentLesson} />
-                    </div>
-                    <div>
-                      <Button variant='outline' leftIcon={Download}>
-                        Import
-                      </Button>
+                      <FormQuiz lessonId={currentLesson} refetch={refetch} />
                     </div>
                   </div>
                 </div>

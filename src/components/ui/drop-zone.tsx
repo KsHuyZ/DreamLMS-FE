@@ -110,7 +110,6 @@ const Dropzone = ({
   dropZoneClassName,
   children,
   showFilesList = true,
-  showErrorMessage = true,
   onFileChange,
   isSingleFile = false,
   value,
@@ -208,6 +207,7 @@ const Dropzone = ({
                   {(fileUploaded as File).type === 'application/pdf' ? (
                     <PDF className='text-rose-700 w-6 h-6' />
                   ) : (
+                    // eslint-disable-next-line jsx-a11y/alt-text
                     <Image className='text-rose-700 w-6 h-6' />
                   )}
                   <div className='flex flex-col gap-0'>

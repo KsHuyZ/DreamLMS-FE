@@ -1,7 +1,7 @@
 import {
   EllipsisVertical,
   Grip,
-  Pen,
+  Pencil,
   PlayCircle,
   StickyNote,
   Trash,
@@ -10,7 +10,6 @@ import React, { Dispatch, memo, SetStateAction, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,15 +74,11 @@ const Unit = ({ index, unit, setSelectEdit }: UnitProps) => {
                     className='flex items-center space-x-4 text-muted-foreground'
                     onClick={() => setSelectEdit(unit)}
                   >
-                    <Button variant='ghost'>
-                      <Pen size={15} />
-                    </Button>
+                    <Pencil className='w-4 h-4 cursor-pointer hover:opacity-75 transition' />
                     <span>Edit</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className='text-error'>
-                    <Button variant='ghost'>
-                      <Trash size={15} />
-                    </Button>
+                  <DropdownMenuItem className='flex items-center space-x-4 text-error'>
+                    <Trash className='w-4 h-4 cursor-pointer hover:opacity-75 transition' />
                     <span>Delete</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>

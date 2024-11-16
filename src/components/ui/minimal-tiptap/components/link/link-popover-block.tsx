@@ -25,13 +25,10 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
   const handleCopy = React.useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      navigator.clipboard
-        .writeText(url)
-        .then(() => {
-          setCopyTitle('Copied!');
-          setTimeout(() => setCopyTitle('Copy'), 1000);
-        })
-        .catch(console.error);
+      navigator.clipboard.writeText(url).then(() => {
+        setCopyTitle('Copied!');
+        setTimeout(() => setCopyTitle('Copy'), 1000);
+      });
     },
     [url]
   );

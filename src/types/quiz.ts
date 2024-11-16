@@ -1,23 +1,25 @@
-export type TChoice = {
-  id?: string;
-  content: string;
-  correct: boolean;
+export type TAnswerPayload = {
+  title: string;
+  isCorrect: boolean;
 };
+
+export type TAnswer = {
+  id: string;
+} & TAnswerPayload;
 
 export type TQuestion = {
   id?: string;
-  content: string;
+  title: string;
+  type: EQuizType;
   description: string;
-  level: number;
+  answers: TAnswerPayload[];
 };
 
 export type TQuestionResponse = TQuestion & {
-  choiceResponses: TChoice[];
+  choiceResponses: TAnswer[];
 };
 
-export type TQuestionCredential = TQuestion & {
-  choices: TChoice[];
-};
+export type TQuestionCredential = TQuestion;
 
 export type TQuestionResults = {
   questionId: string;
@@ -35,11 +37,16 @@ export type TQuizCredentials = {
   title: string;
   description: string;
   lessonId: string;
-  order?: number;
-  finalExam?: boolean;
   questions?: TQuestion[];
   time?: number;
 };
 export type TQuiz = {
   id: string;
+  order?: number;
 } & TQuizCredentials;
+
+export enum EQuizType {
+  SingleChoice = 'SingleChoice',
+  MultipleChoice = 'MultipleChoice',
+  Essay = 'Essay',
+}

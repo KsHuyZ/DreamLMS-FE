@@ -1,15 +1,21 @@
-import { TQuestionCredential } from '@/types';
+import { EQuizType, TQuestionCredential } from '@/types';
 
 export const initialQuestions: TQuestionCredential[] = [
   {
-    content: '',
-    level: 1,
+    title: '',
     description: '',
-    choices: [
+    type: EQuizType.SingleChoice,
+    answers: [
       {
-        correct: true,
-        content: '',
+        isCorrect: true,
+        title: '',
       },
     ],
   },
 ];
+
+export const initialQuiz = {
+  title: '',
+  description: '',
+  questions: initialQuestions,
+};

@@ -21,7 +21,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     {
       label,
       disabled: inputDisabled,
-      size = 'md',
       leftIcon: LeftIcon,
       rightIcon: RightIcon,
       htmlFor,

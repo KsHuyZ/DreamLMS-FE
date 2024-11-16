@@ -1,11 +1,5 @@
 'use client';
-import {
-  BookOpen,
-  ChevronDown,
-  Clock,
-  PlayCircle,
-  StickyNote,
-} from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -14,8 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { useLessonList } from '@/app/(global)/courses/_hooks';
-
-import { EUnitType } from '@/types';
 
 interface CourseListProps {
   id: string;

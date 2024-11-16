@@ -8,7 +8,6 @@ import {
   PaginationResponse,
   TCourse,
   TImage,
-  TVideoCredentials,
 } from '@/types';
 
 export const createCourses = (course: CourseCredentials): Promise<TCourse> => {

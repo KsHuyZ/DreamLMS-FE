@@ -13,6 +13,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 
 import Providers from '@/app/provider';
 import { siteConfig } from '@/constant/config';
+import { nunito } from '@/font';
 
 // !STARTERCONF Change these default meta
 // !STARTERCONF Look at @/constant/config to change them
@@ -67,7 +68,11 @@ export default async function RootLayout({
   return (
     <>
       <html>
-        <body lang={locale} suppressHydrationWarning>
+        <body
+          lang={locale}
+          suppressHydrationWarning
+          className={nunito.className}
+        >
           <NextTopLoader color='var(--color-primary-600)' />
           <NextIntlClientProvider messages={messages}>
             <Toaster />

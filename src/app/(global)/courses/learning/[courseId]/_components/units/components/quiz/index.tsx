@@ -24,7 +24,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import CountdownTime from '@/app/(global)/courses/learning/[courseId]/_components/units/components/quiz/components/countdown-time';
 
-import { TChoice, TQuestionResponse, TQuestionResults, TUnit } from '@/types';
+import { TAnswer, TQuestionResponse, TQuestionResults, TUnit } from '@/types';
 
 interface IQuizProps {
   questions?: TQuestionResponse[];
@@ -33,7 +33,7 @@ interface IQuizProps {
   selectUnit?: TUnit;
   currentIndex: number;
   setCurrentIndex: Dispatch<SetStateAction<number>>;
-  onAddQuestionList: (question: TQuestionResponse, choice: TChoice) => void;
+  onAddQuestionList: (question: TQuestionResponse, choice: TAnswer) => void;
   mutateAsync: (values: {
     quizId: string;
     questionResultRequestList: TQuestionResults[];
@@ -146,7 +146,7 @@ const Quiz = ({
                         <Skeleton className='w-96 h-4' />
                       </div>
                     ) : (
-                      questions && questions[currentIndex].content
+                      questions && questions[currentIndex].title
                     )}
                   </p>
                 </div>
@@ -158,7 +158,7 @@ const Quiz = ({
                     : questions &&
                       questions[currentIndex].choiceResponses.map((choice) => (
                         <Button
-                          key={choice.content}
+                          key={choice.title}
                           variant={
                             questionResultList.find(
                               (question) =>
@@ -171,7 +171,7 @@ const Quiz = ({
                             onAddQuestionList(questions[currentIndex], choice)
                           }
                         >
-                          {choice.content}
+                          {choice.title}
                         </Button>
                       ))}
                 </div>

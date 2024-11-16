@@ -157,7 +157,7 @@ const ModalLesson = ({
       <Button
         leftIcon={Plus}
         onClick={() => setOpen(true)}
-        className='rounded-md'
+        className='rounded-md w-full'
       >
         Add new Lesson
       </Button>
