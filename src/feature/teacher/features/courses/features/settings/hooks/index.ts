@@ -3,9 +3,11 @@ import { useRouter } from 'next/navigation';
 
 import { useToast } from '@/components/ui/use-toast';
 
-import { removeCourse } from '@/api';
+import { changeStatus, removeCourse } from '@/api';
 import { QueryKey, TeacherPath } from '@/constant';
 import { validateError } from '@/utils';
+
+import { ECourseStatus } from '@/types';
 
 export const useRemoveCourse = (id: string) => {
   const queryClient = useQueryClient();
@@ -20,6 +22,16 @@ export const useRemoveCourse = (id: string) => {
     },
     onError: (error) => {
       toast({ variant: 'destructive', title: validateError(error) });
+    },
+  });
+};
+
+export const useChangeCourseStatus = (id: string) => {
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: (status: ECourseStatus) => changeStatus(id, status),
+    onError(error) {
+      toast({ title: validateError(error), variant: 'destructive' });
     },
   });
 };

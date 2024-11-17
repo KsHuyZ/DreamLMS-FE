@@ -41,6 +41,7 @@ interface IFormContext {
   selectedCategories: IOptions[];
   setSelectedCategories: (categories: IOptions[]) => void;
   courseInfo?: TCourse;
+  refetch: () => void;
 }
 
 const FormContext = createContext<IFormContext | undefined>(undefined);
@@ -57,7 +58,11 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
   });
   const [selectedTags, setSelectedTags] = useState<IOptions[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<IOptions[]>([]);
-  const { data: courseInfo, isLoading: infoQueryLoading } = useCourseInfo(
+  const {
+    data: courseInfo,
+    isLoading: infoQueryLoading,
+    refetch,
+  } = useCourseInfo(
     id,
     pathName === TeacherPath.UpdateInfoCourse(id) ||
       pathName === TeacherPath.SettingCourse(id)
@@ -128,6 +133,7 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
         setSelectedCategories,
         setSelectedTags,
         courseInfo,
+        refetch,
       }}
     >
       <div className='flex flex-col space-y-4'>

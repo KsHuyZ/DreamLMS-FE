@@ -23,9 +23,6 @@ dependencies:
   '@hookform/resolvers':
     specifier: ^3.3.4
     version: 3.3.4(react-hook-form@7.51.1)
-  '@next/font':
-    specifier: ^14.2.15
-    version: 14.2.15(next@14.0.4)
   '@radix-ui/react-accordion':
     specifier: ^1.1.2
     version: 1.1.2(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)
@@ -2291,14 +2288,6 @@ packages:
     dependencies:
       glob: 7.1.7
     dev: true
-
-  /@next/font@14.2.15(next@14.0.4):
-    resolution: {integrity: sha512-QopYhBmCDDrNDynbi+ZD1hDZXmQXVFo7TmAFp4DQgO/kogz1OLbQ92hPigJbj572eZ3GaaVxNIyYVn3/eAsehg==}
-    peerDependencies:
-      next: '*'
-    dependencies:
-      next: 14.0.4(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0)
-    dev: false
 
   /@next/swc-darwin-arm64@14.0.4:
     resolution: {integrity: sha512-mF05E/5uPthWzyYDyptcwHptucf/jj09i2SXBPwNzbgBNc+XnwzrL0U6BmPjQeOL+FiB+iG1gwBeq7mlDjSRPg==}

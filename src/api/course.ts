@@ -68,6 +68,10 @@ export const removeCourse = async (id: string): Promise<void> => {
   await api.delete(`/courses/${id}`);
 };
 
+export const changeStatus = async (id: string, status: ECourseStatus) => {
+  await api.put(`/courses/${id}`, { status });
+};
+
 export const getCourses = (
   sort: string | null,
   priceMin = 0,
@@ -112,6 +116,3 @@ export const deleteLessonById = (id: string) =>
 
 export const getMyCourse = (): Promise<TCourse[]> =>
   api.get('/course/get-by-user');
-
-export const changeCourseStatus = (id: string, status: ECourseStatus) =>
-  api.post(`/course/update-status-by-teacher?id=${id}&status=${status}`);

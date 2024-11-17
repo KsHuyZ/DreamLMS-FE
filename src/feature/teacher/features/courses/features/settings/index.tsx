@@ -15,17 +15,21 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 import { useFormCourseContext } from '@/feature/teacher/features/courses/components/tab-form';
+import ModalStatus from '@/feature/teacher/features/courses/features/settings/components/modal-status';
 import { useRemoveCourse } from '@/feature/teacher/features/courses/features/settings/hooks';
+
+import { ECourseStatus } from '@/types';
 
 const SettingCourse = () => {
   const { id } = useParams();
-  const { courseInfo } = useFormCourseContext();
+  const { courseInfo, refetch } = useFormCourseContext();
   const [value, setValue] = useState('');
   const [isSubmit, setIsSubmit] = useState(false);
   const [open, setOpen] = useState(false);
   const { mutateAsync: removeCourse, isPending } = useRemoveCourse(
     id as string
   );
+
   const isError = useMemo(
     () => value.length > 1 && value !== courseInfo?.name && isSubmit,
     [value, courseInfo, isSubmit]
@@ -36,6 +40,7 @@ const SettingCourse = () => {
     await removeCourse();
     setOpen(false);
   }, [removeCourse, isError]);
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -95,17 +100,28 @@ const SettingCourse = () => {
                 <div className='flex-col space-y-2'>
                   <p className='text-lg'>Change course visibility</p>
                   <span className='text-sm text-muted-foreground'>
-                    This course currently is private
+                    This course currently is{' '}
+                    {courseInfo?.status === ECourseStatus.Publish
+                      ? 'Publish'
+                      : 'Private'}
                   </span>
                 </div>
-                <Button>Publish course</Button>
+                <ModalStatus
+                  id={id as string}
+                  newStatus={
+                    courseInfo?.status === ECourseStatus.Publish
+                      ? ECourseStatus.Draft
+                      : ECourseStatus.Publish
+                  }
+                  refetch={refetch}
+                />
               </div>
               <Separator className='my-4' />
               <div className='flex items-center justify-between'>
                 <div className='flex-col space-y-2'>
                   <p className='text-lg'>Change this course</p>
-                  <span className='text-sm text-muted-foreground'>
-                    This course currently is private
+                  <span className='text-sm text-error'>
+                    This course will be remove!
                   </span>
                 </div>
                 <Button variant='error' onClick={() => setOpen(true)}>
