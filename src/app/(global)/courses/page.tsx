@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import CoursesPage from '@/feature/courses';
+import CoursesPage from '@/features/courses';
 
 type Props = {
   searchParams: { name?: string };

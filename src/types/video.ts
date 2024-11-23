@@ -5,9 +5,9 @@ export type TVideoCredentials = {
   description: string;
   duration?: number;
   isFree?: boolean;
+  size: number;
 };
 
 export type TVideo = {
   id: string;
-  order: number;
 } & TVideoCredentials;

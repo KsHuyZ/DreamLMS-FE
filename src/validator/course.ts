@@ -40,6 +40,10 @@ export const courseInfoSchema = z.object({
   level: z.string().min(0, 'Level is require!'),
 });
 
+export const courseAdditionSchema = z.object({
+  videoPreview: z.any(),
+});
+
 export const createVideoSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),

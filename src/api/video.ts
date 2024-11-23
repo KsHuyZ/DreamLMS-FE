@@ -12,7 +12,7 @@ export const createVideo = (
   data.append('lessonId', video.lessonId);
   data.append('description', video.description);
   data.append('isFree', video.isFree ? 'true' : 'false');
-  return api.post('/videos', data, {
+  return api.post('/lesson-videos', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
     onUploadProgress: (progressEvent) =>
       setProgress(

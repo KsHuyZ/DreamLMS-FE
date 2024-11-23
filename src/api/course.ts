@@ -6,6 +6,7 @@ import {
   ICategory,
   Lesson,
   PaginationResponse,
+  TAdditionCoursePayload,
   TCourse,
   TImage,
 } from '@/types';
@@ -71,6 +72,24 @@ export const removeCourse = async (id: string): Promise<void> => {
 export const changeStatus = async (id: string, status: ECourseStatus) => {
   await api.put(`/courses/${id}`, { status });
 };
+
+export const addAdditionData = async (
+  id: string,
+  payload: TAdditionCoursePayload
+) => {
+  const { related, video } = payload;
+  const data = new FormData();
+  data.append('related', JSON.stringify(related));
+  data.append('video', video);
+  await api.put(`/courses/addition/${id}`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
+
+export const getAdditionCourse = (
+  ids: string[],
+  name: string
+): Promise<TCourse[]> => api.post(`/courses/except-ids`, { ids, name });
 
 export const getCourses = (
   sort: string | null,

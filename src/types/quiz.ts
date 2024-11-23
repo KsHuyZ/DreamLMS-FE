@@ -43,6 +43,7 @@ export type TQuizCredentials = {
 export type TQuiz = {
   id: string;
   order?: number;
+  disabled: boolean;
 } & TQuizCredentials;
 
 export enum EQuizType {

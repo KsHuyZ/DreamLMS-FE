@@ -7,9 +7,20 @@ export type LessonCredentials = {
   courseId?: string;
   disabled?: boolean;
 };
+
+export type TLessonVideo = {
+  id: string;
+  title: string;
+  description: string;
+  video?: TVideo;
+  disabled: boolean;
+  lessonId: string;
+  order?: number;
+};
+
 export type Lesson = {
   id: string;
   order: number;
-  videos: TVideo[];
+  videos: TLessonVideo[];
   quizzes: TQuiz[];
 } & LessonCredentials;

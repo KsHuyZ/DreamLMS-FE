@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { useParams } from 'next/navigation';
 import React from 'react';
 
-// import { useCourseInfo } from '@/app/(global)/teacher/courses/(modification-course)/edit/info/[id]/hooks';
+// import { useCourseInfo } from '@/app/(teacher)/teacher/courses/(modification-course)/edit/info/[id]/hooks';
 import { useCertificate } from '@/app/certificate/[userId]/[courseId]/_hooks';
 import Loading from '@/app/loading';
 

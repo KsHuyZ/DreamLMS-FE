@@ -1,2 +1,2 @@
-import ForgotPassword from '@/feature/auth/features/forgot-password';
+import ForgotPassword from '@/features/auth/features/forgot-password';
 export default ForgotPassword;

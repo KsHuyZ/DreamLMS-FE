@@ -300,11 +300,7 @@ export const MultiSelect = React.forwardRef<
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
                 {options.length > 1 ? (
-                  <CommandItem
-                    key='all'
-                    onSelect={toggleAll}
-                    className='cursor-pointer'
-                  >
+                  <CommandItem key='all' onSelect={toggleAll}>
                     <div
                       className={cn(
                         'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',

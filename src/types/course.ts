@@ -5,9 +5,9 @@ import {
   ICategory,
   ITag,
   TImage,
+  TLessonVideo,
   TQuiz,
   TUser,
-  TVideoCredentials,
 } from '@/types';
 
 export type CourseCredentials = {
@@ -36,6 +36,11 @@ export type TCourse = {
   duration: number;
 };
 
+export interface CourseAdditionForm {
+  related: TCourse[];
+  video: File;
+}
+
 export enum EUnitType {
   VIDEO = 'video',
   QUIZ = 'quiz',
@@ -43,10 +48,15 @@ export enum EUnitType {
 
 export type TUnit = {
   unit: EUnitType;
-} & TVideoCredentials &
+} & TLessonVideo &
   TQuiz;
 
 export enum ECourseStatus {
   Publish = 'publish',
   Draft = 'draft',
 }
+
+export type TAdditionCoursePayload = {
+  video: File;
+  related: string[];
+};
