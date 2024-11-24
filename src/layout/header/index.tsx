@@ -65,14 +65,22 @@ const Header = ({ user }: HeaderProps) => {
   const { toast } = useToast();
   const [value, setValue] = useState(searchParams.get('name') ?? '');
   const [focus, setFocus] = useState(false);
-  const valueDebounce = useDebounce(value);
 
   useEffect(() => {
-    const params = new URLSearchParams(Object.entries(searchParams));
-    params.set('name', valueDebounce);
-    params.set('page', '1');
-    router.push(`${pathName}?${params.toString()}`);
-  }, [valueDebounce, searchParams, router, pathName]);
+    const searchName = searchParams.get('name') ?? '';
+    setValue(searchName);
+  }, [searchParams]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(
+      searchParams as unknown as URLSearchParams
+    );
+    if (pathName.startsWith('/courses')) {
+      params.set('name', value);
+      params.set('page', '1');
+      router.push(`${pathName}?${params.toString()}`);
+    }
+  }, [value, searchParams, router, pathName]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
