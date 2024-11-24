@@ -2,12 +2,18 @@ import api from '@/lib/api';
 
 import {
   CourseCredentials,
+  ECourseDuration,
+  ECourseRate,
+  ECourseSort,
   ECourseStatus,
+  ELevel,
+  EPayType,
   ICategory,
   Lesson,
   PaginationResponse,
   TAdditionCoursePayload,
   TCourse,
+  TCourseQuery,
   TImage,
 } from '@/types';
 
@@ -92,16 +98,25 @@ export const getAdditionCourse = (
 ): Promise<TCourse[]> => api.post(`/courses/except-ids`, { ids, name });
 
 export const getCourses = (
-  sort: string | null,
-  priceMin = 0,
-  priceMax = 1000000000,
-  keyword: string | null
-): Promise<PaginationResponse<TCourse>> =>
-  api.get('/course/get-all', {
+  sort = ECourseSort.Newest,
+  rate: ECourseRate,
+  duration: ECourseDuration[],
+  payType: EPayType[],
+  level: ELevel,
+  page = 0,
+  name = ''
+): Promise<PaginationResponse<TCourseQuery>> =>
+  api.get('/courses', {
     params: {
       sort,
-      priceMin: 0,
-      priceMax: 10000000000,
+      page,
+      filters: {
+        rate,
+        duration,
+        payType,
+        name,
+        level,
+      },
     },
   });
 

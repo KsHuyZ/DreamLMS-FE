@@ -36,6 +36,10 @@ export type TCourse = {
   duration: number;
 };
 
+export type TCourseQuery = Omit<TCourse, 'lessons'> & {
+  lessons: number;
+  duration: number;
+};
 export interface CourseAdditionForm {
   related: TCourse[];
   video: File;
@@ -45,6 +49,39 @@ export enum EUnitType {
   VIDEO = 'video',
   QUIZ = 'quiz',
 }
+
+export enum ECourseSort {
+  Newest = 'newest',
+  MostReviewed = 'most-reviewed',
+  HighRated = 'high-rated',
+}
+
+export enum EPayType {
+  Free = 'Free',
+  Paid = 'Paid',
+}
+
+export enum ECourseDuration {
+  LessThanOneHour,
+  OneToThreeHours,
+  ThreeToSixHours,
+  SixToSevenTeenHours,
+  MoreThanSevenTeenHours,
+}
+
+export enum ECourseRate {
+  OneStar = '1',
+  TwoStar = '2',
+  ThreeStar = '3',
+  FourStar = '4',
+}
+
+export type TCourseFilter = {
+  rate: ECourseRate;
+  duration: ECourseDuration[];
+  payment: EPayType[];
+  level: ELevel;
+};
 
 export type TUnit = {
   unit: EUnitType;

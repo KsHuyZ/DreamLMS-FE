@@ -2,6 +2,7 @@
 import { ListFilter } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { cn } from '@/lib/utils';
 
@@ -21,51 +22,54 @@ import {
 
 import CoursesFilter from '@/features/courses/components/courses-filter';
 
-import { ECourseStatus, ELevel, ERoles } from '@/types';
+import {
+  ECourseDuration,
+  ECourseRate,
+  ECourseSort,
+  ELevel,
+  EPayType,
+  TCourseFilter,
+} from '@/types';
+import { useGuestCourses } from '@/features/courses/hooks';
+import { Skeleton } from '@/components/ui/skeleton';
+import Image from 'next/image';
 
-const mockCourse = {
-  id: 'string',
-  name: 'Tailwind from zero to hero',
-  price: 20000,
-  videoPreview: 'https://example.com/path/to/file.mp4',
-  description: 'this is description',
-  shortDescription: 'this is short description',
-  image: {
-    id: '',
-    name: '',
-    url: '/images/spider.jpg',
-    format: '',
-    size: 10,
-    publicId: '',
-  },
-  duration: 2000,
-  createdBy: {
-    id: 'strng',
-    firstName: 'Samantha',
-    email: 'hahahahahaha@gmail.com',
-    lastName: 'Woolfie',
-    role: ERoles.TEACHER,
-    photo: '/images/avatar.jpg',
-  },
-  tags: [],
-  categories: [],
-  lessons: 1,
-  level: ELevel.BEGINNER,
-  isDeleted: true,
-  willLearn: ['Become master css', 'Become master React', "I don't know"],
-  createdAt: '2024-08-31T08:06:49.029Z',
-  updatedAt: '2024-08-31T08:06:49.029Z',
-  status: ECourseStatus.Draft,
+const defaultValues: TCourseFilter = {
+  rate: ECourseRate.OneStar,
+  duration: [] as ECourseDuration[],
+  payment: [] as EPayType[],
+  level: ELevel.ALL,
 };
 
 const CoursesPage = () => {
   const searchParams = useSearchParams();
   const [showFilter, setShowFilter] = useState(true);
+  const [sortBy, setSortBy] = useState(ECourseSort.Newest);
+  const form = useForm({ defaultValues });
+  const { duration, level, payment, rate } = form.watch();
+
+  const [pagination, setPagination] = useState({ page: 1 });
+  const { data: coursePaginate, isLoading } = useGuestCourses(
+    sortBy,
+    rate,
+    duration,
+    payment,
+    level,
+    pagination.page,
+    searchParams.get('name') ?? ''
+  );
+
   return (
     <section className='px-5 xl:px-0 xl:container mt-32'>
       <div className='space-y-5'>
-        <h1 className='max-w-[800px]'>
-          10.000 results for “{searchParams.get('name')}”
+        <h1 className='max-w-[800px] flex items-center'>
+          {isLoading ? (
+            <Skeleton className='w-40 h-8 mx-4' />
+          ) : (
+            coursePaginate?.total ?? 0
+          )}{' '}
+          results for “
+          <span className='text-tertiary-800'>{searchParams.get('name')}</span>”
         </h1>
         <div className='flex items-end space-x-4'>
           <Button
@@ -79,16 +83,23 @@ const CoursesPage = () => {
           </Button>
           <div className='flex flex-col space-y-2'>
             <Label>Sort by</Label>
-            <Select defaultValue='newest'>
+            <Select
+              value={sortBy}
+              onValueChange={(value: ECourseSort) => setSortBy(value)}
+            >
               <SelectTrigger className='w-[180px]'>
                 <SelectValue placeholder='Sort by' />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Sort by</SelectLabel>
-                  <SelectItem value='newest'>Newest</SelectItem>
-                  <SelectItem value='most-reviewed'>Most Reviewed</SelectItem>
-                  <SelectItem value='high-rated'>High Rated</SelectItem>
+                  <SelectItem value={ECourseSort.Newest}>Newest</SelectItem>
+                  <SelectItem value={ECourseSort.MostReviewed}>
+                    Most Reviewed
+                  </SelectItem>
+                  <SelectItem value={ECourseSort.HighRated}>
+                    High Rated
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -102,7 +113,7 @@ const CoursesPage = () => {
               showFilter ? 'translate-x-0' : '-translate-x-full lg:hidden'
             )}
           >
-            <CoursesFilter />
+            <CoursesFilter form={form} />
           </div>
           <div
             className={cn(
@@ -117,19 +128,40 @@ const CoursesPage = () => {
                   showFilter ? 'translate-x-0' : ''
                 )}
               >
-                <CourseCardRow course={mockCourse} />
-                <CourseCardRow course={mockCourse} />
-                <CourseCardRow course={mockCourse} />
-                <CourseCardRow course={mockCourse} />
-                <CourseCardRow course={mockCourse} />
+                {isLoading ? (
+                  Array.from({ length: 5 }).map((_, index) => (
+                    <CourseCardRow loading={isLoading} key={index} />
+                  ))
+                ) : !coursePaginate ||
+                  !coursePaginate.data ||
+                  !coursePaginate.data.length ? (
+                  <div className='h-[calc(100vh-300px)] w-full flex justify-center items-center'>
+                    <div className='flex flex-col space-y-4 items-center'>
+                      <Image
+                        src='/images/empty.svg'
+                        width={150}
+                        height={150}
+                        alt='empty'
+                      />
+                      <Label>No result found</Label>
+                    </div>
+                  </div>
+                ) : (
+                  coursePaginate?.data.map((course) => {
+                    return <CourseCardRow course={course} key={course.id} />;
+                  })
+                )}
               </div>
-              <Paginations
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                onPageChange={(page) => {}}
-                currentPage={1}
-                totalCount={20}
-                pageSize={5}
-              />
+              {!isLoading && Number(coursePaginate?.data.length) > 0 && (
+                <Paginations
+                  onPageChange={(page) =>
+                    setPagination((prev) => ({ ...prev, page: page + 1 }))
+                  }
+                  currentPage={pagination.page}
+                  totalCount={coursePaginate?.total ?? 0}
+                  pageSize={40}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 
 import { deleteCookie } from '@/lib/action';
 import { cn } from '@/lib/utils';
-import { useHeader } from '@/hooks';
+import { useDebounce, useHeader } from '@/hooks';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -65,16 +65,14 @@ const Header = ({ user }: HeaderProps) => {
   const { toast } = useToast();
   const [value, setValue] = useState(searchParams.get('name') ?? '');
   const [focus, setFocus] = useState(false);
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const disabled = value.length <= 3;
-    !disabled && router.push(`/courses/?name=${value}`);
-  };
+  const valueDebounce = useDebounce(value);
 
   useEffect(() => {
-    const searchName = searchParams.get('name') ?? '';
-    setValue(searchName);
-  }, [searchParams]);
+    const params = new URLSearchParams(Object.entries(searchParams));
+    params.set('name', valueDebounce);
+    params.set('page', '1');
+    router.push(`${pathName}?${params.toString()}`);
+  }, [valueDebounce, searchParams, router, pathName]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -174,7 +172,6 @@ const Header = ({ user }: HeaderProps) => {
                       'relative duration-500',
                       focus || value ? 'w-[500px]' : 'w-12'
                     )}
-                    onSubmit={onSubmit}
                     onFocus={() => setFocus(true)}
                   >
                     <Search className='text-primary-600 w-4 h-4 absolute top-1/2 transform -translate-y-1/2 left-3' />
