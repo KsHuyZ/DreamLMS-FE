@@ -20,3 +20,6 @@ export const createVideo = (
       ),
   });
 };
+
+export const getVideo = (id: string): Promise<string> =>
+  api.get(`/videos/${id}`);

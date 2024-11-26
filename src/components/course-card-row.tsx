@@ -20,7 +20,7 @@ const CourseCardRow = ({ course, loading }: CourseCardProps) => {
     <HoverCard openDelay={0.5} closeDelay={0.5}>
       <HoverCardTrigger asChild>
         <Link
-          href={!loading ? `/course/${course?.id}` : '#'}
+          href={!loading ? `/courses/${course?.id}` : '#'}
           className='flex justify-between p-4 rounded-md border duration-500 hover:shadow-md'
         >
           <div className='flex items-center space-x-4'>

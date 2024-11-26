@@ -1,12 +1,12 @@
 import api from '@/lib/api';
 
-import { Lesson, LessonCredentials } from '@/types';
+import { Lesson, LessonPayload } from '@/types';
 
 export const getLessonsByCourseId = (courseId: string): Promise<Lesson[]> =>
   api.get(`/lessons/course/${courseId}`);
 
-export const createLesson = (lesson: LessonCredentials): Promise<Lesson> =>
+export const createLesson = (lesson: LessonPayload): Promise<Lesson> =>
   api.post('/lessons', lesson);
 
-export const updateLesson = (lesson: LessonCredentials): Promise<Lesson> =>
+export const updateLesson = (lesson: LessonPayload): Promise<Lesson> =>
   api.put(`/lessons/${lesson.id}`, lesson);

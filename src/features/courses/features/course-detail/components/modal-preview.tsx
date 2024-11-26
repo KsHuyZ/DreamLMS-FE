@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import { IoPlayCircleOutline } from 'react-icons/io5';
 
+import Spinner from '@/components/loading/spinner';
 import {
   Dialog,
   DialogContent,
@@ -13,14 +14,24 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
+import { useVideo } from '@/features/courses/features/course-detail/hooks';
+
+const ReactPlayer = dynamic(() => import('react-player'), {
+  ssr: false,
+  loading() {
+    return <Spinner />;
+  },
+});
 
 interface IModalPreviewProps {
   img: string;
   name: string;
+  videoId: string;
 }
 
-const ModalPreview = ({ img, name }: IModalPreviewProps) => {
+const ModalPreview = ({ img, name, videoId }: IModalPreviewProps) => {
+  const { data: video, isLoading } = useVideo(videoId);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -44,20 +55,24 @@ const ModalPreview = ({ img, name }: IModalPreviewProps) => {
           <DialogDescription>Course Preview</DialogDescription>
           <DialogTitle>{name}</DialogTitle>
         </DialogHeader>
-        <ReactPlayer
-          url='/videos/course-example.mp4'
-          playing={true}
-          light
-          pip
-          autoPlay
-          muted={false}
-          controls
-          style={{
-            borderRadius: 20,
-          }}
-        >
-          <source autoFocus src='/videos/course-example.mp4' type='video/mp4' />
-        </ReactPlayer>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <ReactPlayer
+            url={video}
+            playing={true}
+            light
+            pip
+            autoPlay
+            muted={false}
+            controls
+            style={{
+              borderRadius: 20,
+            }}
+          >
+            <source autoFocus src={video} type='video/hls' />
+          </ReactPlayer>
+        )}
       </DialogContent>
     </Dialog>
   );

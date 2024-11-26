@@ -1,6 +1,6 @@
 import { TQuiz, TVideo } from '@/types';
 
-export type LessonCredentials = {
+export type LessonPayload = {
   id?: string;
   name: string;
   description?: string;
@@ -23,4 +23,4 @@ export type Lesson = {
   order: number;
   videos: TLessonVideo[];
   quizzes: TQuiz[];
-} & LessonCredentials;
+} & LessonPayload;

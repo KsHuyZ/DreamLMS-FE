@@ -85,8 +85,7 @@ const CourseInfoTab = () => {
     [inputCategoryValue, categories, selectedCategories]
   );
 
-  return !!id &&
-    (isLoading || !selectedCategories.length || !selectedTags.length) ? (
+  return !!id && isLoading ? (
     <div className='w-full h-full flex justify-center items-center'>
       <Spinner />
     </div>

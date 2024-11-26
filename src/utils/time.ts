@@ -231,11 +231,11 @@ export function convertSeconds(seconds: number) {
 export const formatTime = (time: number) => {
   if (time > 60) {
     const minutes = Math.floor(time / 60);
-    return `${minutes} total minutes`;
+    return `${minutes} minutes`;
   }
   if (time > 3600) {
     const hours = Math.floor(time / 3600);
-    return `${hours} total hour${hours > 1 ? 's' : ''}`;
+    return `${hours} hour${hours > 1 ? 's' : ''}`;
   }
-  return `${time} total second${time > 1 ? 's' : ''}`;
+  return `${time} second${time > 1 ? 's' : ''}`;
 };

@@ -8,17 +8,23 @@ import {
   TLessonVideo,
   TQuiz,
   TUser,
+  TVideo,
 } from '@/types';
 
 export type CourseCredentials = {
   id?: string;
 } & CreateCourseForm;
 
+export type TCourseVideo = {
+  id: string;
+  video: TVideo;
+};
+
 export type TCourse = {
   id: string;
   image: TImage;
   name: string;
-  videoPreview?: string;
+  video?: TVideo;
   description: string;
   shortDescription: string;
   createdBy: TUser;
@@ -34,6 +40,8 @@ export type TCourse = {
   deletedAt?: string;
   price: number;
   duration: number;
+  courseVideo?: TCourseVideo;
+  related?: TCourse[];
 };
 
 export type TCourseQuery = Omit<TCourse, 'lessons'> & {

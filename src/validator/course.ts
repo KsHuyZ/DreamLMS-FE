@@ -28,11 +28,14 @@ export const courseInfoSchema = z.object({
     .string({
       required_error: 'About course is require',
     })
+    .min(500, 'Short description must have more 500 characters')
+    .max(1000, 'Short description max is 1000 characters')
     .trim(),
   shortDescription: z
     .string({
       required_error: 'Short description is required!',
     })
+    .min(100, 'Short description must have more 100 characters')
     .trim(),
   image: z.any(),
   tags: z.array(z.string()).min(0, 'Tag at lease one item!'),

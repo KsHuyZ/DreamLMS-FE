@@ -13,7 +13,7 @@ import {
 import { QueryKey } from '@/constant';
 import { validateError } from '@/utils';
 
-import { LessonCredentials } from '@/types';
+import { LessonPayload } from '@/types';
 
 export const useLessons = (id?: string) =>
   useQuery({
@@ -25,7 +25,7 @@ export const useLessons = (id?: string) =>
 export const useModificationLesson = (id?: string) => {
   const { toast } = useToast();
   return useMutation({
-    mutationFn: (data: LessonCredentials) =>
+    mutationFn: (data: LessonPayload) =>
       id ? updateLesson(data) : createLesson(data),
     onError(error) {
       toast({ variant: 'destructive', title: validateError(error) });

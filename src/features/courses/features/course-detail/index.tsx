@@ -1,4 +1,4 @@
-import { Award, Clock, GraduationCap, Signal } from 'lucide-react';
+import { Metadata, ResolvingMetadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
 
@@ -10,61 +10,95 @@ import { Label } from '@/components/ui/label';
 import { Ratings } from '@/components/ui/rating';
 import { Separator } from '@/components/ui/separator';
 
-import CourseList from '@/app/(global)/courses/[courseId]/_components/course-list';
+import { getCourseById } from '@/api';
+import AddCart from '@/app/(global)/courses/[courseId]/_components/add-cart';
 import Enroll from '@/app/(global)/courses/[courseId]/_components/enroll';
-import ModalPreview from '@/app/(global)/courses/[courseId]/_components/modal-preview';
 import PayMent from '@/app/(global)/courses/[courseId]/_components/payment';
-import { formatPrice, generateNameColor } from '@/utils';
+import LessonList from '@/features/courses/features/course-detail/components/lesson-list';
+import ModalPreview from '@/features/courses/features/course-detail/components/modal-preview';
+import {
+  formatPrice,
+  formatTime,
+  generateNameColor,
+  levelCourseMap,
+} from '@/utils';
+// import { formatPrice, generateNameColor } from '@/utils';
 
-import { TCourse } from '@/types';
+type Props = {
+  params: {
+    courseId: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-interface ICourseViewProps {
-  course: TCourse;
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // fetch data
+  const course = await getCourseById(params.courseId);
+
+  // optionally access and extend (rather than replace) parent metadata
+  // const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: course.name,
+    openGraph: {
+      images: [course.image.url],
+    },
+  };
 }
 
-const CourseView = ({ course }: ICourseViewProps) => {
+const CourseIdPage = async ({ params: { courseId } }: Props) => {
+  const course = await getCourseById(courseId);
+  const duration = course.duration;
   return (
-    <div className='w-full h-full'>
+    <div className='w-full h-full space-y-14 min-h-[calc(100vh-80px)]'>
       <div className='flex flex-col space-y-8'>
-        <div className='bg-primary-600 px-10 py-5 rounded-md'>
-          <div className='grid grid-cols-3 gap-2 items-center'>
+        <section className='bg-[url(/images/banner.png)] w-full py-20 pt-40 rounded-md'>
+          <div className='grid grid-cols-3 gap-2 items-center px-5 xl:px-0 xl:container'>
             <div className='col-span-2'>
               <div className='flex flex-col space-y-4'>
-                <h3 className='text-white'>{course.name}</h3>
+                <h3 className='text-tertiary-800 font-bold text-3xl'>
+                  {course.name}
+                </h3>
                 <div className='flex items-center space-x-4'>
                   <Ratings rating={4.5} totalStars={5} variant='yellow' />
-                  <span className='underline text-white'>(400 ratings)</span>
-                  <span className='text-white'>3000 students</span>
+                  <span className='text-tertiary-600'>(400 ratings)</span>
                 </div>
+                <span className='text-tertiary-600'>3000 students</span>
                 <div>
-                  <p className='text-white'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Odit corrupti delectus dignissimos, nihil repudiandae
-                    excepturi soluta totam quas impedit in architecto dicta
-                    explicabo ullam hic quam unde expedita quis illum!
-                  </p>
+                  <p className='text-tertiary-800'>{course.shortDescription}</p>
                 </div>
                 <div className='flex items-center space-x-2'>
                   {course.tags.map((tag) => (
-                    <Badge
-                      key={tag.id}
-                      className='text-white'
-                      variant='outline'
-                    >
+                    <Badge key={tag.id} variant='secondary'>
                       {tag.name}
                     </Badge>
                   ))}
                 </div>
+                <div>
+                  <Button
+                    variant='secondary'
+                    className='bg-white/50 text-tertiary-800 border-white border'
+                  >
+                    Get Started
+                  </Button>
+                </div>
               </div>
             </div>
-            <ModalPreview img={course.image.url} name={course.name} />
+            <ModalPreview
+              img={course.image.url}
+              name={course.name}
+              videoId={course.courseVideo?.video.id ?? ''}
+            />
           </div>
-        </div>
-        <div className='grid grid-cols-3 gap-2 items-start'>
-          <div className='flex flex-col space-y-8 col-span-2'>
+        </section>
+        <div className='grid grid-cols-3 gap-2 items-start px-5 xl:px-0 xl:container'>
+          <div className='flex flex-col space-y-8 col-span-2 p-4'>
             <div className='flex flex-col space-y-4'>
               <h3>Course content</h3>
-              <CourseList id={course.id} />
+              <LessonList id={courseId} />
             </div>
             <div className='flex flex-col space-y-4'>
               <h3>Description</h3>
@@ -74,7 +108,7 @@ const CourseView = ({ course }: ICourseViewProps) => {
             </div>
           </div>
 
-          <Card className='sticky top-0'>
+          <Card className='sticky top-0 border-primary-600 border-2 shadow-md'>
             <CardHeader>
               <CardTitle>
                 {course.price === 0 ? 'Free' : `${formatPrice(course.price)}`}
@@ -87,31 +121,33 @@ const CourseView = ({ course }: ICourseViewProps) => {
                     <Enroll id={course.id} />
                   ) : (
                     <div className='flex flex-col space-y-4'>
-                      <Button>Add to cart</Button>
+                      <AddCart id={course.id} />
                       <PayMent amount={course.price} />
                     </div>
                   )}
                   <div className='flex flex-col space-y-4'>
-                    <Label>This course includes:</Label>
                     <div className='flex flex-col space-y-2 text-gray-500'>
-                      <div className='flex items-center space-x-2'>
-                        <Signal className='w-4 h-4' />
-                        <span>Intermediate</span>
+                      <div className='flex items-center justify-between'>
+                        <Label className='text-black font-bold text-md'>
+                          Level
+                        </Label>
+                        <Badge>{levelCourseMap.get(course.level)}</Badge>
                       </div>
-                      <div className='flex items-center space-x-2'>
-                        <GraduationCap className='w-4 h-4' />
-                        <span>10 Total Enrolled</span>
+                      <div className='flex items-center justify-between'>
+                        <Label className='text-black font-bold text-md'>
+                          Enrolled
+                        </Label>
+                        <Badge>10</Badge>
                       </div>
-                      <div className='flex items-center space-x-2'>
-                        <Clock className='w-4 h-4' />
-                        <span>12 hours Duration</span>
-                      </div>
-                      <div className='flex items-center space-x-2'>
-                        <Award className='w-4 h-4' />
-                        <span>Certificate of completion</span>
+                      <div className='flex items-center justify-between'>
+                        <Label className='text-black font-bold text-md'>
+                          Duration
+                        </Label>
+                        <Badge>{formatTime(duration)}</Badge>
                       </div>
                     </div>
                   </div>
+                  <Separator />
                   <div className='flex flex-col space-y-2'>
                     <Label>Coupon code</Label>
                     <div className='grid grid-cols-3 gap-2 items-center'>
@@ -138,7 +174,9 @@ const CourseView = ({ course }: ICourseViewProps) => {
                       >
                         H
                       </div>
-                      <span>Huy Phân Tiến</span>
+                      <span>
+                        {course.createdBy.firstName} {course.createdBy.lastName}
+                      </span>
                     </Link>
                   </div>
                 </div>
@@ -151,4 +189,4 @@ const CourseView = ({ course }: ICourseViewProps) => {
   );
 };
 
-export default CourseView;
+export default CourseIdPage;

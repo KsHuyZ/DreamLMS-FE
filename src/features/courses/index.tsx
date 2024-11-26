@@ -60,7 +60,7 @@ const CoursesPage = () => {
   );
 
   return (
-    <section className='px-5 xl:px-0 xl:container mt-32'>
+    <section className='mt-32 px-5 xl:px-0 xl:container'>
       <div className='space-y-5'>
         <h1 className='max-w-[800px] flex items-center'>
           {isLoading ? (

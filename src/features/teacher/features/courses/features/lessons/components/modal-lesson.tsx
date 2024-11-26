@@ -25,7 +25,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useModificationLesson } from '@/features/teacher/features/courses/hooks';
 import { lessonSchema } from '@/validator';
 
-import { Lesson, LessonCredentials } from '@/types';
+import { Lesson, LessonPayload } from '@/types';
 
 interface ModalLessonProps {
   courseId: string;
@@ -44,13 +44,13 @@ const ModalLesson = ({
   const { isPending, mutateAsync: modificationLesson } = useModificationLesson(
     currentLesson?.id
   );
-  const form = useForm<LessonCredentials>({
+  const form = useForm<LessonPayload>({
     resolver: zodResolver(lessonSchema),
   });
   const { toast } = useToast();
 
   const onSubmit = useCallback(
-    async (values: LessonCredentials) => {
+    async (values: LessonPayload) => {
       if (courseId) {
         const lessonValues = currentLesson
           ? { ...values, courseId, id: currentLesson.id }

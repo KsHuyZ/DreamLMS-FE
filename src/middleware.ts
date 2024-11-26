@@ -7,9 +7,14 @@ const authRoutes = ['/sign-in', 'sign-up'];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
-  const user = JSON.parse(request.cookies.get('user')?.value ?? '') as TUser;
+  let user;
+  if (request.cookies.get('user')?.value) {
+    user = JSON.parse(request.cookies.get('user')?.value ?? '') as TUser;
+  }
+
   const { pathname } = request.nextUrl;
-  if (!token) return NextResponse.redirect(new URL('/sign-in', request.url));
+  if (!token || !user)
+    return NextResponse.redirect(new URL('/sign-in', request.url));
   if (token && authRoutes.includes(pathname))
     return NextResponse.redirect(new URL('/', request.url));
   if (pathname.startsWith('/teacher') && !user.role.includes(ERoles.TEACHER))
