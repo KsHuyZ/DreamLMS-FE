@@ -41,7 +41,7 @@ const Footer = () => {
             <h5 className='mb-6 uppercase text-tertiary-800 font-bold'>
               For Instructor
             </h5>
-            <ul className='text-gray-500 dark:text-gray-400 font-medium'>
+            <ul className='text-gray-500  font-medium'>
               <li className='mb-4'>
                 <a href='https://flowbite.com/' className='hover:underline'>
                   Flowbite
@@ -58,7 +58,7 @@ const Footer = () => {
             <h5 className='mb-6 uppercase text-tertiary-800 font-bold'>
               For Student
             </h5>
-            <ul className='text-gray-500 dark:text-gray-400 font-medium'>
+            <ul className='text-gray-500  font-medium'>
               <li className='mb-4'>
                 <a
                   href='https://github.com/themesberg/flowbite'
@@ -81,7 +81,7 @@ const Footer = () => {
             <h5 className='mb-6 uppercase text-tertiary-800 font-bold'>
               Address
             </h5>
-            <ul className='text-gray-500 dark:text-gray-400 font-medium space-y-2'>
+            <ul className='text-gray-500  font-medium space-y-2'>
               <li className='mb-4'>
                 <form className='relative flex items-center'>
                   <Button className='absolute top-1/2 transform -translate-y-1/2 right-3 rounded-full duration-300'>
@@ -131,9 +131,9 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <hr className='my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8' />
+        <hr className='my-6 border-gray-200 sm:mx-auto  lg:my-8' />
         <div className='sm:flex sm:items-center sm:justify-between'>
-          <span className='text-sm text-gray-500 sm:text-center dark:text-gray-400'>
+          <span className='text-sm text-gray-500 sm:text-center '>
             © 2023{' '}
             <a href='https://flowbite.com/' className='hover:underline'>
               Flowbite™
@@ -141,10 +141,7 @@ const Footer = () => {
             . All Rights Reserved.
           </span>
           <div className='flex mt-4 sm:justify-center sm:mt-0'>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-gray-900 dark:hover:text-white'
-            >
+            <a href='#' className='text-gray-500 hover:text-gray-900'>
               <svg
                 className='w-4 h-4'
                 aria-hidden='true'
@@ -160,10 +157,7 @@ const Footer = () => {
               </svg>
               <span className='sr-only'>Facebook page</span>
             </a>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5'
-            >
+            <a href='#' className='text-gray-500 hover:text-gray-900 '>
               <svg
                 className='w-4 h-4'
                 aria-hidden='true'
@@ -175,10 +169,7 @@ const Footer = () => {
               </svg>
               <span className='sr-only'>Discord community</span>
             </a>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5'
-            >
+            <a href='#' className='text-gray-500 hover:text-gray-900 '>
               <svg
                 className='w-4 h-4'
                 aria-hidden='true'
@@ -194,10 +185,7 @@ const Footer = () => {
               </svg>
               <span className='sr-only'>Twitter page</span>
             </a>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5'
-            >
+            <a href='#' className='text-gray-500 hover:text-gray-900 '>
               <svg
                 className='w-4 h-4'
                 aria-hidden='true'
@@ -213,10 +201,7 @@ const Footer = () => {
               </svg>
               <span className='sr-only'>GitHub account</span>
             </a>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5'
-            >
+            <a href='#' className='text-gray-500 hover:text-gray-900 '>
               <svg
                 className='w-4 h-4'
                 aria-hidden='true'
