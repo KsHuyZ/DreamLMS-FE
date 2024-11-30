@@ -1,9 +1,10 @@
-export enum Path {
-  HOME = '/',
-  ABOUT = '/about',
-  SIGNIN = '/sign-in',
-  SIGNUP = 'sign-up',
-}
+export const Path = {
+  HOME: '/',
+  ABOUT: '/about',
+  SIGNIN: '/sign-in',
+  SIGNUP: 'sign-up',
+  PaymentSuccess: (id?: string) => `/enroll/course/${id}`,
+};
 export const TeacherPath = {
   Dashboard: '/teacher/dashboard',
   Courses: '/teacher/courses',

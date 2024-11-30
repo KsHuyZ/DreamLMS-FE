@@ -56,7 +56,9 @@ const ModalPreview = ({ img, name, videoId }: IModalPreviewProps) => {
           <DialogTitle>{name}</DialogTitle>
         </DialogHeader>
         {isLoading ? (
-          <Spinner />
+          <div className='h-10 w-full justify-center flex items-center'>
+            <Spinner />
+          </div>
         ) : (
           <ReactPlayer
             url={video}

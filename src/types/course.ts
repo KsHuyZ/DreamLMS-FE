@@ -47,6 +47,7 @@ export type TCourse = {
 export type TCourseQuery = Omit<TCourse, 'lessons'> & {
   lessons: number;
   duration: number;
+  isEnrolled: boolean;
 };
 export interface CourseAdditionForm {
   related: TCourse[];
@@ -56,6 +57,11 @@ export interface CourseAdditionForm {
 export enum EUnitType {
   VIDEO = 'video',
   QUIZ = 'quiz',
+}
+
+export enum ECoursePriceType {
+  USD = 'usd',
+  ETHEREUM = 'ethereum',
 }
 
 export enum ECourseSort {

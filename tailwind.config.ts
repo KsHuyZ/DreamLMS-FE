@@ -121,6 +121,10 @@ export default {
             transform: 'rotate(360deg)',
           },
         },
+        ripple: {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '100%': { transform: 'scale(4)', opacity: '0' },
+        },
       },
       animation: {
         flicker: 'flicker 3s linear infinite',
@@ -130,6 +134,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'spin-slow': 'spin 3s linear infinite',
+        ripple: 'ripple 1.5s infinite',
       },
     },
   },

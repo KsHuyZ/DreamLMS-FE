@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, {
   createContext,
@@ -13,6 +14,8 @@ import React, {
   useState,
 } from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
+
+import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -71,6 +74,7 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
 
   const formInfo = useForm<CreateCourseForm>({
     resolver: zodResolver(courseInfoSchema),
+    mode: 'onChange',
   });
 
   const formAddition = useForm<CourseAdditionForm>({
@@ -128,11 +132,12 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
 
   const onSubmitFormInfo = useCallback(
     async (values: CreateCourseForm) => {
-      const result = await formInfo.trigger();
-      if (!result) return;
+      const validate = await formInfo.trigger();
+      if (!validate) return;
       try {
         const result = await modificationCourse({ ...values, id });
         router.push(TeacherPath.UpdateLessonCourse(result.id));
+        id && refetch();
         toast({
           title: `${id ? 'Update' : 'Create'} course success!`,
           variant: 'success',
@@ -141,7 +146,7 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
         toast({ title: validateError(error), variant: 'destructive' });
       }
     },
-    [formInfo, id, modificationCourse, router, toast]
+    [formInfo, id, modificationCourse, router, toast, refetch]
   );
 
   const onSubmitAddition = useCallback(async () => {
@@ -201,22 +206,44 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
   return (
     <FormContext.Provider value={contextValues}>
       <div className='flex flex-col space-y-4'>
-        <div className='flex space-x-2 justify-end'>
-          <Button variant='secondary' disabled={!id}>
-            Preview
-          </Button>
-          <Button
-            isLoading={courseInfoLoading || courseAdditionLoading}
-            disabled={
-              // (!formInfo.formState.isDirty &&
-              //   !formAddition.formState.isDirty) ||
-              courseInfoLoading || courseAdditionLoading
-            }
-            onClick={onSubmit}
-          >
-            Save and update
-          </Button>
+        <div
+          className={cn(
+            'flex items-center',
+            courseInfo ? 'justify-between' : 'justify-end'
+          )}
+        >
+          {courseInfo && (
+            <div className='flex items-center space-x-2'>
+              <Image
+                src={courseInfo?.image.url}
+                width={100}
+                height={100}
+                className='object-cover rounded-md'
+                alt='image'
+              />
+              <p className='text-lg font-bold text-tertiary-800'>
+                {courseInfo?.name}
+              </p>
+            </div>
+          )}
+          <div className='flex space-x-2'>
+            <Button variant='secondary' disabled={!id}>
+              Preview
+            </Button>
+            <Button
+              isLoading={courseInfoLoading || courseAdditionLoading}
+              disabled={
+                // (!formInfo.formState.isDirty &&
+                //   !formAddition.formState.isDirty) ||
+                courseInfoLoading || courseAdditionLoading
+              }
+              onClick={onSubmit}
+            >
+              Save and update
+            </Button>
+          </div>
         </div>
+
         <Tabs />
         {children}
       </div>

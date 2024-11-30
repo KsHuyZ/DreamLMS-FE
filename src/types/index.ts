@@ -5,7 +5,6 @@ export * from './editor';
 export * from './image';
 export * from './lesson';
 export * from './level';
-export * from './payment';
 export * from './progress';
 export * from './quiz';
 export * from './quiz';

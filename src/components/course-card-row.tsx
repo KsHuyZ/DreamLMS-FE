@@ -10,9 +10,10 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import { formatPrice, formatTime, levelCourseMap } from '@/utils';
-import { Skeleton } from '@/components/ui/skeleton';
+
 import { ELevel } from '@/types';
 
 const CourseCardRow = ({ course, loading }: CourseCardProps) => {
@@ -50,7 +51,9 @@ const CourseCardRow = ({ course, loading }: CourseCardProps) => {
                     <Skeleton className='w-56 h-4' />
                   </>
                 ) : (
-                  <span>{course?.shortDescription}</span>
+                  <span className='line-clamp-2'>
+                    {course?.shortDescription}
+                  </span>
                 )}
 
                 {loading ? (

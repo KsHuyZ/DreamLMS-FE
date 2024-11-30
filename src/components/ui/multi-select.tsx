@@ -161,6 +161,10 @@ export const MultiSelect = React.forwardRef<
       }
     };
 
+    React.useEffect(() => {
+      setSelectedValues(defaultValue);
+    }, [defaultValue]);
+
     const toggleOption = (option: string) => {
       const newSelectedValues = selectedValues.includes(option)
         ? selectedValues.filter((value) => value !== option)
@@ -193,7 +197,6 @@ export const MultiSelect = React.forwardRef<
         onValueChange(allValues);
       }
     };
-
     return (
       <Popover
         open={isPopoverOpen}
@@ -326,7 +329,6 @@ export const MultiSelect = React.forwardRef<
                   <></>
                 )}
                 {options.map((option) => {
-                  console.log({ selectedValues, option: option.value });
                   const isSelected = selectedValues.includes(option.value);
                   return (
                     <CommandItem

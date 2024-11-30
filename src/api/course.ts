@@ -1,3 +1,5 @@
+import { PaymentIntent } from '@stripe/stripe-js';
+
 import api from '@/lib/api';
 
 import {
@@ -143,6 +145,9 @@ export const getAllCourseCategories = (): Promise<ICategory[]> =>
 export const getCourseById = (id?: string): Promise<TCourse> =>
   api.get(`/courses/${id}`);
 
+export const getCourseByGuest = (id?: string): Promise<TCourseQuery> =>
+  api.get(`/courses/guest/${id}`);
+
 export const deleteLessonById = (id: string) =>
   api.delete('/lesson/delete', {
     data: id,
@@ -150,3 +155,8 @@ export const deleteLessonById = (id: string) =>
 
 export const getMyCourse = (): Promise<TCourse[]> =>
   api.get('/course/get-by-user');
+
+export const enrollCourse = (id: string) => api.get(`courses/enroll/${id}`);
+
+export const payCourse = (id: string): Promise<PaymentIntent> =>
+  api.get(`courses/payment/${id}`);

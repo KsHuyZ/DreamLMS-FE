@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
+import { FaCircleCheck } from 'react-icons/fa6';
 
 import Input from '@/components/inputs/Input';
 import { Badge } from '@/components/ui/badge';
@@ -10,19 +11,18 @@ import { Label } from '@/components/ui/label';
 import { Ratings } from '@/components/ui/rating';
 import { Separator } from '@/components/ui/separator';
 
-import { getCourseById } from '@/api';
+import { getCourseByGuest, getCourseById } from '@/api';
 import AddCart from '@/app/(global)/courses/[courseId]/_components/add-cart';
-import Enroll from '@/app/(global)/courses/[courseId]/_components/enroll';
-import PayMent from '@/app/(global)/courses/[courseId]/_components/payment';
+import Enroll from '@/features/courses/features/course-detail/components/enroll';
 import LessonList from '@/features/courses/features/course-detail/components/lesson-list';
 import ModalPreview from '@/features/courses/features/course-detail/components/modal-preview';
+import PayMent from '@/features/courses/features/course-detail/components/payment';
 import {
   formatPrice,
   formatTime,
   generateNameColor,
   levelCourseMap,
 } from '@/utils';
-// import { formatPrice, generateNameColor } from '@/utils';
 
 type Props = {
   params: {
@@ -50,7 +50,7 @@ export async function generateMetadata(
 }
 
 const CourseIdPage = async ({ params: { courseId } }: Props) => {
-  const course = await getCourseById(courseId);
+  const course = await getCourseByGuest(courseId);
   const duration = course.duration;
   return (
     <div className='w-full h-full space-y-14 min-h-[calc(100vh-80px)]'>
@@ -110,19 +110,32 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
 
           <Card className='sticky top-0 border-primary-600 border-2 shadow-md'>
             <CardHeader>
-              <CardTitle>
-                {course.price === 0 ? 'Free' : `${formatPrice(course.price)}`}
+              <CardTitle className='text-tertiary-800'>
+                <div className='flex justify-end'>
+                  {course.price === 0 ? 'Free' : `${formatPrice(course.price)}`}
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className='flex flex-col space-y-12'>
                 <div className='flex flex-col space-y-8'>
-                  {course.price === 0 ? (
+                  {course.isEnrolled ? (
+                    <div className='flex flex-col space-y-4'>
+                      <div className='flex items-center justify-center'>
+                        <div className='absolute w-3 h-3 rounded-full bg-primary-600 opacity-50 animate-ripple z-10'></div>
+                        <FaCircleCheck className='w-5 h-5 text-primary-600 z-30 rounded-full bg-white' />
+                      </div>
+
+                      <span className='text-center text-primary-600 font-bold'>
+                        Course already enrolled
+                      </span>
+                    </div>
+                  ) : course.price === 0 ? (
                     <Enroll id={course.id} />
                   ) : (
                     <div className='flex flex-col space-y-4'>
                       <AddCart id={course.id} />
-                      <PayMent amount={course.price} />
+                      <PayMent courseId={course.id} />
                     </div>
                   )}
                   <div className='flex flex-col space-y-4'>
@@ -147,16 +160,20 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                       </div>
                     </div>
                   </div>
-                  <Separator />
-                  <div className='flex flex-col space-y-2'>
-                    <Label>Coupon code</Label>
-                    <div className='grid grid-cols-3 gap-2 items-center'>
-                      <div className='flex flex-col col-span-2 space-y-2'>
-                        <Input placeholder='Enter your coupon code' />
+                  {!course.isEnrolled && (
+                    <>
+                      <Separator />
+                      <div className='flex flex-col space-y-2'>
+                        <Label>Coupon code</Label>
+                        <div className='grid grid-cols-3 gap-2 items-center'>
+                          <div className='flex flex-col col-span-2 space-y-2'>
+                            <Input placeholder='Enter your coupon code' />
+                          </div>
+                          <Button>Apply</Button>
+                        </div>
                       </div>
-                      <Button>Apply</Button>
-                    </div>
-                  </div>
+                    </>
+                  )}
                 </div>
                 <div className='flex flex-col space-y-4'>
                   <Separator />
@@ -169,10 +186,12 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                       <div
                         className='flex h-8 w-8 items-center justify-center rounded-full text-white'
                         style={{
-                          background: generateNameColor('Huy Phan Tien'),
+                          background: generateNameColor(
+                            `${course.createdBy.firstName} ${course.createdBy.lastName}`
+                          ),
                         }}
                       >
-                        H
+                        {course.createdBy.firstName.charAt(0)}
                       </div>
                       <span>
                         {course.createdBy.firstName} {course.createdBy.lastName}

@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { memo, useCallback, useState } from 'react';
 
 import Spinner from '@/components/loading/spinner';
 import { Button } from '@/components/ui/button';
@@ -11,39 +12,26 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
 
-import { payMent } from '@/api';
-import { validateError } from '@/utils';
+import { usePayCourse } from '@/features/courses/features/course-detail/components/payment/hooks';
 interface IPaymentProps {
-  amount: number;
+  courseId: string;
 }
 
-const PayMent = ({ amount }: IPaymentProps) => {
+const PayMent = ({ courseId }: IPaymentProps) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
-  const handlePayment = async () => {
-    try {
-      setLoading(true);
-      const result = await payMent(amount);
-      location.replace(result.paymentUrl);
-    } catch (error) {
-      toast({ title: validateError(error), variant: 'destructive' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOpenPayment = () => {
-    if (amount > 0) {
-      setOpen(true);
-    }
-  };
+  const { mutateAsync: payMent, isPending } = usePayCourse(courseId);
+  const router = useRouter();
+  const handlePayment = useCallback(async () => {
+    const result = await payMent();
+    router.push(
+      `/enroll/payments/${courseId}?clientSecret=${result.client_secret}`
+    );
+  }, [courseId, payMent, router]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button variant='outline' onClick={handleOpenPayment}>
+      <Button variant='outline' onClick={() => setOpen(true)}>
         Buy now
       </Button>
       <DialogContent>
@@ -51,7 +39,7 @@ const PayMent = ({ amount }: IPaymentProps) => {
           <DialogTitle>Select payment method</DialogTitle>
         </DialogHeader>
         <div className='flex items-center justify-center space-x-8 relative'>
-          {loading && (
+          {isPending && (
             <div className='absolute w-full h-full bg-background/90 backdrop-blur-sm duration-200 flex justify-center items-center'>
               <div className='flex flex-col space-y-4 items-center'>
                 <Spinner />
@@ -64,12 +52,13 @@ const PayMent = ({ amount }: IPaymentProps) => {
             onClick={handlePayment}
           >
             <Image
-              src='/images/vnpay.webp'
+              src='/images/stripe.png'
               width={70}
               height={70}
-              alt='vnpay'
+              alt='stripe'
+              className='rounded-md'
             />
-            <Label className='font-bold'>VNPay</Label>
+            <Label className='font-bold'>Stripe</Label>
           </div>
           <div className='flex flex-col justify-center items-center space-y-2 p-2 px-8 duration-200 rounded-sm hover:bg-gray-300 cursor-pointer'>
             <Image
@@ -86,4 +75,4 @@ const PayMent = ({ amount }: IPaymentProps) => {
   );
 };
 
-export default PayMent;
+export default memo(PayMent);

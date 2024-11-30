@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { ELevel, TImage } from '@/types';
+import { ECoursePriceType, ELevel, TImage } from '@/types';
 
 const ACCEPTED_VIDEO_TYPES = [
   'video/mp4',
@@ -28,19 +28,19 @@ export const courseInfoSchema = z.object({
     .string({
       required_error: 'About course is require',
     })
-    .min(500, 'Short description must have more 500 characters')
-    .max(1000, 'Short description max is 1000 characters')
+    .min(100, 'Short description must have more 100 characters')
     .trim(),
   shortDescription: z
     .string({
       required_error: 'Short description is required!',
     })
-    .min(100, 'Short description must have more 100 characters')
+    .min(50, 'Short description must have more 50 characters')
     .trim(),
   image: z.any(),
   tags: z.array(z.string()).min(0, 'Tag at lease one item!'),
   categories: z.array(z.string()).min(0, 'Category at lease one item!'),
   level: z.string().min(0, 'Level is require!'),
+  // type: z.enum([ECoursePriceType.USD, ECoursePriceType.ETHEREUM]).nullable(),
 });
 
 export const courseAdditionSchema = z.object({

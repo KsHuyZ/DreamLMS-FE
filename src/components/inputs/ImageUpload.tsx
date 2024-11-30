@@ -1,6 +1,6 @@
 'use client';
 import { XIcon } from 'lucide-react';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -117,4 +117,4 @@ const ImageUploader = React.forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-export default ImageUploader;
+export default memo(ImageUploader);
