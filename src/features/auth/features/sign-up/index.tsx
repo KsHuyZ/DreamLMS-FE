@@ -44,7 +44,7 @@ const SignUp = () => {
   return (
     <div className='p-6 space-y-2 md:space-y-6 sm:p-8'>
       <div className='flex flex-col gap-y-2'>
-        <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
+        <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl '>
           Sign up
         </h1>
         <div className='grid grid-cols-2 gap-2 items-center'>
@@ -131,11 +131,11 @@ const SignUp = () => {
               Sign Up
             </Button>
           </form>
-          <p className='text-sm font-light text-gray-500 dark:text-gray-400 mt-3'>
+          <p className='text-sm font-light text-gray-500 '>
             Already have account?{' '}
             <Link
               href='/sign-in'
-              className='font-medium text-primary-600 hover:underline dark:text-primary-500'
+              className='font-medium text-primary-600 hover:underline d'
             >
               Sign in
             </Link>

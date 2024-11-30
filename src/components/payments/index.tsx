@@ -5,12 +5,6 @@ import PaymentFailure from '@/components/payments/components/payment-failure';
 import StripePaymentForm from '@/components/payments/stripe-payment-form';
 import StripePaymentsElementProvider from '@/components/payments/stripe-payment-provider';
 
-import { TUser } from '@/types';
-
-export type PaymentProps = {
-  authUser: TUser;
-};
-
 export enum PaymentSteps {
   PAYMENT,
   PAYMENT_SUCCESS,
@@ -22,25 +16,7 @@ export type FailureReason = {
   description?: string;
 };
 
-const PaymentSideBarProps: Record<
-  PaymentSteps,
-  { title: string; subTitle: string }
-> = {
-  [PaymentSteps.PAYMENT]: {
-    title: 'Payment',
-    subTitle: 'Please enter your payment details to continue',
-  },
-  [PaymentSteps.PAYMENT_SUCCESS]: {
-    title: 'Payment',
-    subTitle: 'Your payment was successful',
-  },
-  [PaymentSteps.PAYMENT_FAILURE]: {
-    title: 'Payment',
-    subTitle: 'Oops, something went wrong',
-  },
-};
-
-const Payment: React.FC<PaymentProps> = () => {
+const Payment = () => {
   const [paymentStep, setPaymentStep] = useState(PaymentSteps.PAYMENT);
   const [failureReason, setFailureReason] = useState<
     FailureReason | undefined
