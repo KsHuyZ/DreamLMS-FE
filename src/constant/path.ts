@@ -4,6 +4,8 @@ export const Path = {
   SIGNIN: '/sign-in',
   SIGNUP: 'sign-up',
   PaymentSuccess: (id?: string) => `/enroll/course/${id}`,
+  Learning: (id?: string) => `/courses/learning/${id}`,
+  NotFound: `not-found`,
 };
 export const TeacherPath = {
   Dashboard: '/teacher/dashboard',

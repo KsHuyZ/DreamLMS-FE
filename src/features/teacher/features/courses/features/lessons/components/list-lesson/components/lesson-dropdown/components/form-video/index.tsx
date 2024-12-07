@@ -80,8 +80,6 @@ const FormVideo = ({ lessonId, unit, setUnit, refetch }: IFormProps) => {
     if (unit) {
       setOpen(true);
       // form.reset(unit);
-      // form.setValue('video', unit.video);
-      setProgress(0);
     }
   }, [setOpen, form, unit, setProgress]);
 

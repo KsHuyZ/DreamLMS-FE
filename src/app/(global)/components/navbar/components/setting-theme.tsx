@@ -1,5 +1,4 @@
 import { Maximize, Minimize, Moon, Settings, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -20,7 +19,6 @@ import { presetColors } from '@/constant';
 const SettingTheme = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const { setTheme, theme } = useTheme();
   const { toggleTheme, theme: themeColor } = useThemeStore();
   const onSelectThemeColor = (color: string): void => {
     toggleTheme(color);
@@ -51,25 +49,13 @@ const SettingTheme = () => {
           <div className='flex flex-col space-y-4 w-full'>
             <Label>Mode</Label>
             <div className='flex items-center justify-between '>
-              <div
-                className={cn(
-                  'group p-8 px-14 border border-dashed rounded cursor-pointer hover:border-primary-600 hover:bg-primary-100 hover:text-primary-600 duration-300',
-                  theme === 'light'
-                    ? 'border-primary-600 bg-primary-100 text-primary-600'
-                    : ''
-                )}
-                onClick={() => setTheme('light')}
-              >
+              <div className='group p-8 px-14 border border-dashed rounded cursor-pointer hover:border-primary-600 hover:bg-primary-100 hover:text-primary-600 duration-300 border-primary-600 bg-primary-100 text-primary-600'>
                 <Sun className='transition ease-in-out group-hover:-translate-y-1 group-hover:scale-110 duration-300 group-hover:text-primary-600' />
               </div>
               <div
                 className={cn(
-                  'group p-8 px-14 border border-dashed rounded cursor-pointer hover:border-primary-600 hover:bg-primary-100 duration-300',
-                  theme === 'dark'
-                    ? 'border-primary-600 bg-primary-100 text-primary-600'
-                    : ''
+                  'group p-8 px-14 border border-dashed rounded cursor-pointer hover:border-primary-600 hover:bg-primary-100 duration-300'
                 )}
-                onClick={() => setTheme('dark')}
               >
                 <Moon className='transition ease-in-out group-hover:-translate-y-1 group-hover:scale-110 duration-300 group-hover:text-primary-600' />
               </div>

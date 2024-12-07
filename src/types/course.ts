@@ -44,6 +44,10 @@ export type TCourse = {
   related?: TCourse[];
 };
 
+export type TCourseProgress = {
+  progress: number;
+} & TCourse;
+
 export type TCourseQuery = Omit<TCourse, 'lessons'> & {
   lessons: number;
   duration: number;
@@ -99,6 +103,7 @@ export type TCourseFilter = {
 
 export type TUnit = {
   unit: EUnitType;
+  isCompleted?: boolean;
 } & TLessonVideo &
   TQuiz;
 

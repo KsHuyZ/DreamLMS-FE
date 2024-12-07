@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator';
 
 import { getCourseByGuest, getCourseById } from '@/api';
 import AddCart from '@/app/(global)/courses/[courseId]/_components/add-cart';
+import { Path } from '@/constant';
 import Enroll from '@/features/courses/features/course-detail/components/enroll';
 import LessonList from '@/features/courses/features/course-detail/components/lesson-list';
 import ModalPreview from '@/features/courses/features/course-detail/components/modal-preview';
@@ -120,7 +121,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
               <div className='flex flex-col space-y-12'>
                 <div className='flex flex-col space-y-8'>
                   {course.isEnrolled ? (
-                    <div className='flex flex-col space-y-4'>
+                    <div className='flex flex-col space-y-4 items-center'>
                       <div className='flex items-center justify-center'>
                         <div className='absolute w-3 h-3 rounded-full bg-primary-600 opacity-50 animate-ripple z-10'></div>
                         <FaCircleCheck className='w-5 h-5 text-primary-600 z-30 rounded-full bg-white' />
@@ -129,6 +130,9 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                       <span className='text-center text-primary-600 font-bold'>
                         Course already enrolled
                       </span>
+                      <Link href={Path.Learning(course.id)}>
+                        <Button>Continue learning</Button>
+                      </Link>
                     </div>
                   ) : course.price === 0 ? (
                     <Enroll id={course.id} />
@@ -138,6 +142,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                       <PayMent courseId={course.id} />
                     </div>
                   )}
+                  <Separator />
                   <div className='flex flex-col space-y-4'>
                     <div className='flex flex-col space-y-2 text-gray-500'>
                       <div className='flex items-center justify-between'>

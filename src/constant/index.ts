@@ -1,3 +1,4 @@
+export * from './animation';
 export * from './color';
 export * from './contract';
 export * from './course';

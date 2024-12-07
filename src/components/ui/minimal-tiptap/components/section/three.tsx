@@ -1,7 +1,6 @@
 import type { Editor } from '@tiptap/react';
 import type { VariantProps } from 'class-variance-authority';
 import { Check, ChevronDown } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import * as React from 'react';
 
 import {
@@ -79,9 +78,7 @@ const MemoizedColorButton = React.memo<{
   inverse: string;
   onClick: (value: string) => void;
 }>(({ color, isSelected, inverse, onClick }) => {
-  const { theme } = useTheme();
-  const label =
-    theme === 'dark' && color.darkLabel ? color.darkLabel : color.label;
+  const label = color.label;
 
   return (
     <Tooltip>

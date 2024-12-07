@@ -15,6 +15,7 @@ import {
   PaginationResponse,
   TAdditionCoursePayload,
   TCourse,
+  TCourseProgress,
   TCourseQuery,
   TImage,
 } from '@/types';
@@ -144,6 +145,9 @@ export const getAllCourseCategories = (): Promise<ICategory[]> =>
 
 export const getCourseById = (id?: string): Promise<TCourse> =>
   api.get(`/courses/${id}`);
+
+export const getCourseLearn = (id?: string): Promise<TCourseProgress> =>
+  api.get(`/courses/learn/${id}`);
 
 export const getCourseByGuest = (id?: string): Promise<TCourseQuery> =>
   api.get(`/courses/guest/${id}`);

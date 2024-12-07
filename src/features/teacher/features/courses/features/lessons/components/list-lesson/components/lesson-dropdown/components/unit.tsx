@@ -6,10 +6,26 @@ import {
   StickyNote,
   Trash,
 } from 'lucide-react';
-import React, { Dispatch, memo, SetStateAction, useState } from 'react';
+import React, {
+  Dispatch,
+  memo,
+  SetStateAction,
+  useCallback,
+  useState,
+} from 'react';
 
 import { cn } from '@/lib/utils';
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +36,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+import { useDeleteUnit } from '@/features/teacher/features/courses/features/lessons/components/list-lesson/components/lesson-dropdown/hooks';
 import { convertSeconds } from '@/utils';
 
 import { EUnitType, TUnit } from '@/types';
@@ -28,12 +45,48 @@ interface UnitProps {
   index: number;
   unit: TUnit;
   setSelectEdit: Dispatch<SetStateAction<TUnit | undefined>>;
+  refetch: () => void;
 }
 
-const Unit = ({ index, unit, setSelectEdit }: UnitProps) => {
+const Unit = ({ index, unit, setSelectEdit, refetch }: UnitProps) => {
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  const { mutateAsync, isPending } = useDeleteUnit();
+
+  const onDelete = useCallback(
+    async (id: string, unit: EUnitType) => {
+      await mutateAsync({ id, unit });
+      refetch();
+    },
+    [mutateAsync, refetch]
+  );
+
   return (
     <div className='duration-150'>
+      <AlertDialog open={openModal} onOpenChange={setOpenModal}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you absolutely delete this{' '}
+              {unit.unit === EUnitType.VIDEO ? 'video' : 'quiz'}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button
+              isLoading={isPending}
+              onClick={() => onDelete(unit.id, unit.unit)}
+            >
+              Continue
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className='flex items-center gap-x-2 border rounded-md text-sm mb-1 shadow-md'>
         <div
           className={cn(
@@ -77,7 +130,10 @@ const Unit = ({ index, unit, setSelectEdit }: UnitProps) => {
                     <Pencil className='w-4 h-4 cursor-pointer hover:opacity-75 transition' />
                     <span>Edit</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className='flex items-center space-x-4 text-error'>
+                  <DropdownMenuItem
+                    className='flex items-center space-x-4 text-error'
+                    onClick={() => setOpenModal(true)}
+                  >
                     <Trash className='w-4 h-4 cursor-pointer hover:opacity-75 transition' />
                     <span>Delete</span>
                   </DropdownMenuItem>

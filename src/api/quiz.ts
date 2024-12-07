@@ -5,6 +5,8 @@ import { TQuestionResponse, TQuestionResults, TQuizCredentials } from '@/types';
 export const createQuiz = (quiz: TQuizCredentials) =>
   api.post('/quizzes', quiz);
 
+export const deleteQuiz = (quizId: string) => api.delete(`/quizzes/${quizId}`);
+
 export const getQuizByUnitId = (id?: string) =>
   api.get(`/quiz/getListQuizByIdUnit?id=${id}`);
 

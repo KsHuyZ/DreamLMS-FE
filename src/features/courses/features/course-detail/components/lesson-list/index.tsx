@@ -3,8 +3,8 @@ import React, { useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 
-import { useLessonList } from '@/app/(global)/courses/_hooks';
 import LessonDropdown from '@/features/courses/features/course-detail/components/lesson-list/components/lesson-dropdown';
+import { useLessonList } from '@/features/courses/features/course-detail/components/lesson-list/hooks';
 
 interface LessonListProps {
   id: string;

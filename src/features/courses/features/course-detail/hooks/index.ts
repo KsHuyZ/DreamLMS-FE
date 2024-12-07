@@ -19,8 +19,9 @@ export const useEnrollCourse = () => {
   });
 };
 
-export const useVideo = (id: string) =>
+export const useVideo = (id?: string) =>
   useQuery({
     queryFn: () => getVideo(id),
     queryKey: [QueryKey.Video, id],
+    enabled: !!id,
   });

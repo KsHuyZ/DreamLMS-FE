@@ -1,9 +1,12 @@
 'use client';
 
 import { Contract, ethers } from 'ethers';
+import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
+
+import { cn } from '@/lib/utils';
 
 import Spinner from '@/components/loading/spinner';
 import {
@@ -24,41 +27,42 @@ import { useToast } from '@/components/ui/use-toast';
 
 import { abi } from '@/abi/contract.json';
 import { useQuestion } from '@/app/(global)/_hooks';
-import { useLessonList } from '@/app/(global)/courses/_hooks';
-import ListUnits from '@/app/(global)/courses/learning/[courseId]/_components/units/components/list-units';
 import Loading from '@/app/(global)/courses/learning/[courseId]/_components/units/components/loading';
 import Quiz from '@/app/(global)/courses/learning/[courseId]/_components/units/components/quiz';
 import { useSubmitQuiz } from '@/app/(global)/courses/learning/[courseId]/_components/units/components/quiz/hooks';
-import Video from '@/app/(global)/courses/learning/[courseId]/_components/units/components/video';
+import { congratulationsOptions } from '@/constant';
+import ListLessons from '@/features/courses/features/learning/components/course-video/components/lesson-list';
+import Video from '@/features/courses/features/learning/components/course-video/components/video';
+import { useLessonLearning } from '@/features/courses/features/learning/components/course-video/hooks';
+import { generateNameColor } from '@/utils';
 
 import {
   EUnitType,
   TAnswer,
+  TCourseProgress,
   TQuestionResponse,
   TQuestionResults,
   TUnit,
 } from '@/types';
+
 interface CourseVideoProps {
-  id: string;
+  course: TCourseProgress;
   userId: string;
 }
 
-const defaultOptions = {
-  loop: false,
-  autoplay: true,
-  animationData: require('@/assets/json/confetti.json'),
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice',
-  },
-};
+export type TUnitParent = {
+  parentId: string;
+  isCompleted?: boolean;
+} & TUnit;
 
 const CONTRACT_ADDRESS = '0x6CAe432354A436fd826f03E258aD84F83f84a7F8';
 
-const CourseVideo = ({ id, userId }: CourseVideoProps) => {
-  const { data, isLoading } = useLessonList(id);
-  const [currentLesson, setCurrentLesson] = useState<string[]>([]);
+const CourseVideo = ({ userId, course }: CourseVideoProps) => {
+  const { data: lessons, isLoading } = useLessonLearning(course.id);
+  const [selectLesson, setSelectLesson] = useState<string[]>([]);
   const [selectUnit, setSelectUnit] = useState<TUnit | undefined>(undefined);
   const [open, setOpen] = useState(false);
+  const [openQuiz, setOpenQuiz] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
   const searchParams = useSearchParams();
   const [questionResultList, setQuestionResultList] = useState<
@@ -69,11 +73,9 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
     selectUnit?.unit
   );
   const pathName = usePathname();
-  const { replace, push } = useRouter();
+  const { replace } = useRouter();
   const { mutateAsync, isPending } = useSubmitQuiz();
-  const [finalResult, setFinalResult] = useState<
-    { score: string; isFinal: boolean; isPass: boolean } | undefined
-  >(undefined);
+  const [tempUnit, setTempUnit] = useState<TUnitParent>();
   const [currentIndex, setCurrentIndex] = useState(
     Number(searchParams.get('question')) || 0
   );
@@ -131,10 +133,6 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
   }) => {
     const result = await mutateAsync({ ...values });
     setShowAnimation(true);
-    setFinalResult(result);
-    if (!result.isFinal) {
-      return;
-    }
     try {
       if (window.ethereum) {
         setLoading(true);
@@ -144,7 +142,7 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
         const contract = new Contract(CONTRACT_ADDRESS, abi, signer);
         const transaction = await contract.createCertificate(
           userId,
-          id,
+          course.id,
           ethers.toBigInt(result.score.split('/')[0]),
           {
             value: ethers.parseEther('0.0025'),
@@ -168,59 +166,128 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
     [createQueryString, setCurrentIndex]
   );
 
-  // useEffect(() => {
-  //   if (data && !isLoading) {
-  //     const unitId = searchParams.get('unitId');
-  //     if (unitId) {
-  //       data.forEach((lesson) =>
-  //         lesson.units.forEach((unit) => {
-  //           if (unit.id === unitId) {
-  //             setSelectUnit(unit);
-  //             setCurrentLesson((prev) => [...prev, lesson.id]);
-  //           }
-  //         })
-  //       );
-  //     } else {
-  //       setCurrentLesson([data[0].id]);
-  //       setSelectUnit(data[0].units[0]);
-  //     }
-  //   }
-  // }, [data, isLoading, searchParams]);
+  const onSelectUnit = useCallback(
+    (unit: TUnitParent) => {
+      if (unit.unit === EUnitType.QUIZ) {
+        setTempUnit(unit);
+        setOpenQuiz(true);
+        return;
+      }
+      setSelectUnit(unit);
+      createQueryString('unitId', unit.id);
+    },
+    [createQueryString, setSelectUnit]
+  );
+
+  const onStartQuiz = () => {
+    if (tempUnit && tempUnit.id) {
+      onSelectUnit(tempUnit);
+      onNextLesson(tempUnit);
+      setTempUnit(undefined);
+      setOpenQuiz(false);
+    }
+  };
+
+  const units = useMemo(
+    () =>
+      lessons?.flatMap((lesson) => {
+        const videos = lesson?.videos.map((video) => ({
+          ...video,
+          unit: EUnitType.VIDEO,
+          parentId: lesson.id,
+          id: video.id,
+        }));
+        const quizzes = lesson?.quizzes.map((quiz) => ({
+          ...quiz,
+          unit: EUnitType.QUIZ,
+          parentId: lesson.id,
+          id: quiz.id,
+        }));
+        return [...videos, ...quizzes].sort(
+          (a, b) => Number(a.order) - Number(b.order)
+        );
+      }) ?? [],
+    [lessons]
+  );
+
+  const onSelectLessons = useCallback((id: string) => {
+    setSelectLesson((prev) => {
+      const selectLesson = prev.find((item) => item === id);
+      if (selectLesson) {
+        return prev.filter((lesson) => lesson !== id);
+      }
+      return [...prev, id];
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      const unitId = searchParams.get('unitId');
+      const selectUnit = units.find((unit) => unit.id === unitId);
+      if (selectUnit) {
+        setSelectUnit(selectUnit);
+        setSelectLesson((prev) => [...prev, selectUnit.parentId]);
+      } else {
+        setSelectLesson([units[0].parentId]);
+        setSelectUnit(units[0]);
+      }
+    }
+  }, [units, isLoading, searchParams]);
 
   useEffect(() => {
     if (showAnimation) {
-      setTimeout(() => setShowAnimation(false), 4000);
+      const timeoutId = setTimeout(() => setShowAnimation(false), 4000);
+      return () => clearTimeout(timeoutId);
     }
   }, [showAnimation]);
 
-  const handleContinueLearning = () => {
-    if (finalResult?.isFinal) {
-      push(`/certificate/${userId}/${id}`);
-      return;
+  const onNextLesson = useCallback((currentUnit: TUnitParent) => {
+    setSelectLesson((prev) => {
+      const selectLesson = prev.find((item) => item === currentUnit.parentId);
+      if (selectLesson) return prev;
+      return [...prev, currentUnit.parentId];
+    });
+  }, []);
+
+  const onNextUnit = useCallback(() => {
+    const unitIndex = units.findIndex((unit) => unit.id === selectUnit?.id);
+    const currentUnit = unitIndex > -1 ? units[unitIndex + 1] : units[0];
+    if (currentUnit.unit === EUnitType.QUIZ) {
+      setOpenQuiz(true);
+      setTempUnit(currentUnit);
+    } else {
+      setSelectUnit(currentUnit);
+      onNextLesson(currentUnit);
     }
-    // if (data) {
-    //   data.forEach((lesson) =>
-    //     lesson.units.forEach((unit, index) => {
-    //       if (unit.id === selectUnit?.id && lesson.units.length - 1 < index) {
-    //         setSelectUnit(lesson.units[index]);
-    //       }
-    //     })
-    //   );
-    //   setSelectUnit(data[0].units[0]);
-    // }
-    setFinalResult(undefined);
-  };
+  }, [selectUnit?.id, units, onNextLesson]);
 
   return (
     <>
       <Loading open={loading} />
+
+      <AlertDialog open={openQuiz} onOpenChange={setOpenQuiz}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you ready for test</AlertDialogTitle>
+            <AlertDialogDescription>
+              When you press start, the quiz time count will start and can not
+              cancel
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button onClick={onStartQuiz}>Start</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {showAnimation && (
         <Lottie
           style={{
             backgroundColor: 'transparent',
             position: 'fixed',
           }}
-          options={defaultOptions}
+          options={congratulationsOptions}
           height='100%'
           width='100%'
         />
@@ -240,45 +307,51 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div className='flex px-5 flex-col space-y-4 overflow-y-scroll h-[calc(100vh-100px)] no-scrollbar'>
-        <div className='w-full'>
-          <div className='mx-auto'>
-            <div>
-              <Label className='text-xl font-bold'>
-                {!selectUnit ? (
-                  <Skeleton className='w-64 h-4' />
-                ) : (
-                  selectUnit.title ?? 'Unknowns'
-                )}
-              </Label>
-            </div>
-            {finalResult ? (
-              <>
-                <Card>
-                  <CardHeader></CardHeader>
-                  <CardContent>
-                    <div className='flex flex-col space-y-4 items-center w-full'>
-                      <Label className='text-xl font-bold'>
-                        You are competed this test with
-                      </Label>
-                      <Label className='text-2xl font-bold text-primary-600'>
-                        {finalResult.score}
-                      </Label>
-                      <Button onClick={handleContinueLearning}>
-                        {finalResult.isFinal
-                          ? 'See your certificate'
-                          : 'Continue learning'}
-                      </Button>
+      <div className='grid grid-cols-7 gap-7 justify-between h-screen w-full'>
+        <div className='flex px-5 flex-col space-y-4 col-span-5'>
+          <div className='w-full'>
+            <div className='mx-auto'>
+              <div className='items-stretch overflow-scroll no-scrollbar mt-5'>
+                <div className='col-span-4'>
+                  <div className='rounded-md w-full shadow-md p-4 bg-tertiary-800 flex items-center space-x-4 mb-4'>
+                    <Image
+                      src={course.image.url}
+                      width={200}
+                      height={200}
+                      alt='course image'
+                      className='rounded-md border shadow-md'
+                    />
+                    <div className='flex flex-col space-y-4 text-white'>
+                      <h2 className='font-bold'>{course.name}</h2>
+                      <div className='flex items-center space-x-4'>
+                        <div
+                          style={{
+                            backgroundColor: generateNameColor(
+                              cn(
+                                course.createdBy.firstName,
+                                course.createdBy.lastName
+                              )
+                            ),
+                          }}
+                          className='w-10 h-10 rounded-full flex justify-center items-center'
+                        >
+                          <span className='text-white text-2xl'>
+                            {course.createdBy.firstName.charAt(0)}
+                          </span>
+                        </div>
+                        <p>
+                          Author:{' '}
+                          {cn(
+                            course.createdBy.firstName,
+                            course.createdBy.lastName
+                          )}
+                        </p>
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </>
-            ) : (
-              <div className='grid grid-cols-4 gap-2 items-stretch overflow-scroll no-scrollbar mt-5'>
-                <div className='col-span-3'>
-                  {data && selectUnit ? (
+                  </div>
+                  {units && selectUnit ? (
                     selectUnit.unit === EUnitType.VIDEO ? (
-                      <Video selectUnit={selectUnit} />
+                      <Video selectUnit={selectUnit} onNextUnit={onNextUnit} />
                     ) : (
                       <Quiz
                         questions={questions}
@@ -297,6 +370,15 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
                       <Spinner />
                     </div>
                   )}
+                  <div>
+                    <Label className='text-xl font-bold mt-20'>
+                      {!selectUnit ? (
+                        <Skeleton className='w-64 h-4' />
+                      ) : (
+                        selectUnit.title ?? 'Unknowns'
+                      )}
+                    </Label>
+                  </div>
                 </div>
                 {selectUnit ? (
                   selectUnit.unit === EUnitType.QUIZ ? (
@@ -331,33 +413,32 @@ const CourseVideo = ({ id, userId }: CourseVideoProps) => {
                       </CardContent>
                     </Card>
                   ) : (
-                    <ListUnits
-                      data={data}
-                      isLoading={isLoading}
-                      currentLesson={currentLesson}
-                      setCurrentLesson={setCurrentLesson}
-                      selectUnit={selectUnit}
-                      id={id}
-                    />
+                    <></>
                   )
                 ) : null}
               </div>
-            )}
+            </div>
+          </div>
+
+          <div className='mx-4 flex flex-col space-y-2'>
+            <Label className='font-bold text-xl'>Description</Label>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: selectUnit ? selectUnit.description : '',
+              }}
+            />
           </div>
         </div>
-
-        <div className='mx-4 flex flex-col space-y-2'>
-          <Label className='font-bold text-xl'>Description</Label>
-          {/* <div
-            dangerouslySetInnerHTML={{
-              __html: selectUnit
-                ? selectUnit.video
-                  ? selectUnit?.video?.description ?? ''
-                  : selectUnit?.quizResponse?.description ?? ''
-                : '',
-            }}
-          /> */}
-        </div>
+        <ListLessons
+          isLoading={isLoading}
+          lessons={lessons ?? []}
+          selectLessons={selectLesson}
+          onSelectLessons={onSelectLessons}
+          selectUnit={selectUnit}
+          onSelectUnit={onSelectUnit}
+          id={course.id}
+          progress={course.progress}
+        />
       </div>
     </>
   );

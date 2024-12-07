@@ -163,6 +163,7 @@ const LessonDropdown = ({
                         index={index}
                         unit={unit}
                         setSelectEdit={setSelectEdit}
+                        refetch={refetch}
                       />
                     ))}
                   </div>

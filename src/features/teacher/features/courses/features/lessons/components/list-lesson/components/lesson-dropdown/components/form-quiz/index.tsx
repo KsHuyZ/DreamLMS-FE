@@ -134,27 +134,29 @@ const FormQuiz = ({ lessonId, refetch }: FormQuizProps) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name='time'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Time duration</FormLabel>
-                      <FormControl>
-                        <TimePickerDuration
-                          date={field.value as unknown as Date}
-                          setDate={(date) => {
-                            form.setValue(
-                              'time',
-                              new Date(date as Date) as unknown as number
-                            );
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name='time'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Time duration</FormLabel>
+                        <FormControl>
+                          <TimePickerDuration
+                            date={field.value as unknown as Date}
+                            setDate={(date) => {
+                              form.setValue(
+                                'time',
+                                new Date(date as Date) as unknown as number
+                              );
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </form>
 
               <div className='w-full flex flex-col space-y-6 h-[400px] overflow-y-scroll no-scrollbar'>

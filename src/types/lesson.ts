@@ -18,9 +18,17 @@ export type TLessonVideo = {
   order?: number;
 };
 
+export type TLessonVideoProgress = {
+  isCompleted?: boolean;
+} & TLessonVideo;
+
 export type Lesson = {
   id: string;
   order: number;
   videos: TLessonVideo[];
   quizzes: TQuiz[];
 } & LessonPayload;
+
+export type LessonProgress = Omit<Lesson, 'videos'> & {
+  videos: TLessonVideoProgress[];
+};
