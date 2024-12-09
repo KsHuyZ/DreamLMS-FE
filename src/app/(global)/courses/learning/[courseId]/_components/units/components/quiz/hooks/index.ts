@@ -13,10 +13,7 @@ export const useSubmitQuiz = () => {
     mutationFn: (values: {
       quizId: string;
       questionResultRequestList: TQuestionResults[];
-    }) => submitQuiz(values),
-    onSuccess() {
-      toast({ variant: 'success', title: 'Submit quiz success' });
-    },
+    }) => submitQuiz(values.quizId, values.questionResultRequestList),
     onError(error) {
       toast({ variant: 'destructive', title: validateError(error) });
     },

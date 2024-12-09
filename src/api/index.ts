@@ -10,3 +10,5 @@ export * from './tag';
 export * from './user';
 export * from './userVideo';
 export * from './video';
+export * from './question';
+export * from './user-quiz';

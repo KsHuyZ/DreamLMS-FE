@@ -15,17 +15,25 @@ export type TQuestion = {
   answers: TAnswerPayload[];
 };
 
-export type TQuestionResponse = TQuestion & {
-  choiceResponses: TAnswer[];
+export type TAnswerTest = Omit<TAnswer, 'isCorrect'>;
+
+export type TAnswerResult = TAnswer & {
+  isSelected: boolean;
+};
+
+export type TQuestionTest = Omit<TQuestion, 'answers'> & {
+  answers: TAnswerResult[];
+};
+
+export type TQuestionResult = Omit<TQuestion, 'answers'> & {
+  answers: TAnswerResult[];
 };
 
 export type TQuestionCredential = TQuestion;
 
 export type TQuestionResults = {
   questionId: string;
-  answerResults: {
-    answerId: string;
-  }[];
+  answerId: string;
 };
 
 export type TQuizSubmitResults = {

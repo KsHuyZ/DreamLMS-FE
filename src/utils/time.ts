@@ -239,3 +239,16 @@ export const formatTime = (time: number) => {
   }
   return `${time} second${time > 1 ? 's' : ''}`;
 };
+
+export function convertUTC7ToUTC0(utc7TimeString: string | Date) {
+  // Tạo đối tượng Date từ chuỗi thời gian UTC+7
+  const utc7Date = new Date(utc7TimeString);
+
+  // Trích xuất số phút chênh lệch múi giờ giữa UTC+7 và UTC+0
+  const utcOffset = 7 * 60; // UTC+7 là 7 giờ, đổi ra phút
+
+  // Trừ offset để chuyển về UTC+0
+  const utc0Time = new Date(utc7Date.getTime() - utcOffset * 60 * 1000);
+
+  return utc0Time.toISOString(); // Chuyển về định dạng ISO
+}

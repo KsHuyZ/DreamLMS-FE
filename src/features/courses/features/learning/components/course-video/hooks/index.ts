@@ -1,10 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import {
-  completeVideo,
-  getLessonByLearnCourseId,
-  getLessonsByCourseId,
-} from '@/api';
+import { completeVideo, getLessonByLearnCourseId, startTest } from '@/api';
 import { QueryKey } from '@/constant';
 
 export const useCompletedVideo = () =>
@@ -16,4 +12,9 @@ export const useLessonLearning = (id: string) =>
   useQuery({
     queryKey: [QueryKey.LessonsLearn, id],
     queryFn: () => getLessonByLearnCourseId(id),
+  });
+
+export const useStartQuiz = () =>
+  useMutation({
+    mutationFn: (id: string) => startTest(id),
   });

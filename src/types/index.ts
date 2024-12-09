@@ -16,3 +16,4 @@ export * from './tag';
 export * from './token';
 export * from './user';
 export * from './video';
+export * from './user-quiz';

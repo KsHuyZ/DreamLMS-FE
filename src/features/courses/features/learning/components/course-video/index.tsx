@@ -1,47 +1,35 @@
 'use client';
 
-import { Contract, ethers } from 'ethers';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Lottie from 'react-lottie';
 
 import { cn } from '@/lib/utils';
 
 import Spinner from '@/components/loading/spinner';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/components/ui/use-toast';
 
-import { abi } from '@/abi/contract.json';
-import { useQuestion } from '@/app/(global)/_hooks';
 import Loading from '@/app/(global)/courses/learning/[courseId]/_components/units/components/loading';
-import Quiz from '@/app/(global)/courses/learning/[courseId]/_components/units/components/quiz';
-import { useSubmitQuiz } from '@/app/(global)/courses/learning/[courseId]/_components/units/components/quiz/hooks';
-import { congratulationsOptions } from '@/constant';
 import ListLessons from '@/features/courses/features/learning/components/course-video/components/lesson-list';
+import ModalQuiz from '@/features/courses/features/learning/components/course-video/components/modal-quiz';
+import Quiz from '@/features/courses/features/learning/components/course-video/components/quiz';
+import { useQuestion } from '@/features/courses/features/learning/components/course-video/components/quiz/hooks';
 import Video from '@/features/courses/features/learning/components/course-video/components/video';
-import { useLessonLearning } from '@/features/courses/features/learning/components/course-video/hooks';
+import {
+  useLessonLearning,
+  useStartQuiz,
+} from '@/features/courses/features/learning/components/course-video/hooks';
 import { generateNameColor } from '@/utils';
 
 import {
   EUnitType,
-  TAnswer,
+  TAnswerTest,
   TCourseProgress,
-  TQuestionResponse,
   TQuestionResults,
+  TQuestionTest,
   TUnit,
 } from '@/types';
 
@@ -58,45 +46,45 @@ export type TUnitParent = {
 const CONTRACT_ADDRESS = '0x6CAe432354A436fd826f03E258aD84F83f84a7F8';
 
 const CourseVideo = ({ userId, course }: CourseVideoProps) => {
-  const { data: lessons, isLoading } = useLessonLearning(course.id);
+  const { data: lessons, isLoading, refetch } = useLessonLearning(course.id);
   const [selectLesson, setSelectLesson] = useState<string[]>([]);
   const [selectUnit, setSelectUnit] = useState<TUnit | undefined>(undefined);
-  const [open, setOpen] = useState(false);
   const [openQuiz, setOpenQuiz] = useState(false);
-  const [showAnimation, setShowAnimation] = useState(false);
+
   const searchParams = useSearchParams();
   const [questionResultList, setQuestionResultList] = useState<
     TQuestionResults[]
   >([]);
-  const { data: questions, isLoading: questionLoading } = useQuestion(
-    selectUnit?.id,
-    selectUnit?.unit
-  );
   const pathName = usePathname();
   const { replace } = useRouter();
-  const { mutateAsync, isPending } = useSubmitQuiz();
   const [tempUnit, setTempUnit] = useState<TUnitParent>();
   const [currentIndex, setCurrentIndex] = useState(
     Number(searchParams.get('question')) || 0
   );
-  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const { mutateAsync: startQuiz, isPending: starting } = useStartQuiz();
+
+  const { data: questions, isLoading: questionLoading } = useQuestion(
+    selectUnit?.id,
+    selectUnit?.isCompleted
+  );
+  const [showResult, setShowResult] = useState(false);
 
   const onAddQuestionList = useCallback(
-    (question: TQuestionResponse, choice: TAnswer) => {
+    (question: TQuestionTest, answer: TAnswerTest) => {
       setQuestionResultList((prev) => {
         const tempQuestionList = [...prev];
         const isQuestionExist = prev.find((q) => q.questionId === question.id);
 
         if (isQuestionExist) {
-          if (isQuestionExist.answerResults[0].answerId === choice.id) {
+          if (isQuestionExist.answerId === answer.id) {
             return tempQuestionList.filter((q) => q.questionId !== question.id);
           }
           return tempQuestionList.map((question) => {
             if (isQuestionExist.questionId === question.questionId) {
               return {
                 ...question,
-                answerResults: [{ answerId: choice.id ?? '' }],
+                answerResults: [{ answerId: answer.id ?? '' }],
               };
             }
             return question;
@@ -104,7 +92,7 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
         }
         const newQuestion: TQuestionResults = {
           questionId: question.id ?? '',
-          answerResults: [{ answerId: choice.id ?? '' }],
+          answerId: answer.id ?? '',
         };
         return [...tempQuestionList, newQuestion];
       });
@@ -127,37 +115,6 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
     [pathName, replace, searchParams]
   );
 
-  const handleSubmit = async (values: {
-    quizId: string;
-    questionResultRequestList: TQuestionResults[];
-  }) => {
-    const result = await mutateAsync({ ...values });
-    setShowAnimation(true);
-    try {
-      if (window.ethereum) {
-        setLoading(true);
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        const contract = new Contract(CONTRACT_ADDRESS, abi, signer);
-        const transaction = await contract.createCertificate(
-          userId,
-          course.id,
-          ethers.toBigInt(result.score.split('/')[0]),
-          {
-            value: ethers.parseEther('0.0025'),
-          }
-        );
-        await transaction.wait();
-        toast({ variant: 'success', title: 'Saved result success!' });
-      }
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Save result fail' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const onSelectIndex = useCallback(
     (index: number) => {
       createQueryString('question', index.toString());
@@ -168,7 +125,7 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
 
   const onSelectUnit = useCallback(
     (unit: TUnitParent) => {
-      if (unit.unit === EUnitType.QUIZ) {
+      if (unit.unit === EUnitType.QUIZ && !unit.isCompleted) {
         setTempUnit(unit);
         setOpenQuiz(true);
         return;
@@ -178,15 +135,6 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
     },
     [createQueryString, setSelectUnit]
   );
-
-  const onStartQuiz = () => {
-    if (tempUnit && tempUnit.id) {
-      onSelectUnit(tempUnit);
-      onNextLesson(tempUnit);
-      setTempUnit(undefined);
-      setOpenQuiz(false);
-    }
-  };
 
   const units = useMemo(
     () =>
@@ -234,13 +182,6 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
     }
   }, [units, isLoading, searchParams]);
 
-  useEffect(() => {
-    if (showAnimation) {
-      const timeoutId = setTimeout(() => setShowAnimation(false), 4000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [showAnimation]);
-
   const onNextLesson = useCallback((currentUnit: TUnitParent) => {
     setSelectLesson((prev) => {
       const selectLesson = prev.find((item) => item === currentUnit.parentId);
@@ -251,6 +192,9 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
 
   const onNextUnit = useCallback(() => {
     const unitIndex = units.findIndex((unit) => unit.id === selectUnit?.id);
+    if (unitIndex === units.length - 1) {
+      return;
+    }
     const currentUnit = unitIndex > -1 ? units[unitIndex + 1] : units[0];
     if (currentUnit.unit === EUnitType.QUIZ) {
       setOpenQuiz(true);
@@ -261,53 +205,35 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
     }
   }, [selectUnit?.id, units, onNextLesson]);
 
+  const onStartQuiz = useCallback(async () => {
+    if (tempUnit && tempUnit.id) {
+      await startQuiz(tempUnit.id);
+      setSelectUnit(tempUnit);
+      onNextLesson(tempUnit);
+      createQueryString('unitId', tempUnit.id);
+      setTempUnit(undefined);
+      setOpenQuiz(false);
+    }
+  }, [createQueryString, onNextLesson, startQuiz, tempUnit]);
+
+  const onClearQuiz = useCallback(() => {
+    setQuestionResultList([]);
+  }, []);
+
+  const onShowResult = useCallback(() => {
+    setShowResult(true);
+  }, []);
+
   return (
     <>
       <Loading open={loading} />
-
-      <AlertDialog open={openQuiz} onOpenChange={setOpenQuiz}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you ready for test</AlertDialogTitle>
-            <AlertDialogDescription>
-              When you press start, the quiz time count will start and can not
-              cancel
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Button onClick={onStartQuiz}>Start</Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {showAnimation && (
-        <Lottie
-          style={{
-            backgroundColor: 'transparent',
-            position: 'fixed',
-          }}
-          options={congratulationsOptions}
-          height='100%'
-          width='100%'
-        />
-      )}
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      <div className='grid grid-cols-7 gap-7 justify-between h-screen w-full'>
+      <ModalQuiz
+        openQuiz={openQuiz}
+        setOpenQuiz={setOpenQuiz}
+        onStartQuiz={onStartQuiz}
+        loading={starting}
+      />
+      <div className='grid grid-cols-7 gap-7 justify-between w-full'>
         <div className='flex px-5 flex-col space-y-4 col-span-5'>
           <div className='w-full'>
             <div className='mx-auto'>
@@ -354,15 +280,18 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
                       <Video selectUnit={selectUnit} onNextUnit={onNextUnit} />
                     ) : (
                       <Quiz
-                        questions={questions}
+                        questions={questions ?? []}
                         isLoading={questionLoading}
                         questionResultList={questionResultList}
                         onAddQuestionList={onAddQuestionList}
                         currentIndex={currentIndex}
                         setCurrentIndex={setCurrentIndex}
                         selectUnit={selectUnit}
-                        mutateAsync={handleSubmit}
-                        isPending={isPending}
+                        onClearQuiz={onClearQuiz}
+                        onNextUnit={onNextUnit}
+                        refetchLesson={refetch}
+                        showResult={showResult}
+                        setShowResult={setShowResult}
                       />
                     )
                   ) : (
@@ -380,42 +309,48 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
                     </Label>
                   </div>
                 </div>
-                {selectUnit ? (
-                  selectUnit.unit === EUnitType.QUIZ ? (
-                    <Card className='border rounded-md'>
-                      <CardHeader>
-                        <CardTitle>Quiz list</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className='grid grid-cols-4 gap-4'>
-                          {questionLoading && !questions
-                            ? Array.from({ length: 12 }).map((_, index) => (
-                                <Skeleton className='w-24 h-4' key={index} />
-                              ))
-                            : questions &&
-                              questions.map((q, i) => (
-                                <Button
-                                  variant={
-                                    questionResultList.find(
-                                      (question) => question.questionId === q.id
-                                    )
-                                      ? 'default'
-                                      : 'outline'
-                                  }
-                                  key={i}
-                                  onClick={() => onSelectIndex(i)}
-                                >
-                                  {i < 10 ? 0 : ''}
-                                  {i + 1}
-                                </Button>
-                              ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <></>
-                  )
-                ) : null}
+                {selectUnit && selectUnit.unit === EUnitType.QUIZ ? (
+                  <Card className='border rounded-md'>
+                    <CardHeader>
+                      <CardTitle>Quiz list</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className='grid grid-cols-10 gap-10'>
+                        {questionLoading
+                          ? Array.from({ length: 20 }).map((_, index) => (
+                              <Skeleton className='w-24 h-4' key={index} />
+                            ))
+                          : questions &&
+                            questions.map((q, i) => (
+                              <Button
+                                variant={
+                                  questionResultList.find(
+                                    (question) => question.questionId === q.id
+                                  )
+                                    ? 'default'
+                                    : 'outline'
+                                }
+                                key={i}
+                                onClick={() => onSelectIndex(i)}
+                                className={cn(
+                                  'rounded-md',
+                                  q.answers.some((answer) =>
+                                    answer.isCorrect === answer.isSelected
+                                      ? 'bg-emerald-600 text-white'
+                                      : 'bg-red-600 text-white'
+                                  )
+                                )}
+                              >
+                                {i < 10 ? 0 : ''}
+                                {i + 1}
+                              </Button>
+                            ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>

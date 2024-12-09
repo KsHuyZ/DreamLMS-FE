@@ -5,33 +5,23 @@ import React, { memo, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { getStorage, setStorage } from '@/utils';
-
 interface ICountDownTimeProps {
   totalSeconds: number;
 }
 
-const realTimeLeft =
-  Number(getStorage('time-left')) -
-  (new Date().getTime() / 1000 - Number(getStorage('reload-time')));
-
 const CountDownTime = ({ totalSeconds }: ICountDownTimeProps) => {
-  const [timeLeft, setTimeLeft] = useState(
-    realTimeLeft >= 0 ? realTimeLeft : totalSeconds
-  );
+  const [timeLeft, setTimeLeft] = useState(totalSeconds);
 
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      setStorage('time-left', timeLeft.toString());
-      setStorage('reload-time', new Date().getTime() / 1000);
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    setTimeLeft(totalSeconds);
+  }, [totalSeconds]);
+
+  useEffect(() => {
     if (timeLeft <= 0) return;
     const intervalId = setInterval(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
       clearInterval(intervalId);
     };
   }, [timeLeft]);

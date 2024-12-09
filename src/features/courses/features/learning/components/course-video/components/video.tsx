@@ -26,7 +26,7 @@ const Video = ({ selectUnit, onNextUnit }: IVideoProps) => {
   const { data: url, isLoading } = useVideo(selectUnit.video?.id);
   const { mutate: completedVideo } = useCompletedVideo();
   const { courseId } = useParams();
-  console.log({ courseId });
+
   const onEnded = useCallback(async () => {
     onNextUnit();
     completedVideo(courseId as string);

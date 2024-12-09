@@ -36,7 +36,6 @@ const LessonDropdown = ({
       ...quiz,
       unit: EUnitType.QUIZ,
       parentId: lesson.id,
-      isCompleted: false,
     }));
     return [...videos, ...quizzes].sort(
       (a, b) => Number(a.order) - Number(b.order)

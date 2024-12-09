@@ -1,5 +1,6 @@
 'use client';
 import { ListFilter } from 'lucide-react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -19,8 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import CoursesFilter from '@/features/courses/components/courses-filter';
+import { useGuestCourses } from '@/features/courses/hooks';
 
 import {
   ECourseDuration,
@@ -30,9 +33,6 @@ import {
   EPayType,
   TCourseFilter,
 } from '@/types';
-import { useGuestCourses } from '@/features/courses/hooks';
-import { Skeleton } from '@/components/ui/skeleton';
-import Image from 'next/image';
 
 const defaultValues: TCourseFilter = {
   rate: ECourseRate.OneStar,

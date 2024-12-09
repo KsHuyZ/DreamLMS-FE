@@ -1,21 +1,13 @@
 import api from '@/lib/api';
 
-import { TQuestionResponse, TQuestionResults, TQuizCredentials } from '@/types';
+import { TQuestionResults, TQuizCredentials } from '@/types';
 
 export const createQuiz = (quiz: TQuizCredentials) =>
   api.post('/quizzes', quiz);
 
 export const deleteQuiz = (quizId: string) => api.delete(`/quizzes/${quizId}`);
 
-export const getQuizByUnitId = (id?: string) =>
-  api.get(`/quiz/getListQuizByIdUnit?id=${id}`);
-
-export const getQuestionByQuizId = (
-  id?: string
-): Promise<TQuestionResponse[]> => api.get(`/question/get-by-quiz-id?id=${id}`);
-
-export const submitQuiz = (values: {
-  quizId: string;
-  questionResultRequestList: TQuestionResults[];
-}): Promise<{ score: string; isFinal: boolean; isPass: boolean }> =>
-  api.post('/quiz-results/submit', values);
+export const submitQuiz = (
+  quizId: string,
+  questionResultRequestList: TQuestionResults[]
+): Promise<number> => api.post(`/quizzes/${quizId}`, questionResultRequestList);

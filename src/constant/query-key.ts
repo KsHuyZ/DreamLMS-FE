@@ -10,4 +10,6 @@ export enum QueryKey {
   Video = 'video',
   CourseLessons = 'course-lessons',
   LessonsLearn = 'lessons-learn',
+  Question = 'question',
+  QuizStart = 'quiz-start',
 }
