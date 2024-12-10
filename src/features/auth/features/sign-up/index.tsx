@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FaCircleCheck } from 'react-icons/fa6';
 import { z } from 'zod';
 
 import Input from '@/components/inputs/Input';
@@ -29,19 +30,45 @@ const SignUp = () => {
   });
   const { toast } = useToast();
   const router = useRouter();
+  const [isSignUp, setIsSignup] = useState(false);
+
   const [isStudent, setIsStudent] = useState(true);
   const { mutateAsync: signUp, isPending } = useSignUp(isStudent);
 
   const onSubmit = async (values: TSignUpCredentials) => {
     await signUp(values);
+    setIsSignup(true);
     toast({
       title: 'Sign Up Success',
       description: 'Please confirm email in your gmail!',
       variant: 'success',
     });
-    router.replace('/sign-in');
   };
-  return (
+  return isSignUp ? (
+    <div className='p-6 pt-0 space-y-4 md:space-y-6 sm:p-8'>
+      <h1 className='text-xl font-bold leading-tight text-center tracking-tight text-tertiary-800 md:text-2xl '>
+        Thank you for your successful registration
+      </h1>
+      <div className='flex items-center justify-center'>
+        <div className='absolute w-5 h-5 rounded-full bg-primary-600 opacity-50 animate-ripple z-10'></div>
+        <FaCircleCheck className='w-10 h-10 text-primary-600 z-30 rounded-full bg-white' />
+      </div>
+      <div className='flex items-center justify-center'>
+        <p className='text-tertiary-800 text-center font-bold'>
+          Please you will check your email right now !
+        </p>
+      </div>
+      <Button
+        type='submit'
+        isLoading={isPending}
+        className='w-full'
+        onClick={() => (window.location.href = 'https://mail.google.com')}
+      >
+        Go to for email
+      </Button>
+      <div></div>
+    </div>
+  ) : (
     <div className='p-6 space-y-2 md:space-y-6 sm:p-8'>
       <div className='flex flex-col gap-y-2'>
         <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl '>
