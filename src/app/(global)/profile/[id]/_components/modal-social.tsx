@@ -58,15 +58,18 @@ const ModalSocial: React.FC<Props> = ({ refetch }) => {
 
   const onSubmit = async () => {
     const values = form.getValues();
-    const result = values.social.reduce((acc: any, curr) => {
-      if (!Object.keys(acc).length) return acc;
-      acc[curr.type] = curr.value;
-      return acc;
-    }, {} as {
-      x?: string;
-      facebook?: string;
-      instagram?: string;
-    });
+    const result = values.social.reduce(
+      (acc: any, curr) => {
+        if (!Object.keys(acc).length) return acc;
+        acc[curr.type] = curr.value;
+        return acc;
+      },
+      {} as {
+        x?: string;
+        facebook?: string;
+        instagram?: string;
+      }
+    );
     await updateSocial(result);
     refetch();
     setOpen(false);

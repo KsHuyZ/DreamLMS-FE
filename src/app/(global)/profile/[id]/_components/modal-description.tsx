@@ -63,7 +63,9 @@ const ModalDescription: React.FC<Props> = ({ user, refetch }) => {
           />
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={onSubmit} isLoading={isPending}>Submit</Button>
+          <Button onClick={onSubmit} isLoading={isPending}>
+            Submit
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

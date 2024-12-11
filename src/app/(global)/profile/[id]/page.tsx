@@ -9,7 +9,7 @@ const Profile = () => {
   const { data: user, isLoading, refetch } = useMe();
   return (
     <div className='flex flex-col space-y-8  mx-4'>
-      <ProfileCard user={user} refetch={refetch}/>
+      <ProfileCard user={user} refetch={refetch} />
       <ProfileDescription user={user} refetch={refetch} />
     </div>
   );

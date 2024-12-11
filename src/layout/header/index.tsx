@@ -216,9 +216,7 @@ const Header = ({ user }: HeaderProps) => {
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        onClick={() =>
-                          router.push(`/profile/${user.id}`)
-                        }
+                        onClick={() => router.push(`/profile/${user.id}`)}
                       >
                         <div className='gap-x-2 flex items-center'>
                           <User size={15} />
