@@ -12,4 +12,5 @@ export enum QueryKey {
   LessonsLearn = 'lessons-learn',
   Question = 'question',
   QuizStart = 'quiz-start',
+  Me = 'me',
 }

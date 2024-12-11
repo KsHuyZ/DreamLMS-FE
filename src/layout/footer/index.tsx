@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 const Footer = () => {
   const pathName = usePathname();
 
-  if (pathName.startsWith('/teacher')) {
+  if (pathName.startsWith('/teacher') || pathName.startsWith('/profile')) {
     return <></>;
   }
 

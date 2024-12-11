@@ -10,6 +10,7 @@ import {
   LucideIcon,
   MessageCircleMore,
   ShoppingCart,
+  User,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
@@ -59,6 +60,11 @@ export const SidebarRoutes = ({ user }: ISidebarProps) => {
   const guestRoutes: GuestRoutes[] = [
     ...(user
       ? [
+          {
+            icon: User,
+            label: `Profile`,
+            href: `/profile/${user.id}`,
+          },
           {
             icon: Layout,
             label: 'Dashboard',

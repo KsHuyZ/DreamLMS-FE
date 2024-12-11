@@ -62,7 +62,6 @@ const Header = ({ user }: HeaderProps) => {
   const pathName = usePathname();
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
-  const { toast } = useToast();
   const [value, setValue] = useState(searchParams.get('name') ?? '');
   const [focus, setFocus] = useState(false);
 
@@ -218,10 +217,7 @@ const Header = ({ user }: HeaderProps) => {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={() =>
-                          toast({
-                            title: 'This function is not available',
-                            variant: 'default',
-                          })
+                          router.push(`/profile/${user.id}`)
                         }
                       >
                         <div className='gap-x-2 flex items-center'>
