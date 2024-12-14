@@ -52,6 +52,7 @@ export type TQuiz = {
   id: string;
   order?: number;
   disabled: boolean;
+  isCompleted?: boolean;
 } & TQuizCredentials;
 
 export enum EQuizType {

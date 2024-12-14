@@ -13,4 +13,5 @@ export enum QueryKey {
   Question = 'question',
   QuizStart = 'quiz-start',
   Me = 'me',
+  Certificate = 'certificate',
 }

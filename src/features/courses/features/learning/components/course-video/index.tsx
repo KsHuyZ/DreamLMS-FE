@@ -12,8 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import Loading from '@/app/(global)/courses/learning/[courseId]/_components/units/components/loading';
 import ListLessons from '@/features/courses/features/learning/components/course-video/components/lesson-list';
+import ModalCertificate from '@/features/courses/features/learning/components/course-video/components/modal-certificate';
 import ModalQuiz from '@/features/courses/features/learning/components/course-video/components/modal-quiz';
 import Quiz from '@/features/courses/features/learning/components/course-video/components/quiz';
 import { useQuestion } from '@/features/courses/features/learning/components/course-video/components/quiz/hooks';
@@ -35,7 +35,6 @@ import {
 
 interface CourseVideoProps {
   course: TCourseProgress;
-  userId: string;
 }
 
 export type TUnitParent = {
@@ -45,7 +44,7 @@ export type TUnitParent = {
 
 const CONTRACT_ADDRESS = '0x6CAe432354A436fd826f03E258aD84F83f84a7F8';
 
-const CourseVideo = ({ userId, course }: CourseVideoProps) => {
+const CourseVideo = ({ course }: CourseVideoProps) => {
   const { data: lessons, isLoading, refetch } = useLessonLearning(course.id);
   const [selectLesson, setSelectLesson] = useState<string[]>([]);
   const [selectUnit, setSelectUnit] = useState<TUnit | undefined>(undefined);
@@ -61,7 +60,7 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
   const [currentIndex, setCurrentIndex] = useState(
     Number(searchParams.get('question')) || 0
   );
-  const [loading, setLoading] = useState(false);
+  const [openCertificate, setOpenCertificate] = useState(false);
   const { mutateAsync: startQuiz, isPending: starting } = useStartQuiz();
 
   const { data: questions, isLoading: questionLoading } = useQuestion(
@@ -220,13 +219,20 @@ const CourseVideo = ({ userId, course }: CourseVideoProps) => {
     setQuestionResultList([]);
   }, []);
 
-  const onShowResult = useCallback(() => {
-    setShowResult(true);
-  }, []);
+  const isCompletedCourse = useMemo(
+    () => units.length && units.at(-1)?.isCompleted,
+    [units]
+  );
+
+  useEffect(() => {
+    if (isCompletedCourse && !course.haveCertificate) {
+      setOpenCertificate(true);
+    }
+  }, [course.haveCertificate, isCompletedCourse]);
 
   return (
     <>
-      <Loading open={loading} />
+      <ModalCertificate open={openCertificate} setOpen={setOpenCertificate} />
       <ModalQuiz
         openQuiz={openQuiz}
         setOpenQuiz={setOpenQuiz}

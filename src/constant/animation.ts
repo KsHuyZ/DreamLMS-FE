@@ -8,3 +8,12 @@ export const congratulationsOptions: Options = {
     preserveAspectRatio: 'xMidYMid slice',
   },
 };
+
+export const runningOptions: Options = {
+  loop: true,
+  autoplay: true,
+  animationData: require('@/assets/json/running.json'),
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};

@@ -46,6 +46,7 @@ export type TCourse = {
 
 export type TCourseProgress = {
   progress: number;
+  haveCertificate?: boolean;
 } & TCourse;
 
 export type TCourseQuery = Omit<TCourse, 'lessons'> & {

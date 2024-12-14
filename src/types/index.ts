@@ -1,5 +1,6 @@
 export * from './cart';
 export * from './category';
+export * from './certificate';
 export * from './course';
 export * from './editor';
 export * from './enroll';
@@ -15,5 +16,5 @@ export * from './status';
 export * from './tag';
 export * from './token';
 export * from './user';
-export * from './video';
 export * from './user-quiz';
+export * from './video';
