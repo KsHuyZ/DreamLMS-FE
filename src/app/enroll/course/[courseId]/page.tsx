@@ -1,19 +1,22 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FaCircleCheck } from 'react-icons/fa6';
+
+import { Path } from '@/constant';
 
 const CoursePayment = () => {
   const [timeLeft, setTimeLeft] = useState(10);
   const router = useRouter();
+  const { courseId } = useParams();
   useEffect(() => {
-    if (timeLeft <= 0) return router.push('/learning');
+    if (timeLeft <= 0) return router.push(Path.Learning(courseId as string));
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, router]);
+  }, [timeLeft, router, courseId]);
 
   return (
     <div className='p-6 pt-0 space-y-4 md:space-y-6 sm:p-8'>

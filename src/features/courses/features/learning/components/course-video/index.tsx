@@ -35,6 +35,7 @@ import {
 
 interface CourseVideoProps {
   course: TCourseProgress;
+  userId: string;
 }
 
 export type TUnitParent = {
@@ -42,9 +43,7 @@ export type TUnitParent = {
   isCompleted?: boolean;
 } & TUnit;
 
-const CONTRACT_ADDRESS = '0x6CAe432354A436fd826f03E258aD84F83f84a7F8';
-
-const CourseVideo = ({ course }: CourseVideoProps) => {
+const CourseVideo = ({ course, userId }: CourseVideoProps) => {
   const { data: lessons, isLoading, refetch } = useLessonLearning(course.id);
   const [selectLesson, setSelectLesson] = useState<string[]>([]);
   const [selectUnit, setSelectUnit] = useState<TUnit | undefined>(undefined);
@@ -232,7 +231,11 @@ const CourseVideo = ({ course }: CourseVideoProps) => {
 
   return (
     <>
-      <ModalCertificate open={openCertificate} setOpen={setOpenCertificate} />
+      <ModalCertificate
+        open={openCertificate}
+        setOpen={setOpenCertificate}
+        userId={userId}
+      />
       <ModalQuiz
         openQuiz={openQuiz}
         setOpenQuiz={setOpenQuiz}

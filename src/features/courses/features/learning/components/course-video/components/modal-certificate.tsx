@@ -12,17 +12,19 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
 
-import { runningOptions } from '@/constant';
+import { Path, runningOptions } from '@/constant';
 import { useCreateCertificate } from '@/features/courses/features/learning/components/course-video/hooks';
 
 interface ModalCertificateProps {
   open: boolean;
   setOpen: (value: boolean) => void;
+  userId: string;
 }
 
 const ModalCertificate: React.FC<ModalCertificateProps> = ({
   open,
   setOpen,
+  userId,
 }) => {
   const [progress, setProgress] = useState(0);
   const { courseId } = useParams();
@@ -36,7 +38,8 @@ const ModalCertificate: React.FC<ModalCertificateProps> = ({
     router.refresh();
     setOpen(false);
     toast({ variant: 'success', title: 'Create certificate success' });
-  }, [isLoading, open, router, setOpen, toast]);
+    router.push(Path.Certificate(userId, courseId as string));
+  }, [courseId, isLoading, open, router, setOpen, toast, userId]);
 
   useEffect(() => {
     if (!open) return setProgress(0);

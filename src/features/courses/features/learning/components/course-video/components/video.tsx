@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { memo, useCallback } from 'react';
 
 import Spinner from '@/components/loading/spinner';
@@ -26,11 +26,13 @@ const Video = ({ selectUnit, onNextUnit }: IVideoProps) => {
   const { data: url, isLoading } = useVideo(selectUnit.video?.id);
   const { mutate: completedVideo } = useCompletedVideo();
   const { courseId } = useParams();
+  const router = useRouter();
 
   const onEnded = useCallback(async () => {
     onNextUnit();
     completedVideo(courseId as string);
-  }, [courseId, completedVideo, onNextUnit]);
+    router.refresh();
+  }, [onNextUnit, completedVideo, courseId, router]);
 
   return isLoading ? (
     <Loading />

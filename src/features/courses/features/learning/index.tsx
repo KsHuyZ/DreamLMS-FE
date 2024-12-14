@@ -38,9 +38,10 @@ const CourseVideo = dynamic(
 
 const LearningPage = async ({ params: { courseId } }: LearningPageProps) => {
   const course = await getCourseLearn(courseId);
+  const user = getCookies('user') as TUser;
   return (
     <div className='flex flex-col h-full space-y-4'>
-      <CourseVideo course={course} />
+      <CourseVideo course={course} userId={user.id} />
     </div>
   );
 };
