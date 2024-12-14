@@ -16,7 +16,7 @@ interface Props {
   };
 }
 
-const Certificate: React.FC<Props> = async ({ params }) => {
+const Certificate = async ({ params }: Props) => {
   const { userId, courseId } = params;
   const currentUrl = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/certificate/${userId}/${courseId};`;
   const certificate = await getCertificateByUserIdAndCourseId(courseId, userId);
@@ -27,7 +27,6 @@ const Certificate: React.FC<Props> = async ({ params }) => {
         <Card>
           <CardContent className='space-y-4 w-[800px]'>
             <div className='flex justify-center items-center p-4'>
-              {' '}
               <NextImage
                 src='/images/logo.svg'
                 width={150}
