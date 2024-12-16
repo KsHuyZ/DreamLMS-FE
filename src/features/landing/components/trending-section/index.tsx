@@ -4,7 +4,7 @@ import React from 'react';
 import CourseCard from '@/components/course-card';
 import { Button } from '@/components/ui/button';
 
-import { ECourseStatus, ELevel, ERoles } from '@/types';
+import { ECourseStatus, ELevel, ERoles, TCourse } from '@/types';
 
 const mockCourse = {
   id: 'string',
@@ -39,7 +39,7 @@ const mockCourse = {
   createdAt: '2024-08-31T08:06:49.029Z',
   updatedAt: '2024-08-31T08:06:49.029Z',
   status: ECourseStatus.Draft,
-};
+} as unknown as TCourse;
 
 const TrendingSection = () => {
   return (

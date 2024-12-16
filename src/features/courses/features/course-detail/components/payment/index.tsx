@@ -14,6 +14,7 @@ import {
 import { Label } from '@/components/ui/label';
 
 import { usePayCourse } from '@/features/courses/features/course-detail/components/payment/hooks';
+import { Path } from '@/constant';
 interface IPaymentProps {
   courseId: string;
 }
@@ -24,9 +25,7 @@ const PayMent = ({ courseId }: IPaymentProps) => {
   const router = useRouter();
   const handlePayment = useCallback(async () => {
     const result = await payMent();
-    router.push(
-      `/enroll/payments/${courseId}?clientSecret=${result.client_secret}`
-    );
+    router.push(Path.PayCourse(courseId, result.client_secret));
   }, [courseId, payMent, router]);
 
   return (

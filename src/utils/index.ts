@@ -10,9 +10,8 @@ export const generateNameColor = (name: string) => {
 };
 
 export * from './editor';
-export * from './file';
 export * from './format';
+export * from './mapper';
 export * from './storage';
 export * from './time';
 export * from './validate';
-export * from './mapper';

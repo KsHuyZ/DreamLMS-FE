@@ -1,8 +1,8 @@
 'use client';
 import {
   Award,
-  BarChart,
   Clock,
+  Cloud,
   Compass,
   GraduationCap,
   Layout,
@@ -13,8 +13,16 @@ import {
   User,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
+
+import { Progress } from '@/components/ui/progress';
+
+import { useAuth } from '@/store/user.store';
 
 import SidebarItem from '@/app/(global)/components/sidebar/components/sidebar-item';
+import { useStorage } from '@/app/(global)/components/sidebar/hooks';
+import { Path } from '@/constant';
+import { convertByteToGB, formatBytes, getTotalStorage } from '@/utils';
 
 import { TUser } from '@/types';
 
@@ -44,11 +52,6 @@ const teacherRoutes: GuestRoutes[] = [
     icon: MessageCircleMore,
     label: 'Chat',
     href: '/teacher/chat',
-  },
-  {
-    icon: BarChart,
-    label: 'Analytics',
-    href: '/teacher/analytics',
   },
 ];
 
@@ -93,15 +96,44 @@ export const SidebarRoutes = ({ user }: ISidebarProps) => {
       href: '/certificate',
     },
   ];
+  const { user: me } = useAuth();
   const pathname = usePathname();
   const isTeacherPage = pathname?.includes('/teacher');
   const routes = isTeacherPage ? teacherRoutes : guestRoutes;
+  const { data } = useStorage(isTeacherPage);
+
+  const totalStorage = useMemo(
+    () => getTotalStorage(me?.totalStorage, me?.unit),
+    [me]
+  );
+
+  const percentage = useMemo(() => {
+    return (convertByteToGB(data) / totalStorage) * 100;
+  }, [data, totalStorage]);
 
   return (
     <div className='flex flex-col w-full space-y-1'>
       {routes.map(({ href, icon, label }) => (
         <SidebarItem key={href} href={href} icon={icon} label={label} />
       ))}
+      {isTeacherPage && (
+        <>
+          <SidebarItem
+            href={Path.Storage}
+            icon={Cloud}
+            label={`Storage (Usage ${percentage.toFixed(2)}%)`}
+          />
+          <div className='m-2 space-y-2'>
+            <Progress value={percentage} className='h-2' />
+            <div className='flex justify-center'>
+              <span className='text-center text-sm text-muted-foreground'>
+                Usage {formatBytes(data || 0)} in total{' '}
+                {getTotalStorage(me?.totalStorage, me?.unit)}GB
+              </span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

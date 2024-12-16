@@ -18,3 +18,4 @@ export * from './token';
 export * from './user';
 export * from './user-quiz';
 export * from './video';
+export * from './payment';

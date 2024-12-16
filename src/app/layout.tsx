@@ -14,6 +14,9 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import Providers from '@/app/provider';
 import { siteConfig } from '@/constant/config';
 import { nunito } from '@/font';
+import { AuthProvider } from '@/store/user.store';
+import { getCookies } from '@/lib/action';
+import { TUser } from '@/types';
 
 // !STARTERCONF Change these default meta
 // !STARTERCONF Look at @/constant/config to change them
@@ -64,7 +67,7 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
   const messages = await getMessages();
-
+  const user = getCookies('user') as TUser | undefined;
   return (
     <>
       <html>
@@ -77,7 +80,9 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <Toaster />
             <Providers>
-              <TooltipProvider>{children}</TooltipProvider>
+              <AuthProvider userJSON={user}>
+                <TooltipProvider>{children}</TooltipProvider>
+              </AuthProvider>
             </Providers>
           </NextIntlClientProvider>
         </body>

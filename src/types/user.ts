@@ -1,4 +1,5 @@
 import { ERoles } from '@/types';
+import { EDisk } from '@/utils';
 
 export type TUser = {
   id: string;
@@ -13,6 +14,8 @@ export type TUser = {
   instagram?: string;
   description?: string;
   walletAddress?: string;
+  unit: EDisk;
+  totalStorage: number;
 };
 
 export type TSignInCredentials = {

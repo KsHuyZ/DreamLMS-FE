@@ -4,15 +4,18 @@ import {
   useStripe,
 } from '@stripe/react-stripe-js';
 import { StripeError } from '@stripe/stripe-js';
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 
-import { Path } from '@/constant';
+import { Path, QueryKey } from '@/constant';
 import { toTitleCase } from '@/utils';
+
+import { EPayment } from '@/types';
 
 export type StripePaymentFormProps = {
   onFailure: (message: string, description?: string) => void;
@@ -26,6 +29,9 @@ const StripePaymentForm: React.FC<StripePaymentFormProps> = ({ onFailure }) => {
   const router = useRouter();
   const { toast } = useToast();
   const { courseId } = useParams();
+  const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+
   const handleError = (error: StripeError) => {
     setSubmitting(false);
 
@@ -73,7 +79,15 @@ const StripePaymentForm: React.FC<StripePaymentFormProps> = ({ onFailure }) => {
           result.paymentIntent &&
           result.paymentIntent.status === 'succeeded'
         ) {
-          router.replace(Path.PaymentSuccess(courseId as string));
+          if (searchParams.get('type') === EPayment.UpgradePlans) {
+            router.replace(Path.Storage);
+            setTimeout(
+              () => queryClient.invalidateQueries({ queryKey: [QueryKey.Me] }),
+              2000
+            );
+          } else {
+            router.replace(Path.PaymentSuccess(courseId as string));
+          }
         }
       } catch (error) {
         console.error('Error in payment confirmation:', error);

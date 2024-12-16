@@ -1,3 +1,5 @@
+import { EPayment } from '@/types';
+
 export const Path = {
   HOME: '/',
   ABOUT: '/about',
@@ -8,6 +10,11 @@ export const Path = {
   NotFound: `not-found`,
   Certificate: (userId: string, courseId: string) =>
     `/certificate/${userId}/${courseId}`,
+  Storage: '/teacher/storage',
+  PayCourse: (courseId: string, clientSecret: string | null) =>
+    `/enroll/payments/${courseId}?clientSecret=${clientSecret}`,
+  UpgradePlan: (clientSecret: string | null) =>
+    `/enroll/payments/plans?clientSecret=${clientSecret}&type=${EPayment.UpgradePlans}`,
 };
 export const TeacherPath = {
   Dashboard: '/teacher/dashboard',

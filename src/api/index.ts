@@ -8,6 +8,7 @@ export * from './lesson';
 export * from './progress';
 export * from './question';
 export * from './quiz';
+export * from './storage';
 export * from './tag';
 export * from './user';
 export * from './user-quiz';
