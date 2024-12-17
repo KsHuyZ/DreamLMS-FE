@@ -15,6 +15,7 @@ export const Path = {
     `/enroll/payments/${courseId}?clientSecret=${clientSecret}`,
   UpgradePlan: (clientSecret: string | null) =>
     `/enroll/payments/plans?clientSecret=${clientSecret}&type=${EPayment.UpgradePlans}`,
+  CourseDetail: (courseId: string) => `/courses/${courseId}`,
 };
 export const TeacherPath = {
   Dashboard: '/teacher/dashboard',
@@ -27,4 +28,6 @@ export const TeacherPath = {
   SettingCourse: (id?: string) => `/teacher/courses/update/settings/${id}`,
   CreateVideo: (courseId: string) =>
     `/teacher/courses/update/lesson/${courseId}/video`,
+  Certificate: (courseId?: string) =>
+    `/teacher/courses/update/certificate/${courseId}`,
 };

@@ -101,6 +101,9 @@ dependencies:
   '@tanstack/react-query-devtools':
     specifier: ^5.18.0
     version: 5.18.0(@tanstack/react-query@5.18.0)(react@18.2.0)
+  '@tanstack/react-table':
+    specifier: ^8.20.6
+    version: 8.20.6(react-dom@18.2.0)(react@18.2.0)
   '@tiptap/core':
     specifier: ^2.8.0
     version: 2.8.0(@tiptap/pm@2.8.0)
@@ -4086,6 +4089,23 @@ packages:
     dependencies:
       '@tanstack/query-core': 5.18.0
       react: 18.2.0
+    dev: false
+
+  /@tanstack/react-table@8.20.6(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-w0jluT718MrOKthRcr2xsjqzx+oEM7B7s/XXyfs19ll++hlId3fjTm+B2zrR3ijpANpkzBAr15j1XGVOMxpggQ==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@tanstack/table-core': 8.20.5
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/table-core@8.20.5:
+    resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
+    engines: {node: '>=12'}
     dev: false
 
   /@testing-library/dom@8.20.1:

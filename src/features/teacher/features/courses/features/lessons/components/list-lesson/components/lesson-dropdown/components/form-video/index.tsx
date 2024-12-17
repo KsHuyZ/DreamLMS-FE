@@ -33,6 +33,8 @@ import {
 import MinimalTiptapEditor from '@/components/ui/minimal-tiptap';
 import { Progress } from '@/components/ui/progress';
 
+import { useAuth } from '@/store/user.store';
+
 import { useCreateVideo } from '@/app/(teacher)/teacher/courses/_hooks';
 import VideoUploader from '@/features/teacher/features/courses/features/lessons/components/list-lesson/components/lesson-dropdown/components/form-video/components/video-uploader';
 import { createVideoSchema } from '@/validator';
@@ -58,6 +60,7 @@ const FormVideo = ({ lessonId, unit, setUnit, refetch }: IFormProps) => {
     defaultValues,
     resolver: zodResolver(createVideoSchema),
   });
+  const { refetch: refetchUser } = useAuth();
   const [open, setOpen] = useState(false);
   const {
     mutateAsync: createVideo,
@@ -73,8 +76,9 @@ const FormVideo = ({ lessonId, unit, setUnit, refetch }: IFormProps) => {
       setOpen(false);
       setUnit(undefined);
       refetch();
+      refetchUser();
     }
-  }, [createVideo, form, lessonId, setUnit, refetch]);
+  }, [createVideo, form, lessonId, setUnit, refetch, refetchUser]);
 
   useEffect(() => {
     if (unit) {

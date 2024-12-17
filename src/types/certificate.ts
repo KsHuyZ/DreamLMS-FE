@@ -6,3 +6,8 @@ export type Certificate = {
   user: TUser;
   timestamp: number;
 };
+
+export type UserCertificate = {
+  course: TCourse;
+  timestamp: number;
+};
