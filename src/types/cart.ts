@@ -1,10 +1,14 @@
 import { TCourse, TUser } from '@/types';
 
-export type TCartResponse = {
-  courseResponse: TCourse;
+export type TCart = {
   id: string;
-  status: string;
-  userResponse: TUser;
+  cartItems: TCartItem[];
+  user: TUser;
+};
+
+export type TCartItem = {
+  id: string;
+  course: TCourse;
 };
 
 export type TCartBuyAll = {

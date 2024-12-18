@@ -14,19 +14,23 @@ import {
 } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { useUserCart } from '@/app/(global)/_hooks';
+import { useRemoveCartItem, useUserCart } from '@/app/(global)/_hooks';
 import { formatPrice } from '@/utils';
 
 const Cart = () => {
-  const { data, isLoading } = useUserCart();
+  const { data: cart, isLoading } = useUserCart();
+  const { mutateAsync: removeCart } = useRemoveCartItem();
+
+  const cartItems = cart?.cartItems || [];
+
   return (
     <Sheet>
       <SheetTrigger asChild>
         <div className='relative inline-flex'>
           <ShoppingCart className='cursor-pointer text-gray-500' />
-          {data && data.length > 0 ? (
+          {cartItems.length > 0 ? (
             <span className="absolute rounded-full py-1 px-1 text-xs font-medium content-[''] leading-none grid place-items-center top-[4%] right-[2%] translate-x-2/4 -translate-y-2/4 bg-red-500 text-white min-w-3 min-h-3">
-              {data?.length}
+              {cartItems.length}
             </span>
           ) : null}
         </div>
@@ -36,7 +40,7 @@ const Cart = () => {
           <SheetTitle>Cart</SheetTitle>
         </SheetHeader>
         <div className='flex flex-col space-y-8 items-center my-6 w-full h-full'>
-          <div className='flex flex-col space-y-4 justify-center items-center'>
+          <div className='flex flex-col space-y-4 justify-center items-center w-full'>
             {isLoading ? (
               Array.from({ length: 5 }).map((_, index) => (
                 <div key={index} className='flex items-center space-x-4'>
@@ -47,7 +51,7 @@ const Cart = () => {
                   </div>
                 </div>
               ))
-            ) : !data || data?.length === 0 ? (
+            ) : cartItems.length === 0 ? (
               <div className='flex flex-col space-y-4 items-center'>
                 <Image
                   src='/images/empty.svg'
@@ -59,31 +63,31 @@ const Cart = () => {
                 <Label>You don't have any course in cart</Label>
               </div>
             ) : (
-              <div className='max-h-[500px] overflow-scroll no-scrollbar grid grid-cols-1 divide-y'>
-                {data?.map((item) => (
+              <div className='max-h-[500px] overflow-scroll no-scrollbar grid grid-cols-1 divide-y w-full'>
+                {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className='flex items-center justify-between hover:bg-gray-100 cursor-pointer duration-200 p-2 rounded-sm'
+                    className='flex items-center w-full justify-between hover:bg-gray-100 cursor-pointer duration-200 p-2 rounded-sm'
                   >
                     <div className='flex items-center space-x-2'>
                       <Image
-                        src={item.courseResponse.image.url}
+                        src={item.course.image.url}
                         width={100}
                         height={100}
                         alt='COurse img'
                         className='rounded-md overflow-hidden'
                       />
                       <div className='flex flex-col space-y-2'>
-                        <Label className='line-clamp-1'>
-                          {item.courseResponse.name}
+                        <Label className='line-clamp-1 font-bold'>
+                          {item.course.name}
                         </Label>
-                        <span>
-                          {item.userResponse.firstName}{' '}
-                          {item.userResponse.lastName}
+                        <span className='text-sm text-muted-foreground'>
+                          {item.course.createdBy.firstName}{' '}
+                          {item.course.createdBy.lastName}
                         </span>
                       </div>
                     </div>
-                    <Button variant='ghost'>
+                    <Button variant='ghost' onClick={() => removeCart(item.id)}>
                       <X size={15} className='text-gray-500' />
                     </Button>
                   </div>
@@ -97,11 +101,10 @@ const Cart = () => {
             <div className='flex space-x-2 items-center justify-between'>
               <Label>Total:</Label>
               <span className='text-2xl text-bold'>
-                {data && data.length > 0
+                {cartItems.length > 0
                   ? formatPrice(
-                      data.reduce(
-                        (current, course) =>
-                          course.courseResponse.price + current,
+                      cartItems.reduce(
+                        (current, cartItem) => cartItem.course.price + current,
                         0
                       )
                     )

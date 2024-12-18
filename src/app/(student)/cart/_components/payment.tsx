@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -11,15 +12,17 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 
-import { useBuyCart } from '@/app/(global)/cart/_hooks';
+import { useBuyCart } from '@/app/(student)/cart/_hooks';
+import { Path } from '@/constant';
 
 const Payment = () => {
   const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useBuyCart();
+  const router = useRouter();
 
   const handlePayment = async () => {
-    const result = await mutateAsync();
-    location.replace(result.redirect_url);
+    const { client_secret } = await mutateAsync();
+    router.push(Path.PayCarts(client_secret));
   };
 
   return (

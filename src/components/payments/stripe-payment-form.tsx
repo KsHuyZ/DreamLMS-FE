@@ -85,6 +85,9 @@ const StripePaymentForm: React.FC<StripePaymentFormProps> = ({ onFailure }) => {
               () => queryClient.invalidateQueries({ queryKey: [QueryKey.Me] }),
               2000
             );
+          } else if (searchParams.get('type') === EPayment.PayCarts) {
+            router.replace(Path.HOME);
+            queryClient.invalidateQueries({ queryKey: [QueryKey.UserCart] });
           } else {
             router.replace(Path.PaymentSuccess(courseId as string));
           }

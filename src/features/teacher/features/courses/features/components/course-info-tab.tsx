@@ -1,4 +1,5 @@
 'use client';
+import { DollarSign } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React, { SetStateAction, useEffect, useMemo, useState } from 'react';
 
@@ -257,14 +258,20 @@ const CourseInfoTab = () => {
                   <FormLabel required>Price</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder='9đ'
-                      type='number'
+                      placeholder='9$'
                       {...field}
                       onChange={(e) =>
                         formInfo.setValue('price', Number(e.target.value))
                       }
+                      onKeyPress={(evt) => {
+                        const charCode = evt.which ? evt.which : evt.keyCode;
+                        if (charCode > 31 && (charCode < 48 || charCode > 57))
+                          return false;
+                        return true;
+                      }}
                       className='rounded-md'
                       disabled={isLoading}
+                      rightIcon={DollarSign}
                     />
                   </FormControl>
                   <FormMessage />

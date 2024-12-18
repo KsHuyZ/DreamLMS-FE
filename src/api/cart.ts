@@ -1,15 +1,17 @@
-import axios from '@/lib/api';
+import { PaymentIntent } from '@stripe/stripe-js';
 
-import { TCartBuyAll, TCartResponse } from '@/types';
+import api from '@/lib/api';
 
-export const getUserCart = (): Promise<TCartResponse[]> =>
-  axios.get('/cart/get-by-user-id');
+import { TCart } from '@/types';
 
-export const removeCartItem = (id: string) =>
-  axios.delete(`/cart/delete-by-cart-id?idCart=${id}`);
+export const getUserCart = (): Promise<TCart> => api.get('/carts');
 
-export const createCartItem = (id: string) =>
-  axios.post(`/cart/add?idCourse=${id}`);
+export const removeCartItem = (id: string) => api.delete(`/cart-items/${id}`);
 
-export const buyAllCart = (): Promise<TCartBuyAll> =>
-  axios.post('/cart/buy-all');
+export const createCartItem = (courseId: string) =>
+  api.post(`/cart-items`, {
+    courseId,
+  });
+
+export const buyAllCart = (): Promise<PaymentIntent> =>
+  api.post('/carts/payments');

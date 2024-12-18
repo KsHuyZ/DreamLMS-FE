@@ -15,4 +15,5 @@ export enum QueryKey {
   Me = 'me',
   Certificate = 'certificate',
   Storage = 'storage',
+  UserCart = 'user-cart',
 }

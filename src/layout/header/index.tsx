@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 
 import { deleteCookie } from '@/lib/action';
 import { cn } from '@/lib/utils';
-import { useDebounce, useHeader } from '@/hooks';
+import { useHeader } from '@/hooks';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -27,9 +27,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
-import { useToast } from '@/components/ui/use-toast';
 
-import { TUser } from '@/types';
+import Cart from '@/app/(global)/components/navbar/components/cart';
+
+import { ERoles, TUser } from '@/types';
 
 const headerRoutes = [
   {
@@ -195,43 +196,48 @@ const Header = ({ user }: HeaderProps) => {
                     />
                   </form>
                 )}
+                {user && user.role === ERoles.STUDENT && <Cart />}
                 {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <Avatar className='cursor-pointer'>
-                        <AvatarImage src={user.photo ?? '/images/avatar.jpg'} />
-                        <AvatarFallback>
-                          {summaryName(`${user.firstName} ${user.lastName}`)}
-                        </AvatarFallback>
-                      </Avatar>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>
-                        <div className='flex flex-col'>
-                          <Label className='text-md'>
-                            {user.firstName} {user.lastName}
-                          </Label>
-                          <span className='text-gray-400'>{user.email}</span>
-                        </div>
-                      </DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => router.push(`/profile/${user.id}`)}
-                      >
-                        <div className='gap-x-2 flex items-center'>
-                          <User size={15} />
-                          <span>Profile</span>
-                        </div>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={signOut}>
-                        <div className='gap-x-2 flex items-center text-red-400'>
-                          <LogOutIcon size={15} />
-                          <span>Logout</span>
-                        </div>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Avatar className='cursor-pointer'>
+                          <AvatarImage
+                            src={user.photo ?? '/images/avatar.jpg'}
+                          />
+                          <AvatarFallback>
+                            {summaryName(`${user.firstName} ${user.lastName}`)}
+                          </AvatarFallback>
+                        </Avatar>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuLabel>
+                          <div className='flex flex-col'>
+                            <Label className='text-md'>
+                              {user.firstName} {user.lastName}
+                            </Label>
+                            <span className='text-gray-400'>{user.email}</span>
+                          </div>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => router.push(`/profile/${user.id}`)}
+                        >
+                          <div className='gap-x-2 flex items-center'>
+                            <User size={15} />
+                            <span>Profile</span>
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={signOut}>
+                          <div className='gap-x-2 flex items-center text-red-400'>
+                            <LogOutIcon size={15} />
+                            <span>Logout</span>
+                          </div>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </>
                 ) : (
                   <div className='hidden lg:grid grid-cols-2 items-center gap-2'>
                     <Button onClick={() => router.push('/sign-in')}>
