@@ -8,9 +8,9 @@ import {
 } from '@/api';
 import { QueryKey } from '@/constant';
 
-export const useCompletedVideo = () =>
+export const useCompletedVideo = (id?: string) =>
   useMutation({
-    mutationFn: (id: string) => completeVideo(id),
+    mutationFn: () => completeVideo(id),
   });
 
 export const useLessonLearning = (id: string) =>

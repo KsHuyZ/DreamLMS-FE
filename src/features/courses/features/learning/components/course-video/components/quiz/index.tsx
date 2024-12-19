@@ -22,11 +22,16 @@ import { Skeleton } from '@/components/ui/skeleton';
 import CountdownTime from '@/app/(global)/courses/learning/[courseId]/_components/units/components/quiz/components/countdown-time';
 import { congratulationsOptions } from '@/constant';
 import ModalSubmit from '@/features/courses/features/learning/components/course-video/components/quiz/components/modal-submit';
-import { useQuizStart } from '@/features/courses/features/learning/components/course-video/components/quiz/hooks';
 import { useStartQuiz } from '@/features/courses/features/learning/components/course-video/hooks';
 import { convertUTC7ToUTC0 } from '@/utils';
 
-import { TAnswerTest, TQuestionResults, TQuestionTest, TUnit } from '@/types';
+import {
+  TAnswerTest,
+  TQuestionResults,
+  TQuestionTest,
+  TUnit,
+  UserQuiz,
+} from '@/types';
 
 interface IQuizProps {
   questions: TQuestionTest[];
@@ -41,6 +46,8 @@ interface IQuizProps {
   refetchLesson: () => void;
   setShowResult: (value: boolean) => void;
   showResult: boolean;
+  retryQuiz: () => void;
+  quizResult?: UserQuiz;
 }
 
 const Quiz = ({
@@ -56,11 +63,13 @@ const Quiz = ({
   refetchLesson,
   showResult,
   setShowResult,
+  retryQuiz,
+  quizResult,
 }: IQuizProps) => {
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
-  const { data, refetch } = useQuizStart(selectUnit?.id);
+
   const [showAnimation, setShowAnimation] = useState(false);
   const { mutateAsync: startQuiz, isPending: starting } = useStartQuiz();
 
@@ -93,21 +102,25 @@ const Quiz = ({
 
   const restTime = useMemo(() => {
     const duration = selectUnit?.time ?? 0;
-    const endTime = new Date(data?.createdAt || 0).getTime() + duration * 1000;
+    const endTime =
+      new Date(quizResult?.createdAt || 0).getTime() + duration * 1000;
     const now = new Date(convertUTC7ToUTC0(new Date())).getTime();
     const timeRemaining = Math.max((endTime - now) / 1000, 0);
     return Math.floor(timeRemaining);
-  }, [data?.createdAt, selectUnit?.time]);
+  }, [quizResult?.createdAt, selectUnit?.time]);
 
-  const isPass = useMemo(() => Number(data?.score) > 50, [data?.score]);
+  const isPass = useMemo(
+    () => Number(quizResult?.score) >= 50,
+    [quizResult?.score]
+  );
 
   const tryAgain = useCallback(async () => {
     if (selectUnit?.id) {
       await startQuiz(selectUnit?.id);
-      refetch();
+      retryQuiz();
       onClearQuiz();
     }
-  }, [refetch, selectUnit?.id, startQuiz, onClearQuiz]);
+  }, [retryQuiz, selectUnit?.id, startQuiz, onClearQuiz]);
 
   const onContinue = useCallback(async () => {
     if (!isPass) {
@@ -135,7 +148,7 @@ const Quiz = ({
           options={congratulationsOptions}
         />
       )}
-      {data?.isCompleted && !showResult ? (
+      {quizResult?.isCompleted && !showResult ? (
         <Card>
           <CardContent className='min-w-full flex flex-col justify-center space-y-5 items-center'>
             <Label>{isPass ? 'Congratulation' : 'Opps'}</Label>
@@ -150,7 +163,7 @@ const Quiz = ({
               )}
             </div>
             <Label className='text-center  text-sm text-slate-500 '>
-              Total point: {data.score}
+              Total point: {quizResult.score}
             </Label>
             <Label className='text-center  text-sm text-slate-500 '>
               {isPass
@@ -203,7 +216,7 @@ const Quiz = ({
                     <ModalSubmit
                       selectUnit={selectUnit}
                       questionResultList={questionResultList}
-                      refetch={refetch}
+                      refetch={retryQuiz}
                       setShowAnimation={setShowAnimation}
                       refetchLesson={refetchLesson}
                     />

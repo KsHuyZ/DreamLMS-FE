@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
-import { useParams, useRouter } from 'next/navigation';
-import React, { memo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useCallback } from 'react';
 
 import Spinner from '@/components/loading/spinner';
 
@@ -14,6 +14,7 @@ const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 interface IVideoProps {
   selectUnit: TUnit;
   onNextUnit: () => void;
+  refetch: () => void;
 }
 
 const Loading = () => (
@@ -22,17 +23,19 @@ const Loading = () => (
   </div>
 );
 
-const Video = ({ selectUnit, onNextUnit }: IVideoProps) => {
+const Video = ({ selectUnit, onNextUnit, refetch }: IVideoProps) => {
   const { data: url, isLoading } = useVideo(selectUnit.video?.id);
-  const { mutate: completedVideo } = useCompletedVideo();
-  const { courseId } = useParams();
+  const { mutateAsync: completedVideo } = useCompletedVideo(
+    selectUnit.video?.id
+  );
   const router = useRouter();
 
   const onEnded = useCallback(async () => {
     onNextUnit();
-    completedVideo(courseId as string);
+    await completedVideo();
+    refetch();
     router.refresh();
-  }, [onNextUnit, completedVideo, courseId, router]);
+  }, [onNextUnit, completedVideo, refetch, router]);
 
   return isLoading ? (
     <Loading />
@@ -58,4 +61,4 @@ const Video = ({ selectUnit, onNextUnit }: IVideoProps) => {
   );
 };
 
-export default memo(Video);
+export default Video;

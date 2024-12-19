@@ -44,7 +44,7 @@ const ModalSubmit: React.FC<IModalSubmitProps> = ({
       quizId: selectUnit?.id ?? '',
       questionResultRequestList: questionResultList,
     });
-    if (score > 50) {
+    if (score >= 50) {
       setShowAnimation(true);
     }
     refetch();

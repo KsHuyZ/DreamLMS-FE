@@ -15,9 +15,9 @@ export const useQuestion = (id?: string, isCompleted?: boolean) =>
     enabled: !!id,
   });
 
-export const useQuizStart = (id?: string) =>
+export const useQuizStart = (isQuiz: boolean, id?: string) =>
   useQuery({
     queryKey: [QueryKey.QuizStart, id],
     queryFn: () => getQuizStartTime(id),
-    enabled: !!id,
+    enabled: !!id && isQuiz,
   });

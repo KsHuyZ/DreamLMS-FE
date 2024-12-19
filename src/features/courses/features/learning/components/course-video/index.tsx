@@ -16,7 +16,10 @@ import ListLessons from '@/features/courses/features/learning/components/course-
 import ModalCertificate from '@/features/courses/features/learning/components/course-video/components/modal-certificate';
 import ModalQuiz from '@/features/courses/features/learning/components/course-video/components/modal-quiz';
 import Quiz from '@/features/courses/features/learning/components/course-video/components/quiz';
-import { useQuestion } from '@/features/courses/features/learning/components/course-video/components/quiz/hooks';
+import {
+  useQuestion,
+  useQuizStart,
+} from '@/features/courses/features/learning/components/course-video/components/quiz/hooks';
 import Video from '@/features/courses/features/learning/components/course-video/components/video';
 import {
   useLessonLearning,
@@ -65,6 +68,10 @@ const CourseVideo = ({ course, userId }: CourseVideoProps) => {
   const { data: questions, isLoading: questionLoading } = useQuestion(
     selectUnit?.id,
     selectUnit?.isCompleted
+  );
+  const { data: quizResult, refetch: retryQuiz } = useQuizStart(
+    selectUnit?.unit === EUnitType.QUIZ,
+    selectUnit?.id
   );
   const [showResult, setShowResult] = useState(false);
 
@@ -219,13 +226,13 @@ const CourseVideo = ({ course, userId }: CourseVideoProps) => {
   }, []);
 
   const isCompletedCourse = useMemo(
-    () => units.length && units.at(-1)?.isCompleted,
+    () => units.length && units.every((unit) => unit.isCompleted),
     [units]
   );
 
   useEffect(() => {
     if (isCompletedCourse && !course.haveCertificate) {
-      setOpenCertificate(true);
+      // setOpenCertificate(true);
     }
   }, [course.haveCertificate, isCompletedCourse]);
 
@@ -286,7 +293,11 @@ const CourseVideo = ({ course, userId }: CourseVideoProps) => {
                   </div>
                   {units && selectUnit ? (
                     selectUnit.unit === EUnitType.VIDEO ? (
-                      <Video selectUnit={selectUnit} onNextUnit={onNextUnit} />
+                      <Video
+                        selectUnit={selectUnit}
+                        onNextUnit={onNextUnit}
+                        refetch={refetch}
+                      />
                     ) : (
                       <Quiz
                         questions={questions ?? []}
@@ -301,6 +312,8 @@ const CourseVideo = ({ course, userId }: CourseVideoProps) => {
                         refetchLesson={refetch}
                         showResult={showResult}
                         setShowResult={setShowResult}
+                        quizResult={quizResult}
+                        retryQuiz={retryQuiz}
                       />
                     )
                   ) : (
@@ -318,7 +331,10 @@ const CourseVideo = ({ course, userId }: CourseVideoProps) => {
                     </Label>
                   </div>
                 </div>
-                {selectUnit && selectUnit.unit === EUnitType.QUIZ ? (
+                {(selectUnit &&
+                  selectUnit.unit === EUnitType.QUIZ &&
+                  !quizResult?.isCompleted) ||
+                (quizResult?.isCompleted && showResult) ? (
                   <Card className='border rounded-md'>
                     <CardHeader>
                       <CardTitle>Quiz list</CardTitle>
