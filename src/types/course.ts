@@ -53,6 +53,7 @@ export type TCourseQuery = Omit<TCourse, 'lessons'> & {
   lessons: number;
   duration: number;
   isEnrolled: boolean;
+  alreadyCart: boolean;
 };
 export interface CourseAdditionForm {
   related: TCourse[];

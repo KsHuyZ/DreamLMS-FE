@@ -1,3 +1,4 @@
+import { ShoppingCart } from 'lucide-react';
 import { Metadata, ResolvingMetadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -120,20 +121,32 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
             <CardContent>
               <div className='flex flex-col space-y-12'>
                 <div className='flex flex-col space-y-8'>
-                  {course.isEnrolled ? (
-                    <div className='flex flex-col space-y-4 items-center'>
-                      <div className='flex items-center justify-center'>
-                        <div className='absolute w-3 h-3 rounded-full bg-primary-600 opacity-50 animate-ripple z-10'></div>
-                        <FaCircleCheck className='w-5 h-5 text-primary-600 z-30 rounded-full bg-white' />
-                      </div>
+                  {course.isEnrolled || course.alreadyCart ? (
+                    course.isEnrolled ? (
+                      <div className='flex flex-col space-y-4 items-center'>
+                        <div className='flex items-center justify-center'>
+                          <div className='absolute w-3 h-3 rounded-full bg-primary-600 opacity-50 animate-ripple z-10'></div>
+                          <FaCircleCheck className='w-5 h-5 text-primary-600 z-30 rounded-full bg-white' />
+                        </div>
 
-                      <span className='text-center text-primary-600 font-bold'>
-                        Course already enrolled
-                      </span>
-                      <Link href={Path.Learning(course.id)}>
-                        <Button>Continue learning</Button>
-                      </Link>
-                    </div>
+                        <span className='text-center text-primary-600 font-bold'>
+                          Course already enrolled
+                        </span>
+                        <Link href={Path.Learning(course.id)}>
+                          <Button>Continue learning</Button>
+                        </Link>
+                      </div>
+                    ) : (
+                      <div className='flex flex-col space-y-4 items-center'>
+                        <div className='flex items-center justify-center'>
+                          <ShoppingCart className='w-5 h-5 text-primary-600 z-30' />
+                        </div>
+
+                        <span className='text-center text-primary-600 font-bold'>
+                          Course already in cart
+                        </span>
+                      </div>
+                    )
                   ) : course.price === 0 ? (
                     <Enroll id={course.id} />
                   ) : (
@@ -165,20 +178,21 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                       </div>
                     </div>
                   </div>
-                  {!course.isEnrolled && (
-                    <>
-                      <Separator />
-                      <div className='flex flex-col space-y-2'>
-                        <Label>Coupon code</Label>
-                        <div className='grid grid-cols-3 gap-2 items-center'>
-                          <div className='flex flex-col col-span-2 space-y-2'>
-                            <Input placeholder='Enter your coupon code' />
+                  {!course.isEnrolled ||
+                    (!course.alreadyCart && (
+                      <>
+                        <Separator />
+                        <div className='flex flex-col space-y-2'>
+                          <Label>Coupon code</Label>
+                          <div className='grid grid-cols-3 gap-2 items-center'>
+                            <div className='flex flex-col col-span-2 space-y-2'>
+                              <Input placeholder='Enter your coupon code' />
+                            </div>
+                            <Button>Apply</Button>
                           </div>
-                          <Button>Apply</Button>
                         </div>
-                      </div>
-                    </>
-                  )}
+                      </>
+                    ))}
                 </div>
                 <div className='flex flex-col space-y-4'>
                   <Separator />

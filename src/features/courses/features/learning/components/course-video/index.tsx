@@ -232,7 +232,7 @@ const CourseVideo = ({ course, userId }: CourseVideoProps) => {
 
   useEffect(() => {
     if (isCompletedCourse && !course.haveCertificate) {
-      // setOpenCertificate(true);
+      setOpenCertificate(true);
     }
   }, [course.haveCertificate, isCompletedCourse]);
 
