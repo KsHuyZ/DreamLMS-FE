@@ -80,10 +80,10 @@ const CourseCard = ({ course, loading, isTeacherView }: CourseCardProps) => {
             {!isTeacherView && (
               <div className='flex items-center space-x-4'>
                 <Image
-                  src={course?.createdBy.photo ?? ''}
+                  src={course?.createdBy.photo?.url ?? ''}
                   width={45}
                   height={45}
-                  alt={course?.createdBy.photo ?? ''}
+                  alt={course?.createdBy.photo?.url ?? ''}
                   className='rounded-full border-2 border-gray-400'
                 />
                 <div>

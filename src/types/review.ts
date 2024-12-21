@@ -1,8 +1,15 @@
-export type Review = {
-  firstName: string;
-  lastName: string;
-  file: string;
-  date: string;
-  content: string;
-  rate: number;
+import { TCourse } from '@/types/course';
+import { TUser } from '@/types/user';
+
+export type TReviewPayload = {
+  comment: string;
+  star: number;
+  courseId: string;
 };
+
+export type TReview = {
+  id: string;
+  createdAt: string;
+  user: TUser;
+  course: TCourse;
+} & Omit<TReviewPayload, 'courseId'>;

@@ -4,12 +4,12 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
-import { TUser } from '@/types';
 import ModalUser from '@/app/(global)/profile/[id]/_components/modal-user';
+
+import { TUser } from '@/types';
 
 interface IProfileCardProps {
   user?: TUser;
@@ -60,7 +60,7 @@ const ProfileCard = ({ user, refetch }: IProfileCardProps) => {
             <div className='flex items-center space-x-4'>
               <div className='relative z-10 drop-shadow-2'>
                 <Image
-                  src={user?.photo ?? '/images/avatar.jpg'}
+                  src={user?.photo?.url ?? '/images/avatar.jpg'}
                   width={120}
                   height={120}
                   alt='avatar'

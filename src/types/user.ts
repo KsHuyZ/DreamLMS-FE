@@ -1,5 +1,6 @@
-import { ERoles } from '@/types';
 import { EDisk } from '@/utils';
+
+import { ERoles, TImage } from '@/types';
 
 export type TUser = {
   id: string;
@@ -7,7 +8,7 @@ export type TUser = {
   lastName: string;
   email: string;
   role: ERoles;
-  photo?: string;
+  photo?: TImage;
   x?: string;
   facebook?: string;
   github?: string;

@@ -203,7 +203,7 @@ const Header = ({ user }: HeaderProps) => {
                       <DropdownMenuTrigger>
                         <Avatar className='cursor-pointer'>
                           <AvatarImage
-                            src={user.photo ?? '/images/avatar.jpg'}
+                            src={user.photo?.url ?? '/images/avatar.jpg'}
                           />
                           <AvatarFallback>
                             {summaryName(`${user.firstName} ${user.lastName}`)}

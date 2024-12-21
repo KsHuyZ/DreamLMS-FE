@@ -1,5 +1,5 @@
 import { ShoppingCart } from 'lucide-react';
-import { Metadata, ResolvingMetadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { FaCircleCheck } from 'react-icons/fa6';
@@ -12,19 +12,16 @@ import { Label } from '@/components/ui/label';
 import { Ratings } from '@/components/ui/rating';
 import { Separator } from '@/components/ui/separator';
 
-import { getCourseByGuest, getCourseById } from '@/api';
+import { getCourseByGuest, getReviewsByCourseId } from '@/api';
 import AddCart from '@/app/(global)/courses/[courseId]/_components/add-cart';
 import { Path } from '@/constant';
+import Description from '@/features/courses/features/course-detail/components/description';
 import Enroll from '@/features/courses/features/course-detail/components/enroll';
 import LessonList from '@/features/courses/features/course-detail/components/lesson-list';
 import ModalPreview from '@/features/courses/features/course-detail/components/modal-preview';
 import PayMent from '@/features/courses/features/course-detail/components/payment';
-import {
-  formatPrice,
-  formatTime,
-  generateNameColor,
-  levelCourseMap,
-} from '@/utils';
+import Reviews from '@/features/courses/features/course-detail/components/reviews';
+import { formatPrice, formatTime, levelCourseMap } from '@/utils';
 
 type Props = {
   params: {
@@ -33,27 +30,11 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  // fetch data
-  const course = await getCourseById(params.courseId);
-
-  // optionally access and extend (rather than replace) parent metadata
-  // const previousImages = (await parent).openGraph?.images || [];
-
-  return {
-    title: course.name,
-    openGraph: {
-      images: [course.image.url],
-    },
-  };
-}
-
 const CourseIdPage = async ({ params: { courseId } }: Props) => {
   const course = await getCourseByGuest(courseId);
   const duration = course.duration;
+  const isEnrolled = course.isEnrolled;
+  const reviewPagination = await getReviewsByCourseId(courseId);
   return (
     <div className='w-full h-full space-y-14 min-h-[calc(100vh-80px)]'>
       <div className='flex flex-col space-y-8'>
@@ -104,9 +85,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
             </div>
             <div className='flex flex-col space-y-4'>
               <h3>Description</h3>
-              <span
-                dangerouslySetInnerHTML={{ __html: course.description }}
-              ></span>
+              <Description description={course.description} />
             </div>
           </div>
 
@@ -199,19 +178,18 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                   <div className='flex flex-col space-y-4'>
                     <Label>Author</Label>
                     <Link
-                      href='/user/123'
-                      className='flex space-x-4 cursor-pointer'
+                      href={`/profile/${course.createdBy.id}`}
+                      className='flex items-center space-x-4 cursor-pointer'
                     >
-                      <div
-                        className='flex h-8 w-8 items-center justify-center rounded-full text-white'
-                        style={{
-                          background: generateNameColor(
-                            `${course.createdBy.firstName} ${course.createdBy.lastName}`
-                          ),
-                        }}
-                      >
-                        {course.createdBy.firstName.charAt(0)}
-                      </div>
+                      <Image
+                        src={
+                          course.createdBy.photo?.url || '/images/avatar.jpg'
+                        }
+                        width={40}
+                        height={40}
+                        alt='Author img'
+                        className='rounded-full'
+                      />
                       <span>
                         {course.createdBy.firstName} {course.createdBy.lastName}
                       </span>
@@ -222,6 +200,12 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
             </CardContent>
           </Card>
         </div>
+
+        <Reviews
+          reviewPagination={reviewPagination}
+          courseId={courseId}
+          isEnrolled={isEnrolled}
+        />
       </div>
     </div>
   );

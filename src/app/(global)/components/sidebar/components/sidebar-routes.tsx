@@ -64,15 +64,16 @@ export const SidebarRoutes = ({ user }: ISidebarProps) => {
     ...(user
       ? [
           {
+            icon: Layout,
+            label: 'Dashboard',
+            href: '/dashboard',
+          },
+          {
             icon: User,
             label: `Profile`,
             href: `/profile/${user.id}`,
           },
-          {
-            icon: Layout,
-            label: 'Dashboard',
-            href: '/',
-          },
+
           {
             icon: ShoppingCart,
             label: 'Cart',
@@ -83,7 +84,7 @@ export const SidebarRoutes = ({ user }: ISidebarProps) => {
     {
       icon: GraduationCap,
       label: 'Courses',
-      href: '/courses',
+      href: '/student-courses',
     },
     {
       icon: Compass,

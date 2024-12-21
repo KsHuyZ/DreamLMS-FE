@@ -104,6 +104,9 @@ dependencies:
   '@tanstack/react-table':
     specifier: ^8.20.6
     version: 8.20.6(react-dom@18.2.0)(react@18.2.0)
+  '@tanstack/react-virtual':
+    specifier: ^3.11.2
+    version: 3.11.2(react-dom@18.2.0)(react@18.2.0)
   '@tiptap/core':
     specifier: ^2.8.0
     version: 2.8.0(@tiptap/pm@2.8.0)
@@ -173,6 +176,9 @@ dependencies:
   immer:
     specifier: ^10.1.1
     version: 10.1.1
+  intro.js-react:
+    specifier: ^1.0.0
+    version: 1.0.0(intro.js@7.2.0)(react@18.2.0)
   lowlight:
     specifier: ^3.1.0
     version: 3.1.0
@@ -4103,9 +4109,24 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
+  /@tanstack/react-virtual@3.11.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-OuFzMXPF4+xZgx8UzJha0AieuMihhhaWG0tCqpp6tDzlFwOmNBPYMuLOtMJ1Tr4pXLHmgjcWhG6RlknY2oNTdQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      '@tanstack/virtual-core': 3.11.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@tanstack/table-core@8.20.5:
     resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
     engines: {node: '>=12'}
+    dev: false
+
+  /@tanstack/virtual-core@3.11.2:
+    resolution: {integrity: sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==}
     dev: false
 
   /@testing-library/dom@8.20.1:
@@ -7251,6 +7272,20 @@ packages:
       '@formatjs/fast-memoize': 2.2.0
       '@formatjs/icu-messageformat-parser': 2.7.8
       tslib: 2.6.0
+    dev: false
+
+  /intro.js-react@1.0.0(intro.js@7.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-zR8pbTyX20RnCZpJMc0nuHBpsjcr1wFkj3ZookV6Ly4eE/LGpFTQwPsaA61Cryzwiy/tTFsusf4hPU9NpI9UOg==}
+    peerDependencies:
+      intro.js: '>=2.5.0'
+      react: '>=0.14.0'
+    dependencies:
+      intro.js: 7.2.0
+      react: 18.2.0
+    dev: false
+
+  /intro.js@7.2.0:
+    resolution: {integrity: sha512-qbMfaB70rOXVBceIWNYnYTpVTiZsvQh/MIkfdQbpA9di9VBfj1GigUPfcCv3aOfsbrtPcri8vTLTA4FcEDcHSQ==}
     dev: false
 
   /invariant@2.2.4:
