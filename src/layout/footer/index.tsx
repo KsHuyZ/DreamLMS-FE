@@ -5,10 +5,12 @@ import React from 'react';
 
 import { Button } from '@/components/ui/button';
 
+const hiddenFooterPath = ['/teacher', '/profile', '/student-courses'];
+
 const Footer = () => {
   const pathName = usePathname();
 
-  if (pathName.startsWith('/teacher') || pathName.startsWith('/profile')) {
+  if (hiddenFooterPath.some((path) => pathName.startsWith(path))) {
     return <></>;
   }
 

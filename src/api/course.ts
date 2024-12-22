@@ -157,9 +157,6 @@ export const deleteLessonById = (id: string) =>
     data: id,
   });
 
-export const getMyCourse = (): Promise<TCourse[]> =>
-  api.get('/course/get-by-user');
-
 export const enrollCourse = (id: string) => api.get(`courses/enroll/${id}`);
 
 export const payCourse = (id: string): Promise<PaymentIntent> =>
