@@ -18,8 +18,20 @@ type Props = {
 
 const ProfileDescription: React.FC<Props> = ({ user, refetch }) => {
   const isEmpty = useMemo(() => {
-    return !user?.facebook && !user?.github && !user?.instagram && !user?.x;
-  }, [user?.facebook, user?.github, user?.instagram, user?.x]);
+    return (
+      !user?.facebook &&
+      !user?.github &&
+      !user?.instagram &&
+      !user?.x &&
+      !user?.walletAddress
+    );
+  }, [
+    user?.facebook,
+    user?.github,
+    user?.instagram,
+    user?.walletAddress,
+    user?.x,
+  ]);
 
   return (
     <div className='grid grid-cols-6 gap-6 w-full'>
@@ -46,6 +58,17 @@ const ProfileDescription: React.FC<Props> = ({ user, refetch }) => {
               </div>
             ) : (
               <div className='flex flex-col space-y-2'>
+                {user?.walletAddress && (
+                  <div className='flex space-x-2'>
+                    <Image
+                      src='/images/metamask.png'
+                      width={20}
+                      height={20}
+                      alt='metamask'
+                    />
+                    <p className='w-full truncate'>{user.walletAddress}</p>
+                  </div>
+                )}
                 {user?.facebook && (
                   <a target='_blank' href='#'>
                     <div className='flex items-center space-x-2'>
@@ -111,7 +134,9 @@ const ProfileDescription: React.FC<Props> = ({ user, refetch }) => {
                   height={150}
                   alt='empty'
                 />
-                <Label>It's look like this user don' have social profile</Label>
+                <Label>
+                  It's look like this user don't have social profile
+                </Label>
               </div>
             )}
           </CardContent>

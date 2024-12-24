@@ -1,4 +1,5 @@
-import { SVGProps } from 'react';
+import Image from 'next/image';
+import { IconType } from 'react-icons';
 
 export const X = (props: any) => {
   return (

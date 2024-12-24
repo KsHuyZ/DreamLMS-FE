@@ -42,6 +42,7 @@ export type TCourse = {
   duration: number;
   courseVideo?: TCourseVideo;
   related?: TCourse[];
+  ethPrice?: string;
 };
 
 export type TCourseProgress = {

@@ -30,6 +30,7 @@ export const createCourses = (course: CourseCredentials): Promise<TCourse> => {
     level,
     price,
     shortDescription,
+    ethPrice,
   } = course;
   const data = new FormData();
   data.append('name', name);
@@ -40,6 +41,9 @@ export const createCourses = (course: CourseCredentials): Promise<TCourse> => {
   data.append('level', level);
   data.append('price', price ? price.toString() : '0');
   data.append('shortDescription', shortDescription);
+  if (ethPrice) {
+    data.append('ethPrice', ethPrice);
+  }
 
   return api.post('/courses', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -57,6 +61,7 @@ export const updateCourses = (course: CourseCredentials): Promise<TCourse> => {
     price,
     shortDescription,
     id,
+    ethPrice,
   } = course;
   const data = new FormData();
   const file = (image as TImage).url ? JSON.stringify(image) : (image as File);
@@ -68,7 +73,9 @@ export const updateCourses = (course: CourseCredentials): Promise<TCourse> => {
   data.append('level', level);
   data.append('price', price ? price.toString() : '0');
   data.append('shortDescription', shortDescription);
-
+  if (ethPrice) {
+    data.append('ethPrice', ethPrice);
+  }
   return api.patch(`/courses/${id}`, data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });

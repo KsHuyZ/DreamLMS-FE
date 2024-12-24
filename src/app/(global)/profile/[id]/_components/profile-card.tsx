@@ -2,26 +2,21 @@
 import Image from 'next/image';
 import React from 'react';
 
-import { cn } from '@/lib/utils';
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-
-import ModalUser from '@/app/(global)/profile/[id]/_components/modal-user';
 
 import { TUser } from '@/types';
 
 interface IProfileCardProps {
   user?: TUser;
-  refetch: () => void;
 }
 
-const ProfileCard = ({ user, refetch }: IProfileCardProps) => {
+const ProfileCard = ({ user }: IProfileCardProps) => {
   return (
-    <Card className='rounded-md p-0 overflow-hidden'>
+    <Card className='border-none p-0'>
       <CardContent className='p-0'>
         <div className='relative h-35 md:h-65'>
-          <div className='bg-[url(/images/cover-image.jpg)] w-full h-48' />
+          <div className='bg-[url(/images/banner.png)] w-full h-48 rounded-md' />
           <div className='absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4'>
             <label
               htmlFor='cover'
@@ -56,9 +51,9 @@ const ProfileCard = ({ user, refetch }: IProfileCardProps) => {
           </div>
         </div>
         <div className='w-full h-5 relative'>
-          <div className='absolute bottom-1 left-5'>
+          <div className='absolute -bottom-2 left-3'>
             <div className='flex items-center space-x-4'>
-              <div className='relative z-10 drop-shadow-2'>
+              <div className='relative z-[9] drop-shadow-2'>
                 <Image
                   src={user?.photo?.url ?? '/images/avatar.jpg'}
                   width={120}
@@ -100,10 +95,10 @@ const ProfileCard = ({ user, refetch }: IProfileCardProps) => {
                 </label>
               </div>
               <div className='flex flex-col text-background'>
-                <Label className='text-lg font-bold'>
+                <Label className='text-lg font-bold text-black'>
                   {user?.firstName} {user?.lastName}
                 </Label>
-                <span className='text-gray-100 text-sm font-thin'>
+                <span className='text-black text-sm font-thin'>
                   {user?.email}
                 </span>
               </div>
@@ -111,25 +106,6 @@ const ProfileCard = ({ user, refetch }: IProfileCardProps) => {
           </div>
         </div>
       </CardContent>
-      <div
-        className={cn(
-          'flex items-center w-full px-2 py-2',
-          user?.walletAddress ? 'justify-between' : 'justify-end'
-        )}
-      >
-        {user?.walletAddress && (
-          <div className='flex space-x-2'>
-            <Image
-              src='/images/metamask.png'
-              width={20}
-              height={20}
-              alt='metamask'
-            />
-            {user.walletAddress}
-          </div>
-        )}
-        <ModalUser user={user} refetch={refetch} />
-      </div>
     </Card>
   );
 };

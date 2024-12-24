@@ -4,6 +4,9 @@ import Link from 'next/link';
 import React from 'react';
 import { FaCircleCheck } from 'react-icons/fa6';
 
+import { getCookies } from '@/lib/action';
+import { cn } from '@/lib/utils';
+
 import Input from '@/components/inputs/Input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,6 +26,8 @@ import PayMent from '@/features/courses/features/course-detail/components/paymen
 import Reviews from '@/features/courses/features/course-detail/components/reviews';
 import { formatPrice, formatTime, levelCourseMap } from '@/utils';
 
+import { TUser } from '@/types';
+
 type Props = {
   params: {
     courseId: string;
@@ -35,6 +40,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
   const duration = course.duration;
   const isEnrolled = course.isEnrolled;
   const reviewPagination = await getReviewsByCourseId(courseId);
+  const user = getCookies('user') as TUser;
   return (
     <div className='w-full h-full space-y-14 min-h-[calc(100vh-80px)]'>
       <div className='flex flex-col space-y-8'>
@@ -92,8 +98,29 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
           <Card className='sticky top-0 border-primary-600 border-2 shadow-md'>
             <CardHeader>
               <CardTitle className='text-tertiary-800'>
-                <div className='flex justify-end'>
-                  {course.price === 0 ? 'Free' : `${formatPrice(course.price)}`}
+                <div
+                  className={cn(
+                    'flex items-center',
+                    course?.ethPrice ? 'justify-between' : 'justify-end'
+                  )}
+                >
+                  <p>
+                    {course.price === 0
+                      ? 'Free'
+                      : `${formatPrice(course.price)}`}
+                  </p>
+                  {course?.ethPrice && (
+                    <div className='flex items-center'>
+                      <Image
+                        src='/images/solidity.png'
+                        width={20}
+                        height={20}
+                        className='w-4 h-4'
+                        alt='solidity'
+                      />
+                      <p>{course?.ethPrice}</p>
+                    </div>
+                  )}
                 </div>
               </CardTitle>
             </CardHeader>
@@ -131,7 +158,12 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                   ) : (
                     <div className='flex flex-col space-y-4'>
                       <AddCart id={course.id} />
-                      <PayMent courseId={course.id} />
+                      <PayMent
+                        userId={user.id}
+                        ethPrice={course.ethPrice}
+                        courseId={course.id}
+                        recipient={course.createdBy.walletAddress}
+                      />
                     </div>
                   )}
                   <Separator />

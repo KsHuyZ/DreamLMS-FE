@@ -1,5 +1,6 @@
 'use client';
 import { DollarSign } from 'lucide-react';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { SetStateAction, useEffect, useMemo, useState } from 'react';
 
@@ -12,6 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,6 +31,8 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
+import { useAuth } from '@/store/user.store';
+
 import { levelOptions } from '@/constant';
 import { useFormCourseContext } from '@/features/teacher/features/courses/components/tab-form';
 import {
@@ -39,7 +43,7 @@ import {
 const CourseInfoTab = () => {
   const [inputTagValue, setInputTagValue] = useState('');
   const [inputCategoryValue, setInputCategoryValue] = useState('');
-
+  const { user } = useAuth();
   const debouncedTag = useDebounce(inputTagValue);
   const debouncedCategory = useDebounce(inputCategoryValue);
 
@@ -278,12 +282,39 @@ const CourseInfoTab = () => {
                 </FormItem>
               )}
             />
-            {/* <Input
-              placeholder='9đ'
-              type='number'
-              className='rounded-md'
-              disabled={isLoading}
-            /> */}
+
+            <FormField
+              control={formInfo.control}
+              name='ethPrice'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ETH Price</FormLabel>
+                  <FormControl>
+                    <div className='relative'>
+                      <Input
+                        placeholder='0.05ETH'
+                        {...field}
+                        className='rounded-md'
+                        disabled={isLoading || !user?.walletAddress}
+                      />
+                      <Image
+                        src='/images/metamask.png'
+                        width={50}
+                        height={50}
+                        alt='metamask'
+                        className='w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3'
+                      />
+                    </div>
+                  </FormControl>
+                  <FormDescription>
+                    {!user?.walletAddress
+                      ? 'Please update your wallet address'
+                      : ''}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         ) : (
           <></>

@@ -60,7 +60,7 @@ const ModalSocial: React.FC<Props> = ({ refetch }) => {
     const values = form.getValues();
     const result = values.social.reduce(
       (acc: any, curr) => {
-        if (!Object.keys(acc).length) return acc;
+        if (!Object.keys(curr).length) return acc;
         acc[curr.type] = curr.value;
         return acc;
       },

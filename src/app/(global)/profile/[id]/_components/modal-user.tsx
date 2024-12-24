@@ -1,3 +1,5 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -18,11 +20,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useToast } from '@/components/ui/use-toast';
 
 import { useSocial } from '@/app/(global)/profile/[id]/_hooks';
+import { profileSchema } from '@/validator';
 
 import { TUser } from '@/types';
-import { useToast } from '@/components/ui/use-toast';
 
 interface Props {
   user?: TUser;
@@ -38,12 +41,15 @@ const ModalUser: React.FC<Props> = ({ user, refetch }) => {
       lastName: '',
       walletAddress: '',
     },
+    resolver: zodResolver(profileSchema),
   });
   const { control, reset } = form;
   const { mutateAsync: updateProfile, isPending } = useSocial();
   const { toast } = useToast();
 
   const onSubmit = async () => {
+    const result = await form.trigger();
+    if (!result) return;
     const { email, ...restValue } = form.getValues();
     await updateProfile(restValue);
     refetch();
@@ -52,11 +58,15 @@ const ModalUser: React.FC<Props> = ({ user, refetch }) => {
 
   useEffect(() => {
     reset(user);
-  }, [user]);
+  }, [reset, user]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button onClick={() => setOpen(true)}>Update profile</Button>
+      <div className='flex justify-end'>
+        <Button onClick={() => setOpen(true)} className='rounded-md'>
+          Update profile
+        </Button>
+      </div>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Update Profile</DialogTitle>
@@ -109,7 +119,16 @@ const ModalUser: React.FC<Props> = ({ user, refetch }) => {
               <FormItem>
                 <FormLabel>Wallet Address</FormLabel>
                 <FormControl>
-                  <Input {...field} className='rounded-md' />
+                  <div className='relative'>
+                    <Input {...field} className='rounded-md' />
+                    <Image
+                      src='/images/metamask.png'
+                      width={50}
+                      height={50}
+                      alt='metamask'
+                      className='w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3'
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

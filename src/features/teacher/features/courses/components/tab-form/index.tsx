@@ -132,6 +132,7 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
 
   const onSubmitFormInfo = useCallback(
     async (values: CreateCourseForm) => {
+      console.log({ values });
       const validate = await formInfo.trigger();
       if (!validate) return;
       try {
