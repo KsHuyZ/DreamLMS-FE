@@ -17,7 +17,7 @@ import { formatPrice, formatTimeToDuration } from '@/utils';
 import { ECourseStatus, TCourse } from '@/types';
 
 export interface CourseCardProps {
-  course?: TCourse & { progress?: number; star: number };
+  course?: TCourse & { progress?: number; star?: number };
   loading?: boolean;
   isTeacherView?: boolean;
   isStudentView?: boolean;
