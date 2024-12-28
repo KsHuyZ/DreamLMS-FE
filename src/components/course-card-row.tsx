@@ -69,14 +69,26 @@ const CourseCardRow = ({ course, loading }: CourseCardProps) => {
                     <Skeleton className='w-48 h-2' />
                   ) : (
                     <div className='flex items-center space-x-1'>
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <Star
-                          key={index}
-                          className='text-yellow-300 w-4 h-4'
-                          fill='#fde047'
-                        />
-                      ))}
-                      <p className='text-tertiary-800 duration-150'>5 (200)</p>
+                      {Array.from({ length: course?.star || 0 }).map(
+                        (_, index) => (
+                          <Star
+                            key={index}
+                            className='text-yellow-300 w-4 h-4'
+                            fill='#fde047'
+                          />
+                        )
+                      )}
+                      {Array.from({ length: 5 - (course?.star || 0) }).map(
+                        (_, index) => (
+                          <Star
+                            key={index}
+                            className='text-yellow-300 w-4 h-4'
+                          />
+                        )
+                      )}
+                      <p className='text-tertiary-800 duration-150'>
+                        {course?.star}
+                      </p>
                     </div>
                   )}
                 </div>

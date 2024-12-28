@@ -49,8 +49,8 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                           defaultValue={field.value}
                         >
                           <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='default' id='r1' />
-                            <Label htmlFor='r1' className='cursor-pointer'>
+                            <RadioGroupItem value='4' id='r4' />
+                            <Label htmlFor='r4' className='cursor-pointer'>
                               <div className='flex items-center space-x-1'>
                                 {Array.from({ length: 4 }).map((_, i) => (
                                   <Star
@@ -62,13 +62,11 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                                 <Star className='text-yellow-300 w-4 h-4' />
                               </div>
                             </Label>
-                            <p className='text-muted-foreground'>
-                              4 & up (200)
-                            </p>
+                            <p className='text-muted-foreground'>4 & up</p>
                           </div>
                           <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='comfortable' id='r2' />
-                            <Label htmlFor='r2' className='cursor-pointer'>
+                            <RadioGroupItem value='3' id='r3' />
+                            <Label htmlFor='r3' className='cursor-pointer'>
                               <div className='flex items-center space-x-1'>
                                 {Array.from({ length: 3 }).map((_, i) => (
                                   <Star
@@ -81,13 +79,11 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                                 <Star className='text-yellow-300 w-4 h-4' />
                               </div>
                             </Label>
-                            <p className='text-muted-foreground'>
-                              3 & up (200)
-                            </p>
+                            <p className='text-muted-foreground'>3 & up</p>
                           </div>
                           <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='comfortableê' id='r3' />
-                            <Label htmlFor='r3' className='cursor-pointer'>
+                            <RadioGroupItem value='2' id='r2' />
+                            <Label htmlFor='r2' className='cursor-pointer'>
                               <div className='flex items-center space-x-1'>
                                 {Array.from({ length: 2 }).map((_, i) => (
                                   <Star
@@ -101,13 +97,11 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                                 <Star className='text-yellow-300 w-4 h-4' />
                               </div>
                             </Label>
-                            <p className='text-muted-foreground'>
-                              2 & up (200)
-                            </p>
+                            <p className='text-muted-foreground'>2 & up</p>
                           </div>
                           <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='comfortableê44' id='r4' />
-                            <Label htmlFor='r4' className='cursor-pointer'>
+                            <RadioGroupItem value='1' id='r1' />
+                            <Label htmlFor='r1' className='cursor-pointer'>
                               <div className='flex items-center space-x-1'>
                                 {Array.from({ length: 1 }).map((_, i) => (
                                   <Star
@@ -122,9 +116,7 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                                 <Star className='text-yellow-300 w-4 h-4' />
                               </div>
                             </Label>
-                            <p className='text-muted-foreground'>
-                              1 & up (200)
-                            </p>
+                            <p className='text-muted-foreground'>1 & up</p>
                           </div>
                         </RadioGroup>
                       </FormControl>
@@ -176,9 +168,6 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                                       className='text-sm font-medium leading-none cursor-pointer'
                                     >
                                       {option.value}
-                                      <span className='text-muted-foreground'>
-                                        ({new Intl.NumberFormat().format(2000)})
-                                      </span>
                                     </Label>
                                   </div>
                                 </FormControl>
@@ -235,9 +224,6 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                                       className='text-sm font-medium leading-none cursor-pointer'
                                     >
                                       {option.value}
-                                      <span className='text-muted-foreground'>
-                                        ({new Intl.NumberFormat().format(2000)})
-                                      </span>
                                     </Label>
                                   </div>
                                 </FormControl>
@@ -279,9 +265,6 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
                               className='text-sm font-medium leading-none cursor-pointer'
                             >
                               {level.value}
-                              <span className='text-muted-foreground'>
-                                ({new Intl.NumberFormat().format(2000)})
-                              </span>
                             </Label>
                           </div>
                         ))}

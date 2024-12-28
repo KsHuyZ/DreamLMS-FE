@@ -24,6 +24,7 @@ export const useGuestCourses = (
     queryKey: [
       QueryKey.GuestCourse,
       sort,
+      rate,
       duration,
       payType,
       level,

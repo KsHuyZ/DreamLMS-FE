@@ -53,6 +53,7 @@ export type TCourseProgress = {
 export type TCourseQuery = Omit<TCourse, 'lessons'> & {
   lessons: number;
   duration: number;
+  star: number;
   isEnrolled: boolean;
   alreadyCart: boolean;
 };
@@ -72,9 +73,9 @@ export enum ECoursePriceType {
 }
 
 export enum ECourseSort {
-  Newest = 'newest',
-  MostReviewed = 'most-reviewed',
-  HighRated = 'high-rated',
+  Newest = 'createdAt',
+  MostReviewed = 'totalReviewed',
+  HighRated = 'avgStar',
 }
 
 export enum EPayType {

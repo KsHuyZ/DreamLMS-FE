@@ -13,11 +13,9 @@ export function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
-  if (!token || !user)
-    return NextResponse.redirect(new URL('/sign-in', request.url));
   if (token && authRoutes.includes(pathname))
     return NextResponse.redirect(new URL('/', request.url));
-  if (pathname.startsWith('/teacher') && !user.role.includes(ERoles.TEACHER))
+  if (pathname.startsWith('/teacher') && !user?.role.includes(ERoles.TEACHER))
     return NextResponse.redirect(new URL('/', request.url));
   return NextResponse.next();
 }
