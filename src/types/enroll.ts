@@ -5,3 +5,9 @@ export type TEnroll = {
   course?: TCourse;
   user?: TUser;
 };
+
+export enum Duration {
+  Day = 'day',
+  Week = 'week',
+  Month = 'month',
+}

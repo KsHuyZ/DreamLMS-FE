@@ -18,3 +18,8 @@ export type PaginationResponse<T> = {
   total: number;
   data: T[];
 };
+
+export type Analyzing = {
+  total: number;
+  percentage: number;
+};

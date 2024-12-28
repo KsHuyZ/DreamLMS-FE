@@ -18,4 +18,11 @@ export enum QueryKey {
   UserCart = 'user-cart',
   Reviews = 'reviews',
   UserCourse = 'user-course',
+  PaidDuration = 'course-duration',
+  TeacherEnroll = 'teacher-enroll',
+  TeacherActiveCourse = 'teacher-active-course',
+  TeacherCompletedCourse = 'teacher-completed-course',
+  TeacherTotalStudent = 'teacher-student',
+  TeacherTotalCourse = 'teacher-total-course',
+  TeacherTotalEarning = 'teacher-total-earning',
 }
