@@ -99,7 +99,7 @@ export enum ECourseRate {
 }
 
 export type TCourseFilter = {
-  rate: ECourseRate;
+  rate?: ECourseRate;
   duration: ECourseDuration[];
   payment: EPayType[];
   level: ELevel;

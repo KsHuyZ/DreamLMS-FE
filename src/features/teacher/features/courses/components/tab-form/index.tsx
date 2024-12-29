@@ -94,11 +94,7 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
     data: courseInfo,
     isLoading: infoQueryLoading,
     refetch,
-  } = useCourseInfo(
-    id,
-    pathName === TeacherPath.UpdateInfoCourse(id) ||
-      pathName === TeacherPath.SettingCourse(id)
-  );
+  } = useCourseInfo(id, true);
 
   const { mutateAsync: addCourseAddition, isPending: courseAdditionLoading } =
     useAddCourseAddition(id as string);
@@ -115,6 +111,9 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
         value: category.id,
       }))
     );
+    if (courseInfo.related && courseInfo.related.length) {
+      setSelectedCourse(courseInfo.related);
+    }
   }, [courseInfo]);
 
   useEffect(() => {
@@ -132,7 +131,6 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
 
   const onSubmitFormInfo = useCallback(
     async (values: CreateCourseForm) => {
-      console.log({ values });
       const validate = await formInfo.trigger();
       if (!validate) return;
       try {
@@ -155,8 +153,11 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
     const result = await formAddition.trigger();
     const { video } = values;
     if (!result) return;
-    await addCourseAddition({ related: selectedCourseIds, video });
-  }, [addCourseAddition, formAddition, selectedCourseIds]);
+    await addCourseAddition({
+      related: selectedCourseIds.filter((courseId) => courseId !== id),
+      video,
+    });
+  }, [addCourseAddition, formAddition, id, selectedCourseIds]);
 
   const onSubmit = useCallback(() => {
     if (

@@ -13,12 +13,12 @@ import {
 
 export const useGuestCourses = (
   sort: ECourseSort,
-  rate: ECourseRate,
   duration: ECourseDuration[],
   payType: EPayType[],
   level: ELevel,
   page: number,
-  name: string
+  name: string,
+  rate?: ECourseRate
 ) =>
   useQuery({
     queryKey: [
@@ -31,5 +31,5 @@ export const useGuestCourses = (
       page,
       name,
     ],
-    queryFn: () => getCourses(sort, rate, duration, payType, level, page, name),
+    queryFn: () => getCourses(sort, duration, payType, level, rate, page, name),
   });

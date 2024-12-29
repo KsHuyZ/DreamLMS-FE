@@ -15,12 +15,15 @@ import {
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 
-import { abi } from '@/abi/enroll.json';
+import enrollContract from '@/abi/enroll.json';
 import { Path } from '@/constant';
 import {
   useEnrollContract,
   usePayCourse,
 } from '@/features/courses/features/course-detail/components/payment/hooks';
+
+const abi = enrollContract.abi;
+
 interface IPaymentProps {
   courseId: string;
   userId?: string;
@@ -30,7 +33,6 @@ interface IPaymentProps {
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_ENROLL_CONTRACT_ADDRESS;
 
 const PayMent = ({ courseId, userId, ethPrice, recipient }: IPaymentProps) => {
-  console.log({ recipient });
   const [open, setOpen] = useState(false);
   const { mutateAsync: payMent, isPending } = usePayCourse(courseId);
   const router = useRouter();

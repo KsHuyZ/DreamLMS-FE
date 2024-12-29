@@ -276,7 +276,9 @@ const CoursesFilter = ({ form }: CoursesFilterProps) => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        <Button>Clear</Button>
+        <Button type='button' onClick={() => form.reset()}>
+          Clear
+        </Button>
       </form>
     </Form>
   );

@@ -1,6 +1,7 @@
 'use client';
 import { Heart, Star } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -12,7 +13,8 @@ import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { formatPrice, formatTimeToDuration } from '@/utils';
+import { Path } from '@/constant';
+import { formatPrice, formatTime } from '@/utils';
 
 import { ECourseStatus, TCourse } from '@/types';
 
@@ -30,9 +32,22 @@ const CourseCard = ({
   isStudentView,
 }: CourseCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
+  const router = useRouter();
   const rate = course?.rate ?? 0;
+
+  const onNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (!course || !course.id) {
+      return;
+    }
+    router.push(Path.CourseDetail(course.id));
+  };
+
   return (
-    <Card className='rounded-md overflow-hidden hover:shadow-md group duration-500 h-full cursor-pointer'>
+    <Card
+      className='rounded-md overflow-hidden hover:shadow-md group duration-500 h-full cursor-pointer'
+      onClick={onNavigate}
+    >
       <div className='w-full aspect-video p-5'>
         {loading ? (
           <Skeleton className='w-full h-50' />
@@ -60,7 +75,7 @@ const CourseCard = ({
               {Array.from({ length: 5 - rate }).map((_, index) => (
                 <Star key={index} className='text-yellow-300 w-5 h-5' />
               ))}
-              <p className='text-tertiary-800 duration-150'>{rate} (0)</p>
+              <p className='text-tertiary-800 duration-150'>{rate}</p>
             </div>
           )}
           {loading ? (
@@ -143,7 +158,7 @@ const CourseCard = ({
                   </div>
                   <div className='flex items-center space-x-2'>
                     <span className='text-tertiary-800 duration-150'>
-                      {formatTimeToDuration(course?.duration ?? 0)}
+                      {formatTime(course?.duration ?? 0)}
                     </span>
                     <Image
                       src='/images/clock.svg'

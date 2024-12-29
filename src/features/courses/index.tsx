@@ -27,7 +27,6 @@ import { useGuestCourses } from '@/features/courses/hooks';
 
 import {
   ECourseDuration,
-  ECourseRate,
   ECourseSort,
   ELevel,
   EPayType,
@@ -35,7 +34,6 @@ import {
 } from '@/types';
 
 const defaultValues: TCourseFilter = {
-  rate: ECourseRate.OneStar,
   duration: [] as ECourseDuration[],
   payment: [] as EPayType[],
   level: ELevel.ALL,
@@ -51,12 +49,12 @@ const CoursesPage = () => {
   const [pagination, setPagination] = useState({ page: 1 });
   const { data: coursePaginate, isLoading } = useGuestCourses(
     sortBy,
-    rate,
     duration,
     payment,
     level,
     pagination.page,
-    searchParams.get('name') ?? ''
+    searchParams.get('name') ?? '',
+    rate
   );
 
   return (

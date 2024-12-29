@@ -102,6 +102,9 @@ export const addAdditionData = async (
   });
 };
 
+export const findRelatedCourse = (id: string): Promise<TCourse[]> =>
+  api.get(`/courses/related/${id}`);
+
 export const getAdditionCourse = (
   ids: string[],
   name: string
@@ -109,10 +112,10 @@ export const getAdditionCourse = (
 
 export const getCourses = (
   sort = ECourseSort.Newest,
-  rate: ECourseRate,
   duration: ECourseDuration[],
   payType: EPayType[],
   level: ELevel,
+  rate?: ECourseRate,
   page = 0,
   name = ''
 ): Promise<PaginationResponse<TCourseQuery>> =>

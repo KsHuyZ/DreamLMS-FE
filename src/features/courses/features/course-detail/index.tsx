@@ -23,6 +23,7 @@ import Enroll from '@/features/courses/features/course-detail/components/enroll'
 import LessonList from '@/features/courses/features/course-detail/components/lesson-list';
 import ModalPreview from '@/features/courses/features/course-detail/components/modal-preview';
 import PayMent from '@/features/courses/features/course-detail/components/payment';
+import Related from '@/features/courses/features/course-detail/components/related';
 import Reviews from '@/features/courses/features/course-detail/components/reviews';
 import { formatPrice, formatTime, levelCourseMap } from '@/utils';
 
@@ -238,6 +239,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
           courseId={courseId}
           isEnrolled={isEnrolled}
         />
+        <Related courseId={courseId} />
       </div>
     </div>
   );
