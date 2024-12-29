@@ -130,6 +130,7 @@ const CourseVideo = ({ course, userId }: CourseVideoProps) => {
 
   const onSelectUnit = useCallback(
     (unit: TUnitParent) => {
+      if (!unit.isCompleted) return;
       if (unit.unit === EUnitType.QUIZ && !unit.isCompleted) {
         setTempUnit(unit);
         setOpenQuiz(true);

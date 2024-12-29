@@ -46,7 +46,9 @@ const Unit = ({ unit, isLearning, isFocus, onSelectUnit }: UnitProps) => {
                     className={cn(isFocus && 'text-white')}
                   />
                 )}{' '}
-                <span className={cn(isFocus && 'text-white')}>
+                <span
+                  className={cn('line-clamp-1 w-3/5', isFocus && 'text-white')}
+                >
                   {unit.title}
                 </span>
               </div>
