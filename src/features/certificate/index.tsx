@@ -21,6 +21,8 @@ const Certificate = async ({ params }: Props) => {
   const currentUrl = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/certificate/${userId}/${courseId};`;
   const certificate = await getCertificateByUserIdAndCourseId(courseId, userId);
 
+  console.log({ certificate });
+
   return (
     <section className='bg-[url(/images/banner.png)] w-full h-screen bg-cover bg-no-repeat bg-center'>
       <div className='flex w-full justify-center items-center h-full'>

@@ -108,7 +108,7 @@ const Cart = () => {
                         0
                       )
                     )
-                  : '0đ'}
+                  : '0$'}
               </span>
             </div>
             <Link href='/cart'>

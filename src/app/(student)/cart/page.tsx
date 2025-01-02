@@ -1,10 +1,7 @@
 'use client';
 import React from 'react';
 
-import Input from '@/components/inputs/Input';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -23,8 +20,8 @@ const Cart = () => {
   const cartItems = cart?.cartItems || [];
   return (
     <div className='flex flex-col space-y-4'>
-      <div className='grid grid-cols-6 gap-2'>
-        <Card className='col-span-4 shadow-md'>
+      <div className='flex space-x-2'>
+        <Card className='w-2/3 shadow-md'>
           <CardContent>
             <Table>
               <TableHeader>
@@ -41,34 +38,10 @@ const Cart = () => {
             </Table>
           </CardContent>
         </Card>
-        <Card className='shadow-md col-span-2 p-1 border-none bg-background/90 backdrop-blur-sm'>
+        <Card className='shadow-md w-1/3 p-1 border-none bg-background/90 backdrop-blur-sm h-fit border'>
           <CardContent className='flex flex-col space-y-4 my-4 divide-y p-2'>
-            <div className='flex flex-col space-y-2'>
-              <Label className='text-xl font-bold'>Coupon Code</Label>
-              <div className='grid grid-cols-4 items-center gap-2'>
-                <div className='col-span-3'>
-                  <Input placeholder='Coupon code' className='w-full' />
-                </div>
-                <Button>Apply</Button>
-              </div>
-            </div>
             <div className='p-4 space-y-4'>
               <div className='flex flex-col p-1 space-y-1 '>
-                <div className='flex justify-between items-center'>
-                  <span>Cart subtotal</span>{' '}
-                  <span>
-                    {' '}
-                    {formatPrice(
-                      cartItems.reduce(
-                        (current, cartItem) => cartItem.course.price + current,
-                        0
-                      )
-                    )}
-                  </span>
-                </div>
-                <div className='flex justify-between items-center'>
-                  <span>Discount</span> <span>-0</span>
-                </div>
                 <div className='flex justify-between items-center'>
                   <span className='font-bold'>Cart Total</span>{' '}
                   <span className='text-xl font-bold'>
@@ -84,7 +57,7 @@ const Cart = () => {
                   </span>
                 </div>
               </div>
-              <Payment />
+              <Payment length={cartItems.length} />
             </div>
           </CardContent>
         </Card>

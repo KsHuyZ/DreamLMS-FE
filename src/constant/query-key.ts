@@ -26,4 +26,5 @@ export enum QueryKey {
   TeacherTotalCourse = 'teacher-total-course',
   TeacherTotalEarning = 'teacher-total-earning',
   RelatedCourse = 'related-course',
+  CoursePreview = 'course-preview',
 }

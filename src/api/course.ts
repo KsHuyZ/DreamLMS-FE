@@ -105,6 +105,9 @@ export const addAdditionData = async (
 export const findRelatedCourse = (id: string): Promise<TCourse[]> =>
   api.get(`/courses/related/${id}`);
 
+export const findCoursePreview = (name = ''): Promise<TCourse[]> =>
+  api.get('/courses/preview', { params: { name } });
+
 export const getAdditionCourse = (
   ids: string[],
   name: string
@@ -170,4 +173,7 @@ export const deleteLessonById = (id: string) =>
 export const enrollCourse = (id: string) => api.get(`courses/enroll/${id}`);
 
 export const payCourse = (id: string): Promise<PaymentIntent> =>
-  api.get(`courses/payment/${id}`);
+  api.get(`/courses/payment/${id}`);
+
+export const getTrendingCourses = (): Promise<TCourse[]> =>
+  api.get('/courses/trending');

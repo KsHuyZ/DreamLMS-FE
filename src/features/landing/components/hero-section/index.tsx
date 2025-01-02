@@ -21,8 +21,8 @@ const HeroSection = () => {
               </h1>
               <SearchBar />
               <h5 className='text-tertiary-600 text-xl font-bold'>
-                Trusted by over 15K Users <br />
-                worldwide since 2022
+                Trusted by over 1K Users <br />
+                worldwide since 2025
               </h5>
               <div className='flex items-center space-x-10'>
                 <CountUpUser />

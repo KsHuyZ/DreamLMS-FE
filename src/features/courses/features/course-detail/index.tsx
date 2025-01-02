@@ -7,7 +7,6 @@ import { FaCircleCheck } from 'react-icons/fa6';
 import { getCookies } from '@/lib/action';
 import { cn } from '@/lib/utils';
 
-import Input from '@/components/inputs/Input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -41,7 +40,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
   const duration = course.duration;
   const isEnrolled = course.isEnrolled;
   const reviewPagination = await getReviewsByCourseId(courseId);
-  const user = getCookies('user') as TUser;
+  const user = getCookies('user') as TUser | undefined;
   return (
     <div className='w-full h-full space-y-14 min-h-[calc(100vh-80px)]'>
       <div className='flex flex-col space-y-8'>
@@ -128,43 +127,54 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
             <CardContent>
               <div className='flex flex-col space-y-12'>
                 <div className='flex flex-col space-y-8'>
-                  {course.isEnrolled || course.alreadyCart ? (
-                    course.isEnrolled ? (
-                      <div className='flex flex-col space-y-4 items-center'>
-                        <div className='flex items-center justify-center'>
-                          <div className='absolute w-3 h-3 rounded-full bg-primary-600 opacity-50 animate-ripple z-10'></div>
-                          <FaCircleCheck className='w-5 h-5 text-primary-600 z-30 rounded-full bg-white' />
-                        </div>
+                  {user ? (
+                    course.isEnrolled || course.alreadyCart ? (
+                      course.isEnrolled ? (
+                        <div className='flex flex-col space-y-4 items-center'>
+                          <div className='flex items-center justify-center'>
+                            <div className='absolute w-3 h-3 rounded-full bg-primary-600 opacity-50 animate-ripple z-10'></div>
+                            <FaCircleCheck className='w-5 h-5 text-primary-600 z-30 rounded-full bg-white' />
+                          </div>
 
-                        <span className='text-center text-primary-600 font-bold'>
-                          Course already enrolled
-                        </span>
-                        <Link href={Path.Learning(course.id)}>
-                          <Button>Continue learning</Button>
-                        </Link>
-                      </div>
+                          <span className='text-center text-primary-600 font-bold'>
+                            Course already enrolled
+                          </span>
+                          <Link href={Path.Learning(course.id)}>
+                            <Button>Continue learning</Button>
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className='flex flex-col space-y-4 items-center'>
+                          <div className='flex items-center justify-center'>
+                            <ShoppingCart className='w-5 h-5 text-primary-600 z-30' />
+                          </div>
+
+                          <span className='text-center text-primary-600 font-bold'>
+                            Course already in cart
+                          </span>
+                        </div>
+                      )
+                    ) : course.price === 0 ? (
+                      <Enroll id={course.id} />
                     ) : (
-                      <div className='flex flex-col space-y-4 items-center'>
-                        <div className='flex items-center justify-center'>
-                          <ShoppingCart className='w-5 h-5 text-primary-600 z-30' />
-                        </div>
-
-                        <span className='text-center text-primary-600 font-bold'>
-                          Course already in cart
-                        </span>
+                      <div className='flex flex-col space-y-4'>
+                        <AddCart id={course.id} />
+                        <PayMent
+                          userId={user?.id}
+                          ethPrice={course.ethPrice}
+                          courseId={course.id}
+                          recipient={course.createdBy.walletAddress}
+                        />
                       </div>
                     )
-                  ) : course.price === 0 ? (
-                    <Enroll id={course.id} />
                   ) : (
-                    <div className='flex flex-col space-y-4'>
-                      <AddCart id={course.id} />
-                      <PayMent
-                        userId={user.id}
-                        ethPrice={course.ethPrice}
-                        courseId={course.id}
-                        recipient={course.createdBy.walletAddress}
-                      />
+                    <div className='flex flex-col space-y-4 items-center'>
+                      <span className='text-center text-primary-600 font-bold'>
+                        Please login first
+                      </span>
+                      <Link href={Path.SIGNIN}>
+                        <Button>Login</Button>
+                      </Link>
                     </div>
                   )}
                   <Separator />
@@ -190,21 +200,6 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                       </div>
                     </div>
                   </div>
-                  {!course.isEnrolled ||
-                    (!course.alreadyCart && (
-                      <>
-                        <Separator />
-                        <div className='flex flex-col space-y-2'>
-                          <Label>Coupon code</Label>
-                          <div className='grid grid-cols-3 gap-2 items-center'>
-                            <div className='flex flex-col col-span-2 space-y-2'>
-                              <Input placeholder='Enter your coupon code' />
-                            </div>
-                            <Button>Apply</Button>
-                          </div>
-                        </div>
-                      </>
-                    ))}
                 </div>
                 <div className='flex flex-col space-y-4'>
                   <Separator />

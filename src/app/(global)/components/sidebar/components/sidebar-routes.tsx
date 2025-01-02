@@ -1,14 +1,11 @@
 'use client';
 import {
   Award,
-  Clock,
   Cloud,
-  Compass,
   GraduationCap,
   Layout,
   LayoutDashboard,
   LucideIcon,
-  MessageCircleMore,
   ShoppingCart,
   User,
 } from 'lucide-react';
@@ -43,16 +40,6 @@ const teacherRoutes: GuestRoutes[] = [
     label: 'Courses',
     href: '/teacher/courses',
   },
-  {
-    icon: Clock,
-    label: 'My Schedule',
-    href: '/teacher/schedule',
-  },
-  {
-    icon: MessageCircleMore,
-    label: 'Chat',
-    href: '/teacher/chat',
-  },
 ];
 
 interface ISidebarProps {
@@ -85,11 +72,6 @@ export const SidebarRoutes = ({ user }: ISidebarProps) => {
       icon: GraduationCap,
       label: 'Courses',
       href: '/student-courses',
-    },
-    {
-      icon: Compass,
-      label: 'Browse',
-      href: '/search',
     },
     {
       icon: Award,

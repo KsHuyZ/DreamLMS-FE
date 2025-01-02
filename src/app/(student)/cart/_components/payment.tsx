@@ -15,7 +15,11 @@ import { Label } from '@/components/ui/label';
 import { useBuyCart } from '@/app/(student)/cart/_hooks';
 import { Path } from '@/constant';
 
-const Payment = () => {
+interface Props {
+  length: number;
+}
+
+const Payment: React.FC<Props> = ({ length }) => {
   const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useBuyCart();
   const router = useRouter();
@@ -27,7 +31,12 @@ const Payment = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button className='w-full' onClick={handlePayment} isLoading={isPending}>
+      <Button
+        className='w-full'
+        onClick={handlePayment}
+        isLoading={isPending}
+        disabled={length === 0}
+      >
         Pay now
       </Button>
       <DialogContent>

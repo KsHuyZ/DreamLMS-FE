@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
@@ -81,7 +80,7 @@ const CourseCard = ({
           {loading ? (
             <Skeleton className='w-44 h-4' />
           ) : (
-            <p className='font-bold text-tertiary-800 text-xl duration-500 max-w-3xl'>
+            <p className='font-bold text-tertiary-800 text-xl duration-500 max-w-3xl truncate'>
               {course?.name}
             </p>
           )}
@@ -174,7 +173,6 @@ const CourseCard = ({
                 <p className='text-tertiary-800 font-bold text-xl'>
                   {formatPrice(course?.price)}
                 </p>
-                {!isTeacherView && <Button>Buy now</Button>}
               </div>
             </>
           )}
