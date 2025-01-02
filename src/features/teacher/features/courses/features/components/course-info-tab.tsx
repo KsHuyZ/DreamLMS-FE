@@ -67,10 +67,6 @@ const CourseInfoTab = () => {
     () =>
       inputTagValue.length
         ? [
-            {
-              label: inputTagValue,
-              value: inputTagValue,
-            },
             ...(tags?.map((tag) => ({
               label: tag.name,
               value: tag.id,
@@ -85,10 +81,6 @@ const CourseInfoTab = () => {
     () =>
       inputCategoryValue.length
         ? [
-            {
-              label: inputCategoryValue,
-              value: inputCategoryValue,
-            },
             ...(categories?.map((tag) => ({
               label: tag.name,
               value: tag.id,
