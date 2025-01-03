@@ -10,9 +10,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAnalyzingTeacher } from '@/features/teacher/features/dashboard/hooks';
 
 const TeacherHome = () => {
-  const { enroll, activeCourses, completedCourses, totalCourses, isLoading } =
-    useAnalyzingTeacher();
-  // console.log
+  const {
+    enroll,
+    activeCourses,
+    completedCourses,
+    totalCourses,
+    totalReceived,
+    isLoading,
+  } = useAnalyzingTeacher();
   return (
     <div className='grid grid-cols-3 gap-3 px-7'>
       <Card className='shadow-md group hover:bg-primary-600 duration-200'>
@@ -30,19 +35,6 @@ const TeacherHome = () => {
                 <Label className='text-4xl group-hover:text-white'>
                   {enroll?.total}
                 </Label>
-              )}
-              {isLoading ? (
-                <Skeleton className='w-28 h-4' />
-              ) : (
-                <div className='flex items-center text-sm space-x-2'>
-                  <TrendingUp className='text-emerald-600 group-hover:text-white w-5 h-5' />
-                  <span className='text-emerald-600 group-hover:text-white'>
-                    {enroll?.percentage}%
-                  </span>
-                  <span className='text-muted-foreground group-hover:text-white'>
-                    vs last month
-                  </span>
-                </div>
               )}
             </div>
             <Ellipsis className='w-5 h-5 cursor-pointer group-hover:text-white' />
@@ -65,19 +57,6 @@ const TeacherHome = () => {
                   {activeCourses?.total}
                 </Label>
               )}
-              {isLoading ? (
-                <Skeleton className='w-28 h-4' />
-              ) : (
-                <div className='flex items-center text-sm space-x-2'>
-                  <TrendingUp className='text-emerald-600 group-hover:text-white w-5 h-5' />
-                  <span className='text-emerald-600 group-hover:text-white'>
-                    {activeCourses?.percentage}%
-                  </span>
-                  <span className='text-muted-foreground group-hover:text-white'>
-                    vs last month
-                  </span>
-                </div>
-              )}
             </div>
             <Ellipsis className='w-5 h-5 cursor-pointer group-hover:text-white' />
           </div>
@@ -98,19 +77,6 @@ const TeacherHome = () => {
                 <Label className='text-4xl group-hover:text-white'>
                   {completedCourses?.total}
                 </Label>
-              )}
-              {isLoading ? (
-                <Skeleton className='w-28 h-4' />
-              ) : (
-                <div className='flex items-center text-sm space-x-2'>
-                  <TrendingUp className='text-emerald-600 group-hover:text-white w-5 h-5' />
-                  <span className='text-emerald-600 group-hover:text-white'>
-                    {completedCourses?.percentage}%
-                  </span>
-                  <span className='text-muted-foreground group-hover:text-white'>
-                    vs last month
-                  </span>
-                </div>
               )}
             </div>
             <Ellipsis className='w-5 h-5 cursor-pointer group-hover:text-white' />
@@ -133,19 +99,6 @@ const TeacherHome = () => {
                   {enroll?.total}
                 </Label>
               )}
-              {isLoading ? (
-                <Skeleton className='w-28 h-4' />
-              ) : (
-                <div className='flex items-center text-sm space-x-2'>
-                  <TrendingUp className='text-emerald-600 group-hover:text-white w-5 h-5' />
-                  <span className='text-emerald-600 group-hover:text-white'>
-                    {enroll?.percentage}%
-                  </span>
-                  <span className='text-muted-foreground group-hover:text-white'>
-                    vs last month
-                  </span>
-                </div>
-              )}
             </div>
             <Ellipsis className='w-5 h-5 cursor-pointer group-hover:text-white' />
           </div>
@@ -167,19 +120,6 @@ const TeacherHome = () => {
                   {totalCourses?.total}
                 </Label>
               )}
-              {isLoading ? (
-                <Skeleton className='w-28 h-4' />
-              ) : (
-                <div className='flex items-center text-sm space-x-2'>
-                  <TrendingUp className='text-emerald-600 group-hover:text-white w-5 h-5' />
-                  <span className='text-emerald-600 group-hover:text-white'>
-                    {totalCourses?.percentage}%
-                  </span>
-                  <span className='text-muted-foreground group-hover:text-white'>
-                    vs last month
-                  </span>
-                </div>
-              )}
             </div>
             <Ellipsis className='w-5 h-5 cursor-pointer group-hover:text-white' />
           </div>
@@ -194,15 +134,22 @@ const TeacherHome = () => {
                   Total Earnings
                 </Label>
               </div>
-              <Label className='text-4xl group-hover:text-white'>8</Label>
-              <div className='flex items-center text-sm space-x-2'>
-                <TrendingUp className='text-primary-600 group-hover:text-white w-5 h-5' />
-                <span className='text-primary-600 group-hover:text-white'>
-                  5%
-                </span>
-                <span className='text-muted-foreground group-hover:text-white'>
-                  vs last month
-                </span>
+              <div className='flex flex-col space-y-2'>
+                {isLoading ? (
+                  <>
+                    <Skeleton className='w-16 h-4' />
+                    <Skeleton className='w-16 h-4' />
+                  </>
+                ) : (
+                  <>
+                    <Label className='text-2xl group-hover:text-white'>
+                      {totalReceived?.dollar} Dollar
+                    </Label>
+                    <Label className='text-2xl group-hover:text-white'>
+                      {totalReceived?.eth} ETH
+                    </Label>
+                  </>
+                )}
               </div>
             </div>
             <Ellipsis className='w-5 h-5 cursor-pointer group-hover:text-white' />

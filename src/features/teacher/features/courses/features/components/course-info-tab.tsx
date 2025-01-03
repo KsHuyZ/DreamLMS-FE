@@ -77,6 +77,8 @@ const CourseInfoTab = () => {
     [inputTagValue, tags, selectedTags]
   );
 
+  console.log({ tagsOptions });
+
   const categoriesOptions = useMemo(
     () =>
       inputCategoryValue.length

@@ -1,5 +1,6 @@
 import { useQueries } from '@tanstack/react-query';
 
+import { getTotalReceived } from '@/api';
 import {
   getTeacherAnalyzingActiveCourse,
   getTeacherAnalyzingEnroll,
@@ -27,23 +28,31 @@ export const useAnalyzingTeacher = () => {
         queryKey: [QueryKey.TeacherTotalCourse],
         queryFn: () => getTeacherTotalCourse(),
       },
+      {
+        queryKey: [QueryKey.TotalReceived],
+        queryFn: () => getTotalReceived(),
+      },
     ],
   });
-  const [enroll, activeCourses, completedCourses, totalCourses] = queries;
+  const [enroll, activeCourses, completedCourses, totalCourses, totalReceived] =
+    queries;
   return {
     enroll: enroll.data,
     activeCourses: activeCourses.data,
     completedCourses: completedCourses.data,
     totalCourses: totalCourses.data,
+    totalReceived: totalReceived.data,
     isLoading:
       enroll.isLoading ||
       activeCourses.isLoading ||
       completedCourses.isLoading ||
-      totalCourses.isLoading,
+      totalCourses.isLoading ||
+      totalReceived.isLoading,
     isError:
       enroll.isError ||
       activeCourses.isError ||
       completedCourses.isError ||
-      totalCourses.isError,
+      totalCourses.isError ||
+      totalReceived.isError,
   };
 };

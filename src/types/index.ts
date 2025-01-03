@@ -16,6 +16,7 @@ export * from './roles';
 export * from './status';
 export * from './tag';
 export * from './token';
+export * from './transaction';
 export * from './user';
 export * from './user-quiz';
 export * from './video';

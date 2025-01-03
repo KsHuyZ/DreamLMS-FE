@@ -98,7 +98,7 @@ const SignUp = () => {
                   <FormItem>
                     <FormLabel>First name</FormLabel>
                     <FormControl>
-                      <Input placeholder='Huy' required {...field} />
+                      <Input placeholder='First name' required {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -111,7 +111,7 @@ const SignUp = () => {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder='Phan' required {...field} />
+                      <Input placeholder='Last name' required {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

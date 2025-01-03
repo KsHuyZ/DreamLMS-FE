@@ -1,5 +1,6 @@
 'use client';
 import {
+  ArrowLeftRight,
   Award,
   Cloud,
   GraduationCap,
@@ -77,6 +78,11 @@ export const SidebarRoutes = ({ user }: ISidebarProps) => {
       icon: Award,
       label: 'Certificate',
       href: '/certificate',
+    },
+    {
+      icon: ArrowLeftRight,
+      label: 'Transaction',
+      href: '/transaction',
     },
   ];
   const { user: me } = useAuth();

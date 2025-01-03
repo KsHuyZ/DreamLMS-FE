@@ -90,6 +90,8 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
     [id, selectedCourse]
   );
 
+  console.log({ selectedTags });
+
   const {
     data: courseInfo,
     isLoading: infoQueryLoading,
@@ -229,9 +231,6 @@ const TabForm = ({ children }: { children: React.ReactNode }) => {
             </div>
           )}
           <div className='flex space-x-2'>
-            <Button variant='secondary' disabled={!id}>
-              Preview
-            </Button>
             <Button
               isLoading={courseInfoLoading || courseAdditionLoading}
               disabled={
