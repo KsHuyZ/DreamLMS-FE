@@ -41,7 +41,7 @@ export const courseInfoSchema = z.object({
   tags: z.array(z.string()).min(0, 'Tag at lease one item!'),
   categories: z.array(z.string()).min(0, 'Category at lease one item!'),
   level: z.string().min(0, 'Level is require!'),
-  ethPrice: z.string().optional(),
+  ethPrice: z.string().optional().nullable(),
 });
 
 export const courseAdditionSchema = z.object({

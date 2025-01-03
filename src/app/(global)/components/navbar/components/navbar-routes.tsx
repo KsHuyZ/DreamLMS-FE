@@ -29,12 +29,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import { useAuth } from '@/store/user.store';
+
 import Cart from '@/app/(global)/components/navbar/components/cart';
 import SettingTheme from '@/app/(global)/components/navbar/components/setting-theme';
 
 import { ERoles, TUser } from '@/types';
 
 const NavbarRoutes = ({ user }: { user?: TUser }) => {
+  const { user: me } = useAuth();
   const [locale, setLocale] = useState(getCookie('NEXT_LOCALE') ?? 'en');
   const router = useRouter();
   const pathName = usePathname();
@@ -92,7 +95,7 @@ const NavbarRoutes = ({ user }: { user?: TUser }) => {
             <DropdownMenuTrigger>
               <div className='w-12 h-12'>
                 <Image
-                  src={user.photo || '/images/avatar.jpg'}
+                  src={me?.photo || '/images/avatar.jpg'}
                   width={50}
                   height={50}
                   alt='avatar'
@@ -103,13 +106,13 @@ const NavbarRoutes = ({ user }: { user?: TUser }) => {
             <DropdownMenuContent>
               <div className='flex flex-col space-y-2 px-2'>
                 <Label className='font-bold leading-5'>
-                  {cn(user.firstName, user.lastName)}
+                  {cn(me?.firstName, me?.lastName)}
                 </Label>
-                <span className='text-sm'>{user.email}</span>
+                <span className='text-sm'>{me?.email}</span>
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => router.push(`/profile/${user.id}`)}
+                onClick={() => router.push(`/profile/${me?.id}`)}
               >
                 <div className='gap-x-2 flex items-center'>
                   <Settings size={15} />

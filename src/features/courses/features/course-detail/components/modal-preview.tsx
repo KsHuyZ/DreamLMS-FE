@@ -36,11 +36,13 @@ const ModalPreview = ({ img, name, videoId }: IModalPreviewProps) => {
     <Dialog>
       <DialogTrigger asChild>
         <div className='relative'>
-          <div className='absolute bg-gradient-to-t w-full h-full from-[#2d2f31e6] cursor-pointer rounded-md'>
-            <div className='flex h-full items-center justify-center'>
-              <IoPlayCircleOutline className='w-10 h-10 text-white' />
+          {videoId && (
+            <div className='absolute bg-gradient-to-t w-full h-full from-[#2d2f31e6] cursor-pointer rounded-md'>
+              <div className='flex h-full items-center justify-center'>
+                <IoPlayCircleOutline className='w-10 h-10 text-white' />
+              </div>
             </div>
-          </div>
+          )}
           <Image
             src={img}
             width={500}

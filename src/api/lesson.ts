@@ -13,4 +13,8 @@ export const createLesson = (lesson: LessonPayload): Promise<Lesson> =>
   api.post('/lessons', lesson);
 
 export const updateLesson = (lesson: LessonPayload): Promise<Lesson> =>
-  api.put(`/lessons/${lesson.id}`, lesson);
+  api.put(`/lessons/${lesson.id}`, {
+    ...lesson,
+    disabled:
+      typeof lesson.disabled === 'boolean' ? lesson.disabled : undefined,
+  });
