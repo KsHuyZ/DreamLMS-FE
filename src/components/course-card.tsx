@@ -101,10 +101,10 @@ const CourseCard = ({
             {!isTeacherView && (
               <div className='flex items-center space-x-4'>
                 <Image
-                  src={course?.createdBy.photo?.url ?? '/images/avatar.jpg'}
+                  src={course?.createdBy.photo ?? '/images/avatar.jpg'}
                   width={45}
                   height={45}
-                  alt={course?.createdBy.photo?.url ?? ''}
+                  alt={course?.createdBy.photo ?? ''}
                   className='rounded-full border-2 border-gray-400'
                 />
                 <div>

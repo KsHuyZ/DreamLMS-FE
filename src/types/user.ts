@@ -8,7 +8,7 @@ export type TUser = {
   lastName: string;
   email: string;
   role: ERoles;
-  photo?: TImage;
+  photo?: string;
   x?: string;
   facebook?: string;
   github?: string;

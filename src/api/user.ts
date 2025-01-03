@@ -19,3 +19,6 @@ export const getTotalReceived = (): Promise<{
   eth: number;
   dollar: number;
 }> => api.get('/transactions/received');
+
+export const uploadAvatar = (photo: string): Promise<void> =>
+  api.post('/users/photo', { photo });

@@ -27,10 +27,6 @@ const tabsList = (id?: string) => {
       label: 'Settings',
       value: TeacherPath.SettingCourse(id),
     },
-    {
-      label: 'Certificate',
-      value: TeacherPath.Certificate(id),
-    },
   ];
 };
 

@@ -62,12 +62,15 @@ const FormQuiz = ({ lessonId, refetch }: FormQuizProps) => {
     const now = new Date();
     const startOfToday = startOfDay(now);
     const timeRemain = Number(currentTime) - Number(startOfToday);
-    const time = timeRemain / 60000;
+
     if (lessonId) {
-      await createQuiz({ title, description, time, questions, lessonId });
-      refetch();
-      setOpen(false);
-      form.reset();
+      await createQuiz({
+        title,
+        description,
+        time: timeRemain,
+        questions,
+        lessonId,
+      });
     }
   }, [createQuiz, form, lessonId, refetch]);
 

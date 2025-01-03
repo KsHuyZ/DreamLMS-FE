@@ -210,9 +210,7 @@ const CourseIdPage = async ({ params: { courseId } }: Props) => {
                       className='flex items-center space-x-4 cursor-pointer'
                     >
                       <Image
-                        src={
-                          course.createdBy.photo?.url || '/images/avatar.jpg'
-                        }
+                        src={course.createdBy.photo || '/images/avatar.jpg'}
                         width={40}
                         height={40}
                         alt='Author img'

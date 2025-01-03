@@ -33,6 +33,7 @@ import Cart from '@/app/(global)/components/navbar/components/cart';
 import { useGetPreviewCourse } from '@/layout/header/hooks';
 
 import { ERoles, TUser } from '@/types';
+import { useMe } from '@/app/(global)/profile/[id]/_hooks';
 
 const headerRoutes = [
   {
@@ -60,6 +61,7 @@ interface HeaderProps {
 }
 
 const Header = ({ user }: HeaderProps) => {
+  const { data: me } = useMe();
   const { scroll } = useHeader();
   const router = useRouter();
   const pathName = usePathname();
@@ -263,7 +265,9 @@ const Header = ({ user }: HeaderProps) => {
                       <DropdownMenuTrigger>
                         <Avatar className='cursor-pointer'>
                           <AvatarImage
-                            src={user.photo?.url ?? '/images/avatar.jpg'}
+                            src={
+                              me?.photo ?? user.photo ?? '/images/avatar.jpg'
+                            }
                           />
                           <AvatarFallback>
                             {summaryName(`${user.firstName} ${user.lastName}`)}

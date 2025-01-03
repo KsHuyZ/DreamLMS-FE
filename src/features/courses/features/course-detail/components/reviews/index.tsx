@@ -50,7 +50,7 @@ const Reviews = ({ courseId, isEnrolled, reviewPagination }: Props) => {
                 <div className='flex flex-col space-y-2'>
                   <div className='flex items-center space-x-2'>
                     <Image
-                      src='/images/avatar.jpg'
+                      src={review.user.photo || '/images/avatar.jpg'}
                       width={40}
                       height={40}
                       alt='avatar'

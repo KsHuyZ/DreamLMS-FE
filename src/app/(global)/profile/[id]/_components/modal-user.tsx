@@ -54,6 +54,7 @@ const ModalUser: React.FC<Props> = ({ user, refetch }) => {
     await updateProfile(restValue);
     refetch();
     toast({ variant: 'success', title: 'Update success' });
+    setOpen(false);
   };
 
   useEffect(() => {

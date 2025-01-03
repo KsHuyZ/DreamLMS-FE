@@ -250,8 +250,7 @@ const ModalListReview: React.FC<Props> = ({ courseId }) => {
                               <div className='flex items-center space-x-2'>
                                 <Image
                                   src={
-                                    review?.user.photo?.url ||
-                                    '/images/avatar.jpg'
+                                    review?.user.photo || '/images/avatar.jpg'
                                   }
                                   width={40}
                                   height={40}
