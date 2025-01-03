@@ -14,7 +14,7 @@ const CountUpInfo = ({ quantity, src }: CountUpInfoProps) => {
         <Image src={src} width={80} height={80} alt='' />
       </div>
       <div className='flex flex-col space-y-3'>
-        <CountUp start={0} end={quantity} duration={5}>
+        <CountUp delay={0} start={0} end={quantity} duration={5}>
           {({ countUpRef }) => (
             <span
               className='text-tertiary-800 text-5xl font-extrabold'

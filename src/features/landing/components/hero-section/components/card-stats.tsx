@@ -20,7 +20,7 @@ const CardStats = ({
     <div className='p-6 rounded-xl flex items-center space-x-4 border-inherit border bg-white hover:-translate-y-3 transition-transform duration-300 cursor-pointer'>
       <Image src={src} width={81} height={81} alt='image' />
       <div className='flex flex-col space-y-2'>
-        <CountUp end={quantity} duration={5}>
+        <CountUp delay={0} end={quantity} duration={5}>
           {({ countUpRef }) => (
             <div>
               <span

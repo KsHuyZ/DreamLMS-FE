@@ -3,7 +3,7 @@ import React from 'react';
 import CountUp from 'react-countup';
 const CountUpUser = () => {
   return (
-    <CountUp start={0} end={290} duration={5}>
+    <CountUp start={0} end={290} duration={5} delay={0}>
       {({ countUpRef }) => (
         <div>
           <span
