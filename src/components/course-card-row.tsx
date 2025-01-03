@@ -4,12 +4,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import { CourseCardProps } from '@/components/course-card';
-import { Button } from '@/components/ui/button';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
+import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { formatPrice, formatTime, levelCourseMap } from '@/utils';
@@ -126,20 +121,6 @@ const CourseCardRow = ({ course, loading }: CourseCardProps) => {
           )}
         </Link>
       </HoverCardTrigger>
-      <HoverCardContent className='w-96'>
-        <div className='space-y-4 w-full'>
-          <h4 className='font-semibold'>What you will learn</h4>
-          <div className='space-y-2'>
-            {/* {course?.willLearn.map((learn) => (
-              <div className='flex space-x-4' key={learn}>
-                <Check className='w-5 h-5 text-primary-600' />
-                <p className='text-sm'>{learn}</p>
-              </div>
-            ))} */}
-          </div>
-          <Button className='w-full'>Add to cart</Button>
-        </div>
-      </HoverCardContent>
     </HoverCard>
   );
 };

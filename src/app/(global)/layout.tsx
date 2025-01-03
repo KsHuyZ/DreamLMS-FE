@@ -9,7 +9,6 @@ import { TUser } from '@/types';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const user = getCookies('user') as TUser;
-
   return (
     <>
       <Header user={user} />

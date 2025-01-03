@@ -1,6 +1,6 @@
 import { EDisk } from '@/utils';
 
-import { ERoles, TImage } from '@/types';
+import { ERoles } from '@/types';
 
 export type TUser = {
   id: string;
@@ -17,6 +17,7 @@ export type TUser = {
   walletAddress?: string;
   unit: EDisk;
   totalStorage: number;
+  banner?: string | null;
 };
 
 export type TSignInCredentials = {

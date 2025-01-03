@@ -213,7 +213,6 @@ const SpentCourseChart: React.FC = () => {
             </span>
             <div className='w-full'>
               <p className='font-semibold text-primary-600'>Total Spending</p>
-              <p className='text-sm font-medium'>{durationTime}</p>
             </div>
           </div>
         </div>

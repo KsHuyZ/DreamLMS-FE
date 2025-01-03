@@ -43,9 +43,10 @@ const SignInForm = () => {
   const onSubmit = async (values: TSignInCredentials) => {
     const result = await signIn(values);
     const { user, refreshToken, token } = result;
+    const { id,firstName, lastName, email } = user;
     ('use server');
     await setCookies('token', { refreshToken, token });
-    await setCookies('user', user);
+    await setCookies('user', { id,firstName, lastName, email });
     const callBack = searchParams.get('callBack');
     if (callBack) {
       router.replace(callBack);
